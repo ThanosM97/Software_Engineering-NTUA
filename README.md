@@ -2,7 +2,7 @@
 Implementation of a price comparison engine for the software engineering course of NTUA ECE.
 
 ## Team Members:
-- Antoniadis Panagiotis
+- Antoniadis Panagiotiss
 - Bazotis Nikolaos
 - Georgiou Dimitrios
 - Iliadis Foivos
