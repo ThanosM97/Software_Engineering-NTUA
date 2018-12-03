@@ -1,5 +1,5 @@
 ## Products
-Each of the above directories contains products for fifteen (15) different types of electronic devices <br> 
+Each of the above directories contains products of fifteen (15) different types of electronic devices <br> 
 crawled from the website of the 'directory's name' store. <br><br>
 For each type there is one directory named photos-'type of device', one csv file (products-'type of device'.csv) <br>
 and one xlsx file (products-'type of device'.xlsx). <br>
