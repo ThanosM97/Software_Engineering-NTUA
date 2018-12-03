@@ -6,7 +6,7 @@ and one xlsx file (products-'type of device'.xlsx). <br>
 *In order to open the csv file use coding: UTF-8 and delimeter: '@'<br>
 *The name of each image is the name of the product it pictures from the <br>
 csv (or xlsx) file. In some cases the character '/' was replaced with the character '-'.<br><br>
-**The types of divices that we will include in our webapp are the following:** 
+**The types of devices that we will include in our web-app are the following:** 
 - Desktops
 - Drives (externals)
 - Drives (internals)
