@@ -51,13 +51,13 @@ public class DataAccess {
         return jdbcTemplate.query("select * from product order by id", EMPTY_ARGS, new ProductRowMapper());
     }
 
-    public Product addProduct(String name, String description, String category, boolean withdrawn, String tags ) {
+    public Product addProduct(String name, String description, String category, boolean withdrawn, String tags, String extraData ) {
         //Create the new product record using a prepared statement
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 PreparedStatement ps = con.prepareStatement(
-                        "insert into product(name, description, category, withdrawn, tags) values(?, ?, ?, ?, ?)",
+                        "insert into product(name, description, category, withdrawn, tags, extraData) values(?, ?, ?, ?, ?,?)",
                         Statement.RETURN_GENERATED_KEYS
                 );
                 ps.setString(1, name);
@@ -65,6 +65,7 @@ public class DataAccess {
                 ps.setString(3, category);
                 ps.setBoolean(4, withdrawn);
                 ps.setString(5, tags);
+                ps.setString(6, extraData);
                 return ps;
             }
         };
@@ -79,7 +80,8 @@ public class DataAccess {
                 description,
                 category,
                 withdrawn,
-                tags
+                tags,
+                extraData
             );
             return product;
 

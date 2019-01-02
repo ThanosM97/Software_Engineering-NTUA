@@ -10,14 +10,16 @@ public class Product {
     private final String category;
     private final boolean withdrawn;
     private final String tags;
+    private final String extraData;
 
-    public Product(long id, String name, String description, String category, boolean withdrawn, String tags) {
+    public Product(long id, String name, String description, String category, boolean withdrawn, String tags, String extraData) {
         this.id          = id;
         this.name        = name;
         this.description = description;
         this.category    = category;
         this.withdrawn   = withdrawn;
         this.tags        = tags;
+        this.extraData	 = extraData;
     }
 
     public long getId() {
@@ -44,6 +46,10 @@ public class Product {
         return tags;
     }
 
+    public String getExtraData() {
+        return extraData;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

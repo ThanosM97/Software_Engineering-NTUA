@@ -42,11 +42,12 @@ public class ProductsResource extends ServerResource {
         String category = form.getFirstValue("category");
         boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
         String tags = form.getFirstValue("tags");
+        String extraData = form.getFirstValue("extraData");
 
         //validate the values (in the general case)
         //...
 
-        Product product = dataAccess.addProduct(name, description, category, withdrawn, tags);
+        Product product = dataAccess.addProduct(name, description, category, withdrawn, tags, extraData);
 
         return new JsonProductRepresentation(product);
     }
