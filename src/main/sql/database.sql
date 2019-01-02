@@ -29,6 +29,8 @@ CREATE TABLE `product` (
   `category` varchar(128) NOT NULL,
   `withdrawn` bit(1) NOT NULL DEFAULT b'0',
   `tags` mediumtext,
+  `price` int NOT NULL,
+  `extraData` mediumtext,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -36,10 +38,14 @@ CREATE TABLE `product` (
 --
 -- Dumping data for table `product`
 --
-
+/* For shops table plaisio, plaisio,
+TVs have the following extra data: 4k, smart, frequency
+Laptops have the following extra data: CPU, RAM, hd, OS, size, graphics card
+Smartphones have the following extra data: CPU cores, cpu freq, RAM, capacity, size , camera pixels 
+*/
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'Vendor TV 32\'\' Model X','Mplah mplah','TV','\0','TV, Smart TV'),(2,'OtherVendor TV 42\'\' Model Y','Mplah Mplah','TV','\0','TV, Smart TV');
+INSERT INTO `product` VALUES (1,'SAMSUNG TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV','\0','TV, Smart TV, 4K,',399,'4K, Smart, 1300 PQI'),(2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV','\0','TV, Smart TV, 4K', 449, '4K, Smart, 1500 PMI'),(3,'DELL Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop','\0','Laptop, Windows 10', 379,'Intel Celeron N4000, 4GB, 500GB, Windows 10, 15.6, Intel HD Graphics 600'),(4,' Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop', '\0','Laptop, Windows 10', 399, 'AMD A-Series, 4GB, 128GB,Windows 10, 14,  Radeon R5'),(5,' Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', '\0', 'Black, Dual Sim, Android',229, 'Octa core, 1.8GHz, 3GB, 32GB, 6.2, 12 Mp');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-05 14:47:43
+-- Dump completed on 2019-01-02 14:47:43
