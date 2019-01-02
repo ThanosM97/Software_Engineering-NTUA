@@ -11,6 +11,9 @@ public class RestfulApp extends Application {
 
         Router router = new Router(getContext());
 
+        /**
+         * Attach all resources to the corresponding URIs.
+         */
         //GET, POST
         router.attach("/products", ProductsResource.class);
 
