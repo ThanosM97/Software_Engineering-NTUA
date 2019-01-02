@@ -6,6 +6,7 @@ import gr.ntua.ece.stingy.data.model.Message;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.RowCountCallbackHandler;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import javax.sql.DataSource;
@@ -48,8 +49,17 @@ public class DataAccess {
     }
 
     public List<Product> getProducts(Limits limits) {
-        //TODO: Support limits
-        return jdbcTemplate.query("select * from product order by id", EMPTY_ARGS, new ProductRowMapper());
+    	/*
+    	 * get number of products
+    	 */
+    	RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
+    	jdbcTemplate.query("select * from product order by id", countCallback);
+    	int rowCount = countCallback.getRowCount();
+    	limits.setTotal(rowCount);
+    	/*
+    	 * return products based on the limits.
+    	 */
+    	return jdbcTemplate.query("select * from product order by id limit ?,?", new Object[] { limits.getStart(), limits.getCount() }, new ProductRowMapper());
     }
 
     public Product addProduct(String name, String description, String category, boolean withdrawn, String tags, String extraData ) {

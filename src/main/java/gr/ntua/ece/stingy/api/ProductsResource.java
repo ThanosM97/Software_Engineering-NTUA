@@ -5,6 +5,7 @@ import gr.ntua.ece.stingy.data.DataAccess;
 import gr.ntua.ece.stingy.data.Limits;
 import gr.ntua.ece.stingy.data.model.Product;
 import org.restlet.data.Form;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
@@ -19,15 +20,61 @@ public class ProductsResource extends ServerResource {
 
     @Override
     protected Representation get() throws ResourceException {
-
-        List<Product> products = dataAccess.getProducts(new Limits(0, 10));
-
+    	/**
+    	 * Get parameters of the get method.
+    	 */
+    	Form queryParams = getQuery();
+    	String startString = queryParams.getFirstValue("start");
+    	String countString = queryParams.getFirstValue("count");
+    	String status = queryParams.getFirstValue("status");
+    	String sort = queryParams.getFirstValue("sort");
+    	
         Map<String, Object> map = new HashMap<>();
-        //map.put("start", xxx);
-        //map.put("count", xxx);
-        //map.put("total", xxx);
+        Limits limits = new Limits();
+        /**
+         * If a parameter exists and is valid put it in the map.
+         */
+        if (startString != null ) {
+        	Long start = null;
+            try {
+                start = Long.parseLong(startString);
+            }
+            catch(Exception e) {
+                throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid start: " + startString);
+            }
+            limits.setStart(start);
+        	map.put("start", start);
+        } else {
+        	/*
+        	 * default value for start is 0.
+        	 */
+        	map.put("start", 0);
+        }
+        if (countString != null ) {
+        	Long count = null;
+        	try {
+                count = Long.parseLong(countString);
+            }
+            catch(Exception e) {
+                throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid count: " + countString);
+            }
+            limits.setCount(count);
+        	map.put("count", count);
+        } else{
+        	/*
+        	 * default value for count is 20.
+        	 */
+        	map.put("count", 20);
+        }
+        /*
+         * get products based on the limits.
+         */
+    	List<Product> products = dataAccess.getProducts(limits);
+    	/*
+    	 * set current total products.
+    	 */
+        map.put("total", limits.getTotal());
         map.put("products", products);
-
         return new JsonMapRepresentation(map);
     }
 
