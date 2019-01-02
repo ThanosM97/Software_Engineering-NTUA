@@ -2,6 +2,7 @@ package gr.ntua.ece.stingy.data;
 
 
 import gr.ntua.ece.stingy.data.model.Product;
+import gr.ntua.ece.stingy.data.model.Message;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -97,6 +98,17 @@ public class DataAccess {
         System.out.println(products);
         if (products.size() == 1)  {
             return Optional.of(products.get(0));
+        }
+        else {
+            return Optional.empty();
+        }
+    }
+    
+    public Optional<Message> deleteProduct(long id) {
+        Long[] params = new Long[]{id};
+        int found = jdbcTemplate.update("delete from product where id=?", params);
+        if (found == 1)  {
+            return Optional.of(new Message("OK"));
         }
         else {
             return Optional.empty();
