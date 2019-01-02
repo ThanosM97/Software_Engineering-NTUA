@@ -48,7 +48,22 @@ public class DataAccess {
         jdbcTemplate = new JdbcTemplate(bds);
     }
 
-    public List<Product> getProducts(Limits limits) {
+    public List<Product> getProducts(Limits limits, String status, String sort) {
+    	String sort_type = sort.replaceAll("\\|", " ");   
+    	/*
+    	 * initialize withdrawn based on the status value
+    	 */
+    	String withdrawn = null;
+    	if (status.equals("ALL")) {
+    		withdrawn = "withdrawn";
+    	}
+    	else if (status.equals("WITHDRAWN")) {
+    		withdrawn = "1";
+    	}
+    	else {
+    		withdrawn = "0";
+    	}
+
     	/*
     	 * get number of products
     	 */
@@ -59,7 +74,8 @@ public class DataAccess {
     	/*
     	 * return products based on the limits.
     	 */
-    	return jdbcTemplate.query("select * from product order by id limit ?,?", new Object[] { limits.getStart(), limits.getCount() }, new ProductRowMapper());
+    	//TODO: fix error in descending order 
+    	return jdbcTemplate.query("select * from product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn,sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
     }
 
     public Product addProduct(String name, String description, String category, boolean withdrawn, String tags, String extraData ) {
