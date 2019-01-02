@@ -3,6 +3,7 @@ package gr.ntua.ece.stingy.api;
 import gr.ntua.ece.stingy.conf.Configuration;
 import gr.ntua.ece.stingy.data.DataAccess;
 import gr.ntua.ece.stingy.data.model.Product;
+import gr.ntua.ece.stingy.data.model.Message;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
@@ -39,7 +40,23 @@ public class ProductResource extends ServerResource {
 
     @Override
     protected Representation delete() throws ResourceException {
-        //TODO: Implement this
-        throw new ResourceException(Status.SERVER_ERROR_NOT_IMPLEMENTED);
+        String idAttr = getAttribute("id");
+
+        if (idAttr == null) {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing product id");
+        }
+
+        Long id = null;
+        try {
+            id = Long.parseLong(idAttr);
+        }
+        catch(Exception e) {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid product id: " + idAttr);
+        }
+
+        Optional<Message> optional = dataAccess.deleteProduct(id);
+        Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
+
+        return new JsonMessageRepresentation(message);
     }
 }
