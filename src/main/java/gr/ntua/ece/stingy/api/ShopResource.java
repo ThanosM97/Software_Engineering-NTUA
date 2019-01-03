@@ -40,5 +40,27 @@ public class ShopResource extends ServerResource {
 
         return new JsonShopRepresentation(shop);
     }
+    
+    @Override
+    protected Representation delete() throws ResourceException {
+        String idAttr = getAttribute("id");
+
+        if (idAttr == null) {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing shop id");
+        }
+
+        Long id = null;
+        try {
+            id = Long.parseLong(idAttr);
+        }
+        catch(Exception e) {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
+        }
+
+        Optional<Message> optional = dataAccess.deleteShop(id);
+        Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
+
+        return new JsonMessageRepresentation(message);
+    }
 
 }
