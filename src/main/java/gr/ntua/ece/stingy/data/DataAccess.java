@@ -121,7 +121,6 @@ public class DataAccess {
     public Optional<Product> getProduct(long id) {
         Long[] params = new Long[]{id};
         List<Product> products = jdbcTemplate.query("select * from product where id = ?", params, new ProductRowMapper());
-        System.out.println(products);
         if (products.size() == 1)  {
             return Optional.of(products.get(0));
         }
@@ -141,5 +140,18 @@ public class DataAccess {
         }
     }
 
+    public Optional<Product> updateProduct(long id, String name, String description, String category, boolean withdrawn, String tags, String extraData ) {
+        // Updates the new product record
+    	int rows = jdbcTemplate.update("update product set name=?, description=?, category=?, withdrawn=?, tags =?, extraData=? where id =?", new Object[] {name, description, category, withdrawn, tags, extraData, id});
+        System.out.println(rows);
+        // Check if the product exists
+        if (rows == 1)  {
+        	// return the product that was updated.
+        	return getProduct(id);
+        }
+        else {
+            return Optional.empty();
+        }
+    }
 
 }
