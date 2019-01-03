@@ -1,5 +1,6 @@
 package gr.ntua.ece.stingy.data.model;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Product {
@@ -9,10 +10,10 @@ public class Product {
     private final String description;
     private final String category;
     private final boolean withdrawn;
-    private final String tags;
-    private final String extraData;
+    private final ArrayList<String> tags;
+    private final ArrayList<String> extraData;
 
-    public Product(long id, String name, String description, String category, boolean withdrawn, String tags, String extraData) {
+    public Product(long id, String name, String description, String category, boolean withdrawn, ArrayList<String> tags, ArrayList<String> extraData) {
         this.id          = id;
         this.name        = name;
         this.description = description;
@@ -42,11 +43,11 @@ public class Product {
         return withdrawn;
     }
 
-    public String getTags() {
+    public ArrayList<String> getTags() {
         return tags;
     }
 
-    public String getExtraData() {
+    public ArrayList<String> getExtraData() {
         return extraData;
     }
     
