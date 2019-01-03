@@ -62,5 +62,40 @@ public class ShopResource extends ServerResource {
 
         return new JsonMessageRepresentation(message);
     }
+    
+    @Override
+    protected Representation put(Representation entity) throws ResourceException {
+        /*
+         * get the shop id and check if it is valid 
+         */
+    	String idAttr = getAttribute("id");
+
+        if (idAttr == null) {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing shop id");
+        }
+
+        Long id = null;
+        try {
+            id = Long.parseLong(idAttr);
+        }
+        catch(Exception e) {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
+        }
+        //Create a new restlet form
+        Form form = new Form(entity);
+        //Read the parameters
+        String name = form.getFirstValue("name");
+        String address = form.getFirstValue("address");
+        double lng = Double.valueOf(form.getFirstValue("lng"));
+        double lat = Double.valueOf(form.getFirstValue("lat"));
+        String tags = form.getFirstValue("tags");
+        boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
+        /*
+         * update the certain product
+         */
+        Optional<Shop> optional = dataAccess.updateShop(id, name, address, lng, lat, tags, withdrawn);
+        Shop shop = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
+        return new JsonShopRepresentation(shop);
+    }
 
 }

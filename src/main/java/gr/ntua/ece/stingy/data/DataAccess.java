@@ -266,5 +266,19 @@ public class DataAccess {
             return Optional.empty();
         }
     }
+    
+    public Optional<Shop> updateShop(long id, String name, String address, double lng, double lat, String tags, boolean withdrawn ) {
+        // Updates the new shop record
+    	int rows = jdbcTemplate.update("update shop set name=?, address=?, lng=?, lat=?, tags =?, withdrawn=? where id =?", new Object[] {name, address, lng, lat, tags, withdrawn, id});
+        System.out.println(rows);
+        // Check if the product exists
+        if (rows == 1)  {
+        	// return the product that was updated.
+        	return getShop(id);
+        }
+        else {
+            return Optional.empty();
+        }
+    }
 
 }
