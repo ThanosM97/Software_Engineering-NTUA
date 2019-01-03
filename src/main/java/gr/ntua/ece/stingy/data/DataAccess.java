@@ -280,5 +280,33 @@ public class DataAccess {
             return Optional.empty();
         }
     }
+    
+    public Optional<Shop> patchShop(long id, String value, String field ) {
+        // Updates the new shop record based on the non null value
+    	int rows;
+    	if (field.equals("withdrawn")) {
+            boolean withdrawn = Boolean.valueOf(value);
+        	rows = jdbcTemplate.update("update shop set " + field + "=? where id =?", new Object[] {withdrawn, id});
+    	}
+    	else if (field.equals("lng")) {
+            double lng = Double.valueOf(value);
+        	rows = jdbcTemplate.update("update shop set " + field + "=? where id =?", new Object[] {lng, id});
+    	}
+    	else if (field.equals("lat")) {
+            double lat = Double.valueOf(value);
+        	rows = jdbcTemplate.update("update shop set " + field + "=? where id =?", new Object[] {lat, id});
+    	}
+    	else {
+        	rows = jdbcTemplate.update("update shop set " + field + "=? where id =?", new Object[] {value, id});
+    	}
+        // Check if the shop exists
+        if (rows == 1)  {
+        	// return the product that was updated.
+        	return getShop(id);
+        }
+        else {
+            return Optional.empty();
+        }
+    }
 
 }
