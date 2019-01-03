@@ -3,6 +3,7 @@ package gr.ntua.ece.stingy.data;
 
 import gr.ntua.ece.stingy.data.model.Product;
 import gr.ntua.ece.stingy.data.model.Message;
+import gr.ntua.ece.stingy.data.model.Shop;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -172,6 +173,36 @@ public class DataAccess {
         else {
             return Optional.empty();
         }
+    }
+    
+    public List<Shop> getShops(Limits limits, String status, String sort) {
+    	String sort_type = sort.replaceAll("\\|", " ");   
+    	/*
+    	 * initialize withdrawn based on the status value
+    	 */
+    	String withdrawn = null;
+    	if (status.equals("ALL")) {
+    		withdrawn = "withdrawn";
+    	}
+    	else if (status.equals("WITHDRAWN")) {
+    		withdrawn = "1";
+    	}
+    	else {
+    		withdrawn = "0";
+    	}
+
+    	/*
+    	 * get number of shops
+    	 */
+    	RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
+    	jdbcTemplate.query("select * from shop order by id", countCallback);
+    	int rowCount = countCallback.getRowCount();
+    	limits.setTotal(rowCount);
+    	/*
+    	 * return shops based on the limits.
+    	 */
+    	//TODO: fix error in descending order 
+    	return jdbcTemplate.query("select * from shop where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn,sort_type, limits.getStart(), limits.getCount() }, new ShopRowMapper());
     }
 
 }
