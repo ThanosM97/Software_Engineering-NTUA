@@ -153,5 +153,25 @@ public class DataAccess {
             return Optional.empty();
         }
     }
+    
+    public Optional<Product> patchProduct(long id, String value, String field ) {
+        // Updates the new product record based on the non null value
+    	int rows;
+    	if (field.equals("withdrawn")) {
+            boolean withdrawn = Boolean.valueOf(value);
+        	rows = jdbcTemplate.update("update product set " + field + "=? where id =?", new Object[] {withdrawn, id});
+    	}
+    	else {
+        	rows = jdbcTemplate.update("update product set " + field + "=? where id =?", new Object[] {value, id});
+    	}
+        // Check if the product exists
+        if (rows == 1)  {
+        	// return the product that was updated.
+        	return getProduct(id);
+        }
+        else {
+            return Optional.empty();
+        }
+    }
 
 }
