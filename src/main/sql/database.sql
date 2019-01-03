@@ -45,6 +45,18 @@ CREATE TABLE `shop` (
   `withdrawn` bit(1) NOT NULL DEFAULT b'0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `record`;
+CREATE TABLE `record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `price` FLOAT(8,3) NOT NULL,
+  `date` DATE NOT NULL,
+  `productId` int(11) NOT NULL,
+  `shopId` int(11) NOT NULL,
+  CONSTRAINT fk_record1 FOREIGN KEY (productId) REFERENCES product(id) ON DELETE CASCADE ON UPDATE CASCADE, 
+  CONSTRAINT fk_record2 FOREIGN KEY (shopId) REFERENCES shop(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 --
 -- Dumping data for table `product`
 --
@@ -70,6 +82,16 @@ INSERT INTO `shop` VALUES (1, 'Πλαίσιο Αθήνα', 'Βουλής 3,10562
 ,37.976454, 'laptops, TV', '\0');
 /*!40000 ALTER TABLE `shop` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping data for table `record`
+--
+LOCK TABLES `record` WRITE;
+/*!40000 ALTER TABLE `record` DISABLE KEYS */;
+INSERT INTO `record` VALUES (1, 300, '2018-12-12', 1, 1), (2, 250, '2018-12-20', 1, 2), (3, 280, '2018-11-15', 2, 1), (4, 220,'2018-11-29', 2, 3), (5, 100, '2018-10-10', 3,2),(6,250,'2018-10-11', 3,3);
+/*!40000 ALTER TABLE `record` ENABLE KEYS */;
+UNLOCK TABLES;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
