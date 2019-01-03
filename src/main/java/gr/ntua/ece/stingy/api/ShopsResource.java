@@ -92,7 +92,7 @@ public class ShopsResource extends ServerResource {
 	     * set current total products.
 	     */
 	    map.put("total", limits.getTotal());
-	    map.put("products", shops);
+	    map.put("shops", shops);
 	    return new JsonMapRepresentation(map);
 	}
 
