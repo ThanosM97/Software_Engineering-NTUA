@@ -96,11 +96,26 @@ public class ShopsResource extends ServerResource {
 	    return new JsonMapRepresentation(map);
 	}
 
-/**
-@Override
-protected Representation post(Representation entity) throws ResourceException {}
+    @Override
+    protected Representation post(Representation entity) throws ResourceException {
+
+        //Create a new restlet form
+        Form form = new Form(entity);
+        //Read the parameters
+        String name = form.getFirstValue("name");
+        String address = form.getFirstValue("address");
+        double lng = Double.valueOf(form.getFirstValue("lng"));
+        double lat = Double.valueOf(form.getFirstValue("lat"));
+        String tags = form.getFirstValue("tags");
+        boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
+
+        //validate the values (in the general case)
+        //...
+
+        Shop shop = dataAccess.addShop(name, address, lng, lat, tags, withdrawn);
+
+        return new JsonShopRepresentation(shop);
+    }
+}
 
 
-}
-*/
-}

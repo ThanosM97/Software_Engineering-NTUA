@@ -204,5 +204,45 @@ public class DataAccess {
     	//TODO: fix error in descending order 
     	return jdbcTemplate.query("select * from shop where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn,sort_type, limits.getStart(), limits.getCount() }, new ShopRowMapper());
     }
+    
+    public Shop addShop(String name, String address,double lng, double lat, String tags, boolean withdrawn ) {
+        //Create the new shop record using a prepared statement
+        PreparedStatementCreator psc = new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                PreparedStatement ps = con.prepareStatement(
+                        "insert into shop(name, address, lng, lat, tags, withdrawn) values(?, ?, ?, ?, ?,?)",
+                        Statement.RETURN_GENERATED_KEYS
+                );
+                ps.setString(1, name);
+                ps.setString(2, address);
+                ps.setDouble(3,  lng);
+                ps.setDouble(4, lat);
+                ps.setString(5, tags);
+                ps.setBoolean(6, withdrawn);
+                return ps;
+            }
+        };
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        int cnt = jdbcTemplate.update(psc, keyHolder);
+
+        if (cnt == 1) {
+            //New row has been added
+            Shop shop = new Shop(
+                keyHolder.getKey().longValue(), //the newly created project id
+                name,
+                address,
+                lng,
+                lat,
+                tags,
+                withdrawn
+            );
+            return shop;
+
+        }
+        else {
+            throw new RuntimeException("Creation of Product failed");
+        }
+    }
 
 }
