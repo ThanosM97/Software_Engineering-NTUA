@@ -15,6 +15,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,7 +81,7 @@ public class DataAccess {
     	return jdbcTemplate.query("select * from product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn,sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
     }
 
-    public Product addProduct(String name, String description, String category, boolean withdrawn, String tags, String extraData ) {
+    public Product addProduct(String name, String description, String category, boolean withdrawn, String tagsString, String extraDataString ) {
         //Create the new product record using a prepared statement
         PreparedStatementCreator psc = new PreparedStatementCreator() {
             @Override
@@ -92,8 +94,8 @@ public class DataAccess {
                 ps.setString(2, description);
                 ps.setString(3, category);
                 ps.setBoolean(4, withdrawn);
-                ps.setString(5, tags);
-                ps.setString(6, extraData);
+                ps.setString(5, tagsString);
+                ps.setString(6, extraDataString);
                 return ps;
             }
         };
@@ -102,6 +104,8 @@ public class DataAccess {
 
         if (cnt == 1) {
             //New row has been added
+            ArrayList<String> tags = new ArrayList<String>(Arrays.asList(tagsString.split(" , ")));
+            ArrayList<String> extraData = new ArrayList<String>(Arrays.asList(extraDataString.split(" , ")));
             Product product = new Product(
                 keyHolder.getKey().longValue(), //the newly created project id
                 name,

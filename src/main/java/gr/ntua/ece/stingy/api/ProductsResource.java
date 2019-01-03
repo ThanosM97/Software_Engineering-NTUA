@@ -10,6 +10,8 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,14 +106,13 @@ public class ProductsResource extends ServerResource {
         String description = form.getFirstValue("description");
         String category = form.getFirstValue("category");
         boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
-        String tags = form.getFirstValue("tags");
-        String extraData = form.getFirstValue("extraData");
+        String tagsString = form.getFirstValue("tags");
+        String extraDataString = form.getFirstValue("extraData");
 
         //validate the values (in the general case)
         //...
 
-        Product product = dataAccess.addProduct(name, description, category, withdrawn, tags, extraData);
-
+        Product product = dataAccess.addProduct(name, description, category, withdrawn, tagsString, extraDataString);
         return new JsonProductRepresentation(product);
     }
 }
