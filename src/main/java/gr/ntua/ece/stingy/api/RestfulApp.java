@@ -6,30 +6,30 @@ import org.restlet.routing.Router;
 
 public class RestfulApp extends Application {
 
-    @Override
-    public synchronized Restlet createInboundRoot() {
+	@Override
+	public synchronized Restlet createInboundRoot() {
 
-        Router router = new Router(getContext());
+		Router router = new Router(getContext());
 
-        /**
-         * Attach all resources to the corresponding URIs.
-         */
-        //GET, POST
-        router.attach("/products", ProductsResource.class);
+		/**
+		 * Attach all resources to the corresponding URIs.
+		 */
+		//GET, POST methods
+		router.attach("/products", ProductsResource.class);
 
-        //GET, DELETE, PUT, PATCΗ
-        router.attach("/products/{id}", ProductResource.class);
+		//GET, DELETE, PUT, PATCΗ methods
+		router.attach("/products/{id}", ProductResource.class);
 
-        //GET, POST
-        router.attach("/shops", ShopsResource.class);
-        
-        //GET, DELETE, PUT, PATCΗ
-        router.attach("/shops/{id}", ShopResource.class);
-        
-        //GET, POST
-        router.attach("/prices", PricesResource.class);
-        
-        return router;
-    }
+		//GET, POST methods
+		router.attach("/shops", ShopsResource.class);
+
+		//GET, DELETE, PUT, PATCΗ
+		router.attach("/shops/{id}", ShopResource.class);
+
+		//GET, POST methods
+		router.attach("/prices", PricesResource.class);
+
+		return router;
+	}
 
 }
