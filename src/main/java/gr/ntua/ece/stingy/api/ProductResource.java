@@ -87,12 +87,12 @@ public class ProductResource extends ServerResource {
         String description = form.getFirstValue("description");
         String category = form.getFirstValue("category");
         boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
-        String tags = form.getFirstValue("tags");
-        String extraData = form.getFirstValue("extraData");
+        String tagsString = form.getFirstValue("tags");
+        String extraDataString = form.getFirstValue("extraData");
         /*
          * update the certain product
          */
-        Optional<Product> optional = dataAccess.updateProduct(id, name, description, category, withdrawn, tags, extraData);
+        Optional<Product> optional = dataAccess.updateProduct(id, name, description, category, withdrawn, tagsString, extraDataString);
         Product product = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
         return new JsonProductRepresentation(product);
     }
@@ -122,8 +122,8 @@ public class ProductResource extends ServerResource {
         String description = form.getFirstValue("description");
         String category = form.getFirstValue("category");
         String withdrawn = form.getFirstValue("withdrawn");
-        String tags = form.getFirstValue("tags");
-        String extraData = form.getFirstValue("extraData");
+        String tagsString = form.getFirstValue("tags");
+        String extraDataString = form.getFirstValue("extraData");
         /*
          * patch the certain product based on the non null value.
          * If more than two values are given only the first is updated.
@@ -144,11 +144,11 @@ public class ProductResource extends ServerResource {
     	else if (withdrawn != null) {
             optional = dataAccess.patchProduct(id, withdrawn, "withdrawn");
     	}
-    	else if (tags != null) {
-            optional = dataAccess.patchProduct(id, tags, "tags");
+    	else if (tagsString != null) {
+            optional = dataAccess.patchProduct(id, tagsString, "tags");
     	}
-    	else if (extraData != null) {
-            optional = dataAccess.patchProduct(id, extraData, "extraData");
+    	else if (extraDataString != null) {
+            optional = dataAccess.patchProduct(id, extraDataString, "extraData");
     	}
     	else {
     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "None field changed");
