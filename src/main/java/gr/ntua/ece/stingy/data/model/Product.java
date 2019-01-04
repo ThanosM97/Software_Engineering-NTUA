@@ -22,10 +22,10 @@ public class Product {
     /*
      * tags and extraData are saved in the database as comma separated string.
      */
-    private final ArrayList<String> tags;
+    private final List<String> tags;
     private final Map<String, String> extraData;
 
-    public Product(long id, String name, String description, String category, boolean withdrawn, ArrayList<String> tags, String extraDataString) {
+    public Product(long id, String name, String description, String category, boolean withdrawn, List<String> tags, String extraDataString) {
         this.id          = id;
         this.name        = name;
         this.description = description;
@@ -58,7 +58,7 @@ public class Product {
         return withdrawn;
     }
 
-    public ArrayList<String> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
