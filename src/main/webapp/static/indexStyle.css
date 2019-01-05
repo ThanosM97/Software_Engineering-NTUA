@@ -56,7 +56,7 @@ nav a {
 
 .header .hotoffers {
   height:99%;
-  width:20%;
+  width:18%;
   margin-top: 2px;
   float:right;
   border-radius: 40px 0px 0px 40px;
@@ -98,16 +98,16 @@ nav a {
 }
 
 .searchspace input {
-  width:75%;
-  height:50px;
-  margin-left: 2%;
+  width:70%;
+  height:5vh;
+  margin-left: 4%;
   padding-left: 2%;
   float:left;
 }
 
 .searchspace input[type="submit"] {
   width:20%;
-  height: 54px;
+  height:5.4vh;
   margin:0;
   color: white;
   background-color: #b08b00;
@@ -161,7 +161,7 @@ nav a {
   margin: 50px 0;
   display: grid;
   width: 70%;
-  height: 700px;
+  height: 40vw;
   grid-template: repeat(3,32%) / repeat(3,1fr);
   grid-gap: 2%  5px;
 }
