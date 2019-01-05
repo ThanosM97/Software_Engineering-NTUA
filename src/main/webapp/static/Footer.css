@@ -1,0 +1,45 @@
+.footer {
+  position:relative;
+  bottom:0;
+  width:100%;
+  height:7vw;
+  background-color: #e5e5e5;
+  text-align: center;
+  font-size: 1vw;
+  z-index:1;
+}
+
+.categories-box {
+  position: relative;
+  width:33%;
+  top:25%;
+  height:50%;
+  float:left;
+}
+.categories-box a {
+  padding:5px;
+}
+
+.contact-box {
+  position:relative;
+  width:33%;
+  top:25%;
+  height:50%;
+  margin-left:-2%;
+  float:left;
+}
+.contact-box img {
+  position:relative;
+  display: inline;
+}
+.contact-box h3 {
+  display:inline;
+}
+
+.volunteering-box {
+  width:33%;
+  height:100%;
+  float:right;
+  text-align: justify;
+  margin-right: 10px;
+}
