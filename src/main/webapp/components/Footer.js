@@ -6,7 +6,7 @@ class Footer extends Component {
     return (
       <div>
         <Head>
-          <link href="/static/Footer.css" rel="stylesheet" />
+          <link href="../static/Footer.css" rel="stylesheet" />
         </Head>
         <div className="footer">
           <div className="categories-box">
