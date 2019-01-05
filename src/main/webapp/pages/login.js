@@ -5,7 +5,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div style={{backgroundColor:"#e5e5e5", position:"absolute",height:"100%", width:"100%", margin:"-10px"}}>
+      <div style={{backgroundColor:"#f1f1f1", position:"absolute",height:"100%", width:"100%", margin:"-10px"}}>
         <Head>
           <title>Σύνδεση χρήστη | Stingy </title>
           <link rel="shortcut icon" href="../static/logo/logo.png"/>
