@@ -1,15 +1,15 @@
 .modal {
   background-color: white;
-  box-shadow: 0px 0px 10px 2px #910f2d;
+  border: solid 1px #910f2d;
   color:black;
-  position:fixed;
+  position:relative;
   width:60%;
   height:80%;
-  position:fixed;
-  top:15%;
   left:20%;
+  margin: 30px 0;
 }
 .modal h1 {
   text-align:center;
   font-style: italic;
+  font-size: 1.5vw;
 }
