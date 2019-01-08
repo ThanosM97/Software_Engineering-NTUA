@@ -85,16 +85,33 @@ class ProductViewTv extends React.Component{
     }
 }
 
-//More product views to come
+class ProductViewMonitor extends React.Component{
+	render(){
+		<h1>Coming Soon</h1>
+	}
+}
+
+
+class ProductViewTablet extends React.Component{
+	render(){
+		<h1>Coming Soon</h1>
+	}
+}
+
+class ProductViewLaptop extends React.Component{
+	render(){
+		<h1>Coming Soon</h1>
+	}
+}
 
 class ProductViewShops extends React.Component{
     render(){
         // const listItems = strings.map( ...
         return(
-            <h1>Μαγαζιά που πωλούν το προϊόν:</h1>
-	    <h2>Coming soon :)</h2>
+		<div>
+        	    <h1>Μαγαζιά που πωλούν το προϊόν:</h1>
+		    <h2>Coming soon :)</h2>
+		</div>
         );
     }
 }
-
-ReactDOM.render(<ProductView />, document.getElementById('app'));
