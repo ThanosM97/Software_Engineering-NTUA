@@ -1,6 +1,6 @@
 import {ProductView} from '../components/ProductView.js';
-import {ProductViewSpecs} from '../components/ProductView.js';
-import {ProductViewSmartphone} from '../components/ProductView.js';
+//import {ProductViewSpecs, ProductView} from '../components/ProductView.js';
+//import {ProductViewSmartphone} from '../components/ProductView.js';
 
 import HomeHeader from '../components/HomeHeader.js';
 
@@ -9,6 +9,11 @@ const myExampleProduct = {
     frontCamera: '4Mp', cpuCores: '4', manufacturer: 'Samsung'
 };
 
+const myExampleShops = [
+    {name: 'Λαική αγορά Αιγαλέου', price: '5$', otherData: ''},
+    {name: 'Public Συντάγματος', price: '1000$', otherData: ''}
+];
+
 //const myExampleShops = [
 //    {name: 'Λαική αγορά Αιγαλέου', price: '5$', otherData: ''},
 //    {name: 'Public Συντάγματος', price: '1000$', otherData: ''}
@@ -16,9 +21,9 @@ const myExampleProduct = {
 
 var content = (
     <div>
-	<h1>This is a test page for an item!</h1>
-	<h2>This test item is a {myExampleProduct.device}! Here are its specs</h2>
-	<ProductViewSpecs product={myExampleProduct} />
+        <h1>This is a test page for an item!</h1>
+        <h2>This test item is a {myExampleProduct.device}! Here are its specs</h2>
+        <ProductView product={myExampleProduct} shops={myExampleShops} />
     </div>
 );
 export default () => content;

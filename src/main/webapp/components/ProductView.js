@@ -13,16 +13,18 @@ const myExampleShops = [
 
 export class ProductView extends React.Component{
     render(){
+        // We should give as the product argument the 'category' argument from the URL
+        // For testing I am going to assume the URL is of type www.stingy.com/category='category'&
         return(
             <div>
-                <ProductViewSpecs product={myExampleProduct}/>  
-                <ProductViewShops shops={myExampleShops}/>
+                <ProductViewSpecs product={this.props.product}/>  
+                <ProductViewShopList shops={this.props.shops}/>
             </div>
         );
     }
 }
 
-export class ProductViewSpecs extends React.Component{
+class ProductViewSpecs extends React.Component{
     render(){
         let product_render;
         switch (this.props.product.device){
@@ -52,12 +54,15 @@ export class ProductViewSpecs extends React.Component{
         //     product_render = ( <div> Oops! </div> );
         // }
         return(
-                <div>{product_render}</div>
+                <div>
+                    <h3>Χαρακτηριστικά Προϊόντος:</h3>
+                    <div>{product_render}</div>
+                </div>
         );
     }
 }
 
-export class ProductViewSmartphone extends React.Component{
+class ProductViewSmartphone extends React.Component{
     render(){
         return(
             <div>
@@ -108,14 +113,32 @@ class ProductViewLaptop extends React.Component{
 	}
 }
 
-class ProductViewShops extends React.Component{
+// class ProductViewShop extends React.Component{
+//     render(){
+//         return(
+//             <div>
+//                 <a>Όνομα: {this.props.shop.name}</a><br />
+//                 <a>Τιμή: {this.props.shop.price}</a><br />
+//                 <a>Άλλα στοιχεία: {this.props.shop.otherData}</a><br />
+//             </div>
+//         );
+//     }
+// }
+
+class ProductViewShopList extends React.Component{
     render(){
-        // const listItems = strings.map( ...
+        const shoplist = this.props.shops.map(shop => 
+            <li>
+                <a>Όνομα: {shop.name}</a>
+                <a>Τιμή: {shop.price}</a> 
+                <a>Άλλα στοιχεία: {shop.otherData}</a>
+            </li>
+            );
         return(
-		<div>
-        	    <h1>Μαγαζιά που πωλούν το προϊόν:</h1>
-		    <h2>Coming soon :)</h2>
-		</div>
-        );
+            <div>
+                <h3>Μαγαζιά που διαθέτουν το προϊόν:</h3>
+                <ul>{shoplist}</ul>
+            </div>
+        )
     }
 }
