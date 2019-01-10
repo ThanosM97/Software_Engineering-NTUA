@@ -11,7 +11,7 @@ const myExampleShops = [
     {name: 'Public Συντάγματος', price: '1000$', otherData: ''}
 ];
 
-class ProductView extends React.Component{
+export class ProductView extends React.Component{
     render(){
         return(
             <div>
@@ -22,49 +22,53 @@ class ProductView extends React.Component{
     }
 }
 
-class ProductViewSpecs extends React.Component{
+export class ProductViewSpecs extends React.Component{
     render(){
-        switch (this.props.device){
+        let product_render;
+        switch (this.props.product.device){
             case 'smartphone':
-                return (
-                    <ProductViewSmartphone product={this.props.product} />
-                );
+                product_render = ( <ProductViewSmartphone product={this.props.product} />);
+                break;
             case 'tv':
-                return (
-                    <ProductViewTv />
-                );
+                product_render = ( <ProductViewTv product={this.props.product} />);
+                break;
             case 'monitor':
-                return (
-                    <ProductViewMonitor />
-                );
+                product_render = ( <ProductViewMonitor product={this.props.product} />);
+                break;
             case 'tablet':
-                return (
-                    <ProductViewTablet />
-                );
+                product_render = ( <ProductViewTablet product={this.props.product} />);
+                break;
             case 'laptop':
-                return (
-                    <ProductViewLaptop />
-                );
-            default: 
-                return (
-                    <h1>Not a valid product type!</h1>
-                );
-        }
+                product_render = ( <ProductViewLaptop product={this.props.product} />);
+                break;
+            default:
+                product_render = ( <div> Oops! Invalid product type :( </div> );
+            }
+
+        // if (this.props.product.device == 'smartphone'){
+        //     product_render = ( <ProductViewSmartphone product={this.props.product} />);
+        // }
+        // else if
+        //     product_render = ( <div> Oops! </div> );
+        // }
+        return(
+                <div>{product_render}</div>
+        );
     }
 }
 
-class ProductViewSmartphone extends React.Component{
+export class ProductViewSmartphone extends React.Component{
     render(){
         return(
             <div>
-                <a>Όνομα: {this.props.name}</a>
-                <a>Οθόνη: {this.props.screen}</a>
-                <a>Μνήμη RAM: {this.props.ram}</a>
-                <a>Μνήμη ROM: {this.props.rom}</a>
-                <a>Κάμερα: {this.props.backCamera}</a>
-                <a>Selfie: {this.props.frontCamera}</a>
-                <a>Πυρήνες Επεξεργαστή: {this.props.cpuCores}</a>
-                <a>Κατασκευαστής: {this.props.manufacturer}</a>
+                <a>Όνομα: {this.props.product.name}</a><br />
+                <a>Οθόνη: {this.props.product.screen}</a><br />
+                <a>Μνήμη RAM: {this.props.product.ram}</a><br />
+                <a>Μνήμη ROM: {this.props.product.rom}</a><br />
+                <a>Κάμερα: {this.props.product.backCamera}</a><br />
+                <a>Selfie: {this.props.product.frontCamera}</a><br />
+                <a>Πυρήνες Επεξεργαστή: {this.props.product.cpuCores}</a><br />
+                <a>Κατασκευαστής: {this.props.product.manufacturer}</a><br />
             </div>
         );
     }
