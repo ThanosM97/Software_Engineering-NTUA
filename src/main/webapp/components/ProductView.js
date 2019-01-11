@@ -11,6 +11,9 @@ const myExampleShops = [
     {name: 'Public Συντάγματος', price: '1000$', otherData: ''}
 ];
 
+const smartphone = "../static/images/smartphone250x250.png";
+
+
 export class ProductView extends React.Component{
     render(){
         // We should give as the product argument the 'category' argument from the URL
@@ -54,8 +57,7 @@ class ProductViewSpecs extends React.Component{
         //     product_render = ( <div> Oops! </div> );
         // }
         return(
-                <div>
-                    <h3>Χαρακτηριστικά Προϊόντος:</h3>
+                <div class='specs'>
                     <div>{product_render}</div>
                 </div>
         );
@@ -66,14 +68,38 @@ class ProductViewSmartphone extends React.Component{
     render(){
         return(
             <div>
-                <a>Όνομα: {this.props.product.name}</a><br />
-                <a>Οθόνη: {this.props.product.screen}</a><br />
-                <a>Μνήμη RAM: {this.props.product.ram}</a><br />
-                <a>Μνήμη ROM: {this.props.product.rom}</a><br />
-                <a>Κάμερα: {this.props.product.backCamera}</a><br />
-                <a>Selfie: {this.props.product.frontCamera}</a><br />
-                <a>Πυρήνες Επεξεργαστή: {this.props.product.cpuCores}</a><br />
-                <a>Κατασκευαστής: {this.props.product.manufacturer}</a><br />
+                <a class='product-name'>{this.props.product.name}</a><br />
+                <img src={smartphone} class='product-image' /><br />
+                <table class='specs-table'>
+                    <tr>
+                        <td>Οθόνη</td> 
+                        <td>{this.props.product.screen}</td>
+                    </tr>
+                    <tr>
+                        <td>Μνήμη RAM</td> 
+                        <td>{this.props.product.ram}</td>
+                    </tr>
+                    <tr>
+                        <td>Μνήμη ROM</td> 
+                        <td>{this.props.product.rom}</td>
+                    </tr>
+                    <tr>
+                        <td>Κάμερα</td> 
+                        <td>{this.props.product.backCamera}</td>
+                    </tr>
+                    <tr>
+                    <td>Selfie</td> 
+                    <td>{this.props.product.frontCamera}</td>
+                    </tr>
+                    <tr>
+                        <td>Πυρήνες Επεξεργαστή</td> 
+                        <td>{this.props.product.cpuCores}</td>
+                    </tr>
+                    <tr>
+                        <td>Κατασκευαστής</td> 
+                        <td>{this.props.product.manufacturer}</td>
+                    </tr>
+                </table>
             </div>
         );
     }
@@ -129,14 +155,14 @@ class ProductViewShopList extends React.Component{
     render(){
         const shoplist = this.props.shops.map(shop => 
             <li>
-                <a>Όνομα: {shop.name}</a>
-                <a>Τιμή: {shop.price}</a> 
-                <a>Άλλα στοιχεία: {shop.otherData}</a>
+                <a>Όνομα: {shop.name} </a>
+                <a>Τιμή: {shop.price} </a> 
+                <a>Άλλα στοιχεία: {shop.otherData} </a>
             </li>
             );
         return(
-            <div>
-                <h3>Μαγαζιά που διαθέτουν το προϊόν:</h3>
+            <div class='shops'>
+                <h3 class='list-name'>Καταστήματα</h3>
                 <ul>{shoplist}</ul>
             </div>
         )
