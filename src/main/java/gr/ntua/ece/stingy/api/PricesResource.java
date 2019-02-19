@@ -11,6 +11,8 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,14 +99,21 @@ public class PricesResource extends ServerResource {
         if ((dateFrom == null && dateTo != null) || (dateFrom != null && dateTo == null)) {
         	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid date ");
         }
+        if (dateFrom == null) {
+        	Date date = new Date();
+        	dateFrom = new SimpleDateFormat("yyyy-MM-dd").format(date);
+        	dateTo = new SimpleDateFormat("yyyy-MM-dd").format(date);
+        }
+        System.out.println(geoLngString +  geoLatString + dateFrom + dateTo + shops + products + tags + sort);
         
-    	List<Product> products = dataAccess.getRecords(limits, geoDistString, geoLngString, geoLatString, dateFrom, dateTo, 
+        
+    	List<Record> records = dataAccess.getRecords(limits, geoDistString, geoLngString, geoLatString, dateFrom, dateTo, 
     			shops, products, tags ,sort);
     	/*
     	 * set current total products.
     	 */
         map.put("total", limits.getTotal());
-        map.put("products", products);
+        map.put("prices", records);
         return new JsonMapRepresentation(map);
     }
 
