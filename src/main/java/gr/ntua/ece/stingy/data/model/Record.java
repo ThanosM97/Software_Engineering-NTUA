@@ -4,6 +4,7 @@
 package gr.ntua.ece.stingy.data.model;
 
 import java.util.Objects;
+import java.util.Date;
 
 public class Record {
 
@@ -11,14 +12,15 @@ public class Record {
     private final String productName;
     private final long productId;
     private final String productTags;
-    private final String shopId;
+    private final long shopId;
     private final String shopName;
     private final String shopTags;
     private final String shopAddress;
     private final int shopDist;
+    private final Date date;
     
-	public Record(double price, String productName, long productId, String productTags, String shopId, String shopName,
-			String shopTags, String shopAddress, int shopDist) {
+	public Record(double price, String productName, long productId, String productTags, long shopId, String shopName,
+			String shopTags, String shopAddress, int shopDist, Date date) {
 		this.price = price;
 		this.productName = productName;
 		this.productId = productId;
@@ -28,6 +30,7 @@ public class Record {
 		this.shopTags = shopTags;
 		this.shopAddress = shopAddress;
 		this.shopDist = shopDist;
+		this.date = date;
 	}
 
 	/**
@@ -61,7 +64,7 @@ public class Record {
 	/**
 	 * @return the shopId
 	 */
-	public String getShopId() {
+	public long getShopId() {
 		return shopId;
 	}
 
