@@ -102,17 +102,42 @@ public class ProductsResource extends ServerResource {
 	protected Representation post(Representation entity) throws ResourceException {
 
 		//Create a new restlet form
+		
 		Form form = new Form(entity);
+	
 		//Read the parameters
 		String name = form.getFirstValue("name");
 		String description = form.getFirstValue("description");
 		String category = form.getFirstValue("category");
-		boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
+		String withdrawnString = form.getFirstValue("withdrawn");
 		String tagsString = form.getFirstValue("tags");
 		String extraDataString = form.getFirstValue("extraData");
+		// Validate the values (in the general case)
+		System.out.println(description);
 
-		//validate the values (in the general case)
-		//...
+		
+		if (name == null || name.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Name is required");
+		}
+		if (description == null || description.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Description is required");
+		}
+		if (category == null || category.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category is required");
+		}
+		if (tagsString == null || tagsString.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
+		}
+		/*
+		 * default value for withdrawn is false
+		 */
+		boolean withdrawn;
+		if (withdrawnString == null) {
+			withdrawn = false;
+		}
+		else {
+			withdrawn = Boolean.valueOf(withdrawnString);
+		}
 
 		Product product = dataAccess.addProduct(name, description, category, withdrawn, tagsString, extraDataString);
 		return new JsonProductRepresentation(product);
