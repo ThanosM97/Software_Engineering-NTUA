@@ -5,11 +5,14 @@ package gr.ntua.ece.stingy.data;
 
 import gr.ntua.ece.stingy.data.model.Product;
 import gr.ntua.ece.stingy.data.model.Message;
+import gr.ntua.ece.stingy.data.model.Record;
 import gr.ntua.ece.stingy.data.model.Shop;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowCountCallbackHandler;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import javax.sql.DataSource;
@@ -29,6 +32,7 @@ public class DataAccess {
 	private static final int MAX_IDLE_CONNECTIONS = 8;
 	private DataSource dataSource;
 	private JdbcTemplate jdbcTemplate;
+	private NamedParameterJdbcTemplate namedJdbcTemplate;
 
 	public void setup(String driverClass, String url, String user, String pass) throws SQLException {
 
@@ -49,6 +53,7 @@ public class DataAccess {
 
 		// Initialize the jdbc template utility
 		jdbcTemplate = new JdbcTemplate(bds);
+		namedJdbcTemplate = new NamedParameterJdbcTemplate(bds);
 	}
 
 	public List<Product> getProducts(Limits limits, String status, String sort) {
@@ -311,5 +316,73 @@ public class DataAccess {
 			return Optional.empty();
 		}
 	}
+	
+	
+	public List<Record> getRecords(Limits limits, String geoDistString, String geoLngString, String geoLatString, String dateFrom, String dateTo, 
+			String shops, String products, String tags , String sort) {
+		String sort_type = sort.replaceAll("\\|", " ");
+		/*
+		 * Initialize withdrawn based on the status value
+		 */
+		/*
+		 * Get number of all products
+		 */
+		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
+		jdbcTemplate.query("select * from record order by id", countCallback);
+		int rowCount = countCallback.getRowCount();
+		limits.setTotal(rowCount);
+		/*
+		 * Return products based on the limits.
+		 */
+		
+		//shopTagsNew
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("geoLng", geoLngString);
+	    parameters.addValue("geoLat", geoLatString);
+	    parameters.addValue("geoDist", geoDistString);
+	    parameters.addValue("dateFrom", dateFrom);
+	    parameters.addValue("dateTo", dateTo);
+	    parameters.addValue("shops", shops);
+	    parameters.addValue("products", products);
+	    parameters.addValue("productTags", tags);
+	    parameters.addValue("shopTags", tags);
+	    parameters.addValue("sort", sort_type);
+	    
+	    if (geoDistString != null) {
+			return namedJdbcTemplate.query("SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, \n" + 
+					"SQRT(POW(shop.lng - :geoLng, 2) + POW(shop.lat - :geoLat, 2)) as dist, record.date\n" + 
+					"FROM shop, product, record\n" + 
+					"WHERE SQRT(POW(shop.lng - :geoLng, 2) + POW(shop.lat - :geoLat, 2)) < :geoDist\n" + 
+					"AND record.shopId = shop.id \n" + 
+					"AND record.productId = product.id\n" + 
+					"AND record.date > :dateFrom and record.date <= :dateTo\n" + 
+					"AND record.shopId in (:shops)\n" + 
+					"AND record.productId in (:products)\n" + 
+					"AND (\n" + 
+					"product.tags REGEXP :productTags\n" + 
+					"OR shop.tags REGEXP :shopTags\n" + 
+					")\n" + 
+					"order by :sort",  parameters, new RecordRowMapper());
+	    }
+		else {
+			return namedJdbcTemplate.query("SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, \n" + 
+						" record.date\n" + 
+						"FROM shop, product, record\n" + 
+						"WHERE \n" + 
+						"record.shopId = shop.id \n" + 
+						"AND record.productId = product.id\n" + 
+						"AND record.date > :dateFrom and record.date <= :dateTo\n" + 
+						"AND record.shopId in (:shops)\n" + 
+						"AND record.productId in (:products)\n" + 
+						"AND (\n" + 
+						"product.tags REGEXP :productTags\n" + 
+						"OR shop.tags REGEXP :shopTags\n" + 
+						")\n" + 
+						"order by :sort",  parameters, new RecordRowMapper());
+		}
+
+	}
+	
+	
 
 }
