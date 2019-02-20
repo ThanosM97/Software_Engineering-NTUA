@@ -30,7 +30,7 @@ public class RecordRowMapper implements RowMapper {
 		long shopId        = rs.getLong("shopId");
 		String shopName   = rs.getString("shopName");
 		String shopTags   = rs.getString("shopTags");
-		String shopAddress   = rs.getString("shopAddress");
+		String shopAddress   = rs.getString("address");
 		int shopDist	= rs.getInt("dist");
 		Date date 		= rs.getDate("date");
 		
