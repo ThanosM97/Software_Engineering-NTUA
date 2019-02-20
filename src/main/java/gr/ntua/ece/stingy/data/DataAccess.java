@@ -327,10 +327,7 @@ public class DataAccess {
 		/*
 		 * Get number of all products
 		 */
-		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
-		jdbcTemplate.query("select * from record order by id", countCallback);
-		int rowCount = countCallback.getRowCount();
-		limits.setTotal(rowCount);
+		
 		/*
 		 * Return products based on the limits.
 		 */
@@ -347,40 +344,61 @@ public class DataAccess {
 	    parameters.addValue("productTags", tags);
 	    parameters.addValue("shopTags", tags);
 	    parameters.addValue("sort", sort_type);
+	    parameters.addValue("start", limits.getStart());
+	    parameters.addValue("count", limits.getCount());
+
+	    System.out.println(geoLngString);
+	    System.out.println(geoLatString);
+	    System.out.println(geoDistString);
+	    System.out.println(dateFrom);
+	    System.out.println(dateTo);
+	    System.out.println(shops);
+	    System.out.println(products);
+	    System.out.println(tags);
+	    System.out.println(sort_type);
+	    String sqlStm;
 	    
 	    if (geoDistString != null) {
-			return namedJdbcTemplate.query("SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, \n" + 
+	    	sqlStm = "SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, \n" + 
 					"SQRT(POW(shop.lng - :geoLng, 2) + POW(shop.lat - :geoLat, 2)) as dist, record.date\n" + 
 					"FROM shop, product, record\n" + 
 					"WHERE SQRT(POW(shop.lng - :geoLng, 2) + POW(shop.lat - :geoLat, 2)) < :geoDist\n" + 
 					"AND record.shopId = shop.id \n" + 
 					"AND record.productId = product.id\n" + 
-					"AND record.date > :dateFrom and record.date <= :dateTo\n" + 
-					"AND record.shopId in (:shops)\n" + 
-					"AND record.productId in (:products)\n" + 
-					"AND (\n" + 
+					"AND record.date > :dateFrom and record.date <= :dateTo\n";
+	    
+	    }
+	    else {
+	    	sqlStm = "SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, -1 as dist, \n" + 
+					" record.date\n" + 
+					"FROM shop, product, record\n" + 
+					"WHERE \n" + 
+					"record.shopId = shop.id \n" + 
+					"AND record.productId = product.id\n" + 
+					"AND record.date > :dateFrom and record.date <= :dateTo\n";
+	    }
+	    
+	    if (products != null) {
+	    	sqlStm += "AND record.productId in (:products)\n";
+	    }
+	    if (shops != null) {
+	    	sqlStm += "AND record.shopId in (:shops)\n";
+	    }
+	    if (tags != null) {
+	    	sqlStm += "AND (\n" + 
 					"product.tags REGEXP :productTags\n" + 
 					"OR shop.tags REGEXP :shopTags\n" + 
-					")\n" + 
-					"order by :sort",  parameters, new RecordRowMapper());
+					")\n";
 	    }
-		else {
-			return namedJdbcTemplate.query("SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, \n" + 
-						" record.date\n" + 
-						"FROM shop, product, record\n" + 
-						"WHERE \n" + 
-						"record.shopId = shop.id \n" + 
-						"AND record.productId = product.id\n" + 
-						"AND record.date > :dateFrom and record.date <= :dateTo\n" + 
-						"AND record.shopId in (:shops)\n" + 
-						"AND record.productId in (:products)\n" + 
-						"AND (\n" + 
-						"product.tags REGEXP :productTags\n" + 
-						"OR shop.tags REGEXP :shopTags\n" + 
-						")\n" + 
-						"order by :sort",  parameters, new RecordRowMapper());
-		}
-
+	    
+	    RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
+	    namedJdbcTemplate.query(sqlStm, parameters, countCallback);
+		int rowCount = countCallback.getRowCount();
+		limits.setTotal(rowCount);
+	    
+	    sqlStm += "order by :sort limit :start, :count";
+	    System.out.println(sqlStm);
+	    return namedJdbcTemplate.query(sqlStm, parameters, new RecordRowMapper());
 	}
 	
 	
