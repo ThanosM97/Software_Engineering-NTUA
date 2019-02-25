@@ -1,5 +1,7 @@
 -- MySQL dump 10.13  Distrib 5.6.23, for Win64 (x86_64)
 --
+CREATE SCHEMA `stingy`  DEFAULT CHARACTER SET utf8 ;
+USE stingy;
 -- Host: localhost    Database: stingy
 -- ------------------------------------------------------
 -- Server version	5.6.24-log
