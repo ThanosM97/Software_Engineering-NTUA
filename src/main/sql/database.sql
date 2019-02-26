@@ -28,7 +28,7 @@ CREATE TABLE `Product` (
 	`description` mediumtext,
 	`category` varchar(128) NOT NULL,
 	`withdrawn` bit(1) NOT NULL DEFAULT b'0',
-	'image' varchar(45)
+	`image` varchar(45),
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -54,6 +54,8 @@ DROP TABLE IF EXISTS `Product_Tag`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Product_Tag` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`ProductId` int(11) NOT NULL,
+	`TagId` int(11) NOT NULL,
   	CONSTRAINT fk_prodTag1 FOREIGN KEY (ProductId) REFERENCES Product(id) ON DELETE CASCADE ON UPDATE CASCADE,
   	CONSTRAINT fk_prodTag2 FOREIGN KEY (TagId) REFERENCES Tag(id) ON DELETE CASCADE ON UPDATE CASCADE,  
 	PRIMARY KEY (`id`)
@@ -68,8 +70,9 @@ DROP TABLE IF EXISTS `extraData`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `extraData` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
-	'characteristic' varchar(45) NOT NULL,
-	'value' varchar(45) NOT NULL,
+	`characteristic` varchar(45) NOT NULL,
+	`value` varchar(45) NOT NULL,
+	`ProductId` int(11) NOT NULL,
   	CONSTRAINT fk_extraData FOREIGN KEY (ProductId) REFERENCES Product(id) ON DELETE CASCADE ON UPDATE CASCADE, 
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
@@ -85,7 +88,7 @@ CREATE TABLE `Shop` (
 	`address` mediumtext,
 	`lng` FLOAT(13,10) NOT NULL,
 	`lat` FLOAT(13,10) NOT NULL,
-	'image' varchar(45),
+	`image` varchar(45),
 	`withdrawn` bit(1) NOT NULL DEFAULT b'0',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
@@ -98,6 +101,8 @@ DROP TABLE IF EXISTS `Shop_Tag`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Shop_Tag` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`ShopId` int(11) NOT NULL,
+	`TagId` int(11) NOT NULL,
   	CONSTRAINT fk_shopTag1 FOREIGN KEY (ShopId) REFERENCES Shop(id) ON DELETE CASCADE ON UPDATE CASCADE,
   	CONSTRAINT fk_shopTag2 FOREIGN KEY (TagId) REFERENCES Tag(id) ON DELETE CASCADE ON UPDATE CASCADE, 
 	PRIMARY KEY (`id`)
@@ -118,8 +123,8 @@ CREATE TABLE `User` (
 	`key` varchar(45) NOT NULL,
 	`email` varchar(45) NOT NULL,
 	`phoneNumber` varchar(45) NOT NULL,
-	'points'  int(11),
-	'profilePic' varchar(45),
+	`points`  int(11),
+	`profilePic` varchar(45),
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -128,15 +133,16 @@ CREATE TABLE `User` (
 --
 DROP TABLE IF EXISTS `Record`;
 CREATE TABLE `Record` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `price` FLOAT(8,3) NOT NULL,
-  `date` DATE NOT NULL,
-  `productId` int(11) NOT NULL,
-  'validity' int(11),
-  `shopId` int(11) NOT NULL,
-  CONSTRAINT fk_record1 FOREIGN KEY (productId) REFERENCES Product(id) ON DELETE CASCADE ON UPDATE CASCADE, 
-  CONSTRAINT fk_record2 FOREIGN KEY (shopId) REFERENCES Phop(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT fk_record3 FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`price` FLOAT(8,3) NOT NULL,
+	`date` DATE NOT NULL,
+	`validity` int(11),
+	`productId` int(11) NOT NULL,
+	`shopId` int(11) NOT NULL,
+	`userId` int(11) NOT NULL,
+	CONSTRAINT fk_record1 FOREIGN KEY (productId) REFERENCES Product(id) ON DELETE CASCADE ON UPDATE CASCADE, 
+	CONSTRAINT fk_record2 FOREIGN KEY (shopId) REFERENCES Phop(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT fk_record3 FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE ON UPDATE CASCADE,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -147,12 +153,13 @@ CREATE TABLE `Record` (
 TVs have the following extra data: 4k, smart, frequency
 Laptops have the following extra data: CPU, RAM, hd, OS, size, graphics card
 Smartphones have the following extra data: CPU cores, cpu freq, RAM, capacity, size , camera pixels 
-*/
+
 'TV, Smart TV, 4K,','4K, Smart, 1300 PQI'
 ,'TV, Smart TV, 4K', '4K, Smart, 1500 PMI'
 ,'Laptop, Windows 10','Intel Celeron N4000, 4GB, 500GB, Windows 10, 15.6, Intel HD Graphics 600'
 'Laptop, Windows 10', 'AMD A-Series, 4GB, 128GB,Windows 10, 14,  Radeon R5'
  'Black, Dual Sim, Android','Octa core, 1.8GHz, 3GB, 32GB, 6.2, 12 Mp'
+*/
 LOCK TABLES `Product` WRITE;
 /*!40000 ALTER TABLE `Product` DISABLE KEYS */;
 INSERT INTO `Product` VALUES (1,'SAMSUNG TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV','\0'),(2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV','\0'),(3,'DELL Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop','\0'),(4,' Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop', '\0'),(5,' Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', '\0');
