@@ -20,8 +20,8 @@ export class ProductView extends React.Component{
         // For testing I am going to assume the URL is of type www.stingy.com/category='category'&
         return(
             <div>
-                <ProductViewSpecs product={this.props.product}/>  
-                <ProductViewShopList shops={this.props.shops}/>
+                <ProductViewSpecs class='main-product' product={this.props.product}/>  
+                <ProductViewShopList class='main-shops' shops={this.props.shops}/>
             </div>
         );
     }
@@ -154,16 +154,17 @@ class ProductViewLaptop extends React.Component{
 class ProductViewShopList extends React.Component{
     render(){
         const shoplist = this.props.shops.map(shop => 
-            <li>
-                <a>Όνομα: {shop.name} </a>
-                <a>Τιμή: {shop.price} </a> 
-                <a>Άλλα στοιχεία: {shop.otherData} </a>
-            </li>
+            <div class='shopbox'>
+                <as>Όνομα: {shop.name} </as><br></br>
+                <as>Τιμή: {shop.price} </as><br></br> 
+                <as>Άλλα στοιχεία: {shop.otherData} </as><br></br>
+                <as>Αξιοπιστία καταχώρησης: <at></at></as>
+            </div>
             );
         return(
-            <div class='shops'>
-                <h3 class='list-name'>Καταστήματα</h3>
-                <ul>{shoplist}</ul>
+            <div>
+                <h3>Διαθέσιμο στα εξής Καταστήματα:</h3>
+                <div class='myshoplist'>{shoplist}</div>
             </div>
         )
     }

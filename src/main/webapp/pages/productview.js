@@ -9,7 +9,8 @@ const myExampleProduct = {
 
 const myExampleShops = [
     {name: 'Λαική αγορά Αιγαλέου', price: '5$', otherData: ''},
-    {name: 'Public Συντάγματος', price: '1000$', otherData: ''}
+    {name: 'Public Συντάγματος', price: '1000$', otherData: ''},
+    {name: 'Πλαίσιο Πειραιά', price: '1000$', otherData: ''}
 ];
 
 //const myExampleShops = [
