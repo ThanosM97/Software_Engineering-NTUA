@@ -17,5 +17,9 @@
 3) ανοίγουμε browser και συνδεόμαστε στο localhost:3000
 
 ### Για linux 
-1) στον φάκελο webapp ανοίγουμε terminal: npm run dev
-2) ανοίγουμε browser και μπαίνουμε στο localhost:3000
+
+1) sudo chmod -R 777 webapp
+
+2) στον φάκελο webapp ανοίγουμε terminal: npm run dev
+
+3) ανοίγουμε browser και μπαίνουμε στο localhost:3000
