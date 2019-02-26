@@ -2,11 +2,18 @@
     margin: 0;
     padding: 0;
   }
-  
+
+  td {
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      border: 1px solid black;
+      border-collapse: collapse;
+  }
+
 .specs {
     width: 30%;
     background-color: #e5e5e5;
     padding: 3%;
+    float: left;
 }
 
 .product-name {
@@ -23,7 +30,6 @@
     margin-bottom: 5%;
 }
 
-
 .specs-table {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 150%;
@@ -31,13 +37,12 @@
     height: 50%;
 }
 
-td {
-font-family: Georgia, 'Times New Roman', Times, serif;
-border: 1px solid black;
-border-collapse: collapse;
+.myshoplist{
+    display: grid;
 }
 
-.shops {
-
+.shopbox{
+    padding: 5px;
+    margin-top: 10px;
+    background-color: rgb(113, 153, 153);
 }
-
