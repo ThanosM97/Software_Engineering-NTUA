@@ -1,6 +1,6 @@
 -- MySQL dump for Stingy by JavaMagkes
 
-CREATE SCHEMA `stingy`  DEFAULT CHARACTER SET utf8 ;
+CREATE DATABASE  IF NOT EXISTS `stingy`;
 USE stingy;
 
 -- Host: localhost    Database: stingy
@@ -238,3 +238,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2019-02-29 14:47:43
+
