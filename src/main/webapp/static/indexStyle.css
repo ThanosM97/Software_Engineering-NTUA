@@ -181,30 +181,35 @@ nav a {
 }
 .blue:hover {
   background-color: #395c9b;
+  transform: scale(0.97);
 }
 .purple {
   background-color: #752984;
 }
 .purple:hover {
   background-color: #8f479e;
+  transform: scale(0.97);
 }
 .yellow {
   background-color: #c6993f;
 }
 .yellow:hover {
   background-color: #d3a750;
+  transform: scale(0.97);
 }
 .green {
   background-color: #135e23;
 }
 .green:hover {
   background-color: #256b34;
+  transform: scale(0.97);
 }
 .red {
   background-color: #5e212a;;
 }
 .red:hover {
   background-color: #72353f;
+  transform: scale(0.97);
 }
 .stingy {
   background-color: #a5a19a;
