@@ -14,19 +14,30 @@ public class RestfulApp extends Application {
 		/**
 		 * Attach all resources to the corresponding URIs.
 		 */
-		//GET, POST methods
+		
+		/*
+		 * GET, POST methods
+		 */
 		router.attach("/products", ProductsResource.class);
 
-		//GET, DELETE, PUT, PATCΗ methods
+		/*
+		 * GET, DELETE, PUT, PATCΗ methods
+		 */
 		router.attach("/products/{id}", ProductResource.class);
 
-		//GET, POST methods
+		/*
+		 * GET, POST methods
+		 */
 		router.attach("/shops", ShopsResource.class);
 
-		//GET, DELETE, PUT, PATCΗ
+		/*
+		 * GET, DELETE, PUT, PATCΗ methods
+		 */
 		router.attach("/shops/{id}", ShopResource.class);
 
-		//GET, POST methods
+		/*
+		 * GET, POST methods
+		 */
 		router.attach("/prices", PricesResource.class);
 
 		return router;
