@@ -1,3 +1,6 @@
+/*
+ * This class converts an object of type Product in json format.
+ */
 package gr.ntua.ece.stingy.api;
 
 import com.google.gson.Gson;

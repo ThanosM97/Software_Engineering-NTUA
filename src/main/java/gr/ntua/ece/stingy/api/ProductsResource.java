@@ -9,6 +9,10 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,8 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 /*
- * A class implementing get and post methods of /products URI
+ * A class implementing get and post methods of /products URI.
  */
+
 public class ProductsResource extends ServerResource {
 
 	private final DataAccess dataAccess = Configuration.getInstance().getDataAccess();
@@ -36,8 +41,9 @@ public class ProductsResource extends ServerResource {
 
 		Map<String, Object> map = new HashMap<>();
 		Limits limits = new Limits();
+		
 		/**
-		 * If a parameter exists and is valid put it in the map.
+		 * If a parameter exists and is valid put it in the map. Otherwise, use default value.
 		 */
 		if (startString != null ) {
 			Long start = null;
@@ -49,10 +55,8 @@ public class ProductsResource extends ServerResource {
 			}
 			limits.setStart(start);
 			map.put("start", start);
-		} else {
-			/*
-			 * else put default value for start (0).
-			 */
+		} 
+		else {
 			map.put("start", 0);
 		}
 		if (countString != null ) {
@@ -65,14 +69,13 @@ public class ProductsResource extends ServerResource {
 			}
 			limits.setCount(count);
 			map.put("count", count);
-		} else{
-			/*
-			 * else put default value for count (20).
-			 */
+		} 
+		else {
 			map.put("count", 20);
 		}
+		
 		/*
-		 * set default values for status and sort
+		 * Set default values for status and sort
 		 */
 		if (status == null) {
 			status = "ACTIVE";
@@ -80,6 +83,9 @@ public class ProductsResource extends ServerResource {
 		if (sort == null) {
 			sort = "id|DESC";
 		}
+		/*
+		 * Check if status and sort are valid.
+		 */
 		if (!status.equals("ALL") && !status.equals("WITHDRAWN") && !status.equals("ACTIVE")) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid status: " + status);
 		}
@@ -87,11 +93,11 @@ public class ProductsResource extends ServerResource {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid sort: " + sort);
 		}
 		/*
-		 * get products based on the limits.
+		 * Get products based on the limits.
 		 */
 		List<Product> products = dataAccess.getProducts(limits, status, sort);
 		/*
-		 * set current total products.
+		 * Set current total products.
 		 */
 		map.put("total", limits.getTotal());
 		map.put("products", products);
@@ -100,22 +106,28 @@ public class ProductsResource extends ServerResource {
 
 	@Override
 	protected Representation post(Representation entity) throws ResourceException {
-
-		//Create a new restlet form
-		
+		/*
+		 * Create a new restlet form
+		 */	
 		Form form = new Form(entity);
-	
-		//Read the parameters
+		/*
+		 * Read the parameters from the body of the form.
+		 */
 		String name = form.getFirstValue("name");
 		String description = form.getFirstValue("description");
 		String category = form.getFirstValue("category");
 		String withdrawnString = form.getFirstValue("withdrawn");
 		String tagsString = form.getFirstValue("tags");
 		String extraDataString = form.getFirstValue("extraData");
-		// Validate the values (in the general case)
-		System.out.println(description);
-
 		
+		/*
+		 * Convert tagString that represents a list of tags to a list.
+		 */
+		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
+		
+		/*
+		 *  Validate the values (in the general case)
+		 */
 		if (name == null || name.isEmpty()) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Name is required");
 		}
@@ -128,8 +140,9 @@ public class ProductsResource extends ServerResource {
 		if (tagsString == null || tagsString.isEmpty()) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
 		}
+		
 		/*
-		 * default value for withdrawn is false
+		 * If withdrawn is not set, use default value.
 		 */
 		boolean withdrawn;
 		if (withdrawnString == null) {
@@ -139,7 +152,10 @@ public class ProductsResource extends ServerResource {
 			withdrawn = Boolean.valueOf(withdrawnString);
 		}
 
-		Product product = dataAccess.addProduct(name, description, category, withdrawn, tagsString, extraDataString);
+		/*
+		 * Add requested product in the database.
+		 */
+		Product product = dataAccess.addProduct(name, description, category, withdrawn, tags, extraDataString);
 		return new JsonProductRepresentation(product);
 	}
 }

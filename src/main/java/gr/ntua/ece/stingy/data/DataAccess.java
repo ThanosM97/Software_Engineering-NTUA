@@ -8,12 +8,15 @@ import gr.ntua.ece.stingy.data.model.Message;
 import gr.ntua.ece.stingy.data.model.Record;
 import gr.ntua.ece.stingy.data.model.Shop;
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.restlet.data.Status;
+import org.restlet.resource.ResourceException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowCountCallbackHandler;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -22,7 +25,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class DataAccess {
@@ -86,46 +91,127 @@ public class DataAccess {
 		return jdbcTemplate.query("select * from product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
 	}
 
-	public Product addProduct(String name, String description, String category, boolean withdrawn, String tagsString, String extraDataString ) {
-		//Create the new product record using a prepared statement
-		PreparedStatementCreator psc = new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				PreparedStatement ps = con.prepareStatement(
-						"insert into product(name, description, category, withdrawn, tags, extraData) values(?, ?, ?, ?, ?,?)",
-						Statement.RETURN_GENERATED_KEYS
-						);
-				ps.setString(1, name);
-				ps.setString(2, description);
-				ps.setString(3, category);
-				ps.setBoolean(4, withdrawn);
-				ps.setString(5, tagsString);
-				ps.setString(6, extraDataString);
-				return ps;
+	public Product addProduct(String name, String description, String category, boolean withdrawn, ArrayList<String> tags, String extraDataString ) {
+		/*
+		 * Insert the new product in the Product table
+		 */
+		KeyHolder keyHolder = new GeneratedKeyHolder();	// for keeping the product id
+		jdbcTemplate.update(
+		    new PreparedStatementCreator() {
+		        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+		            PreparedStatement ps =
+		                connection.prepareStatement("insert into Product(name, description, category, withdrawn) "
+		                		+ "values(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+		            ps.setString(1, name);
+					ps.setString(2, description);
+					ps.setString(3, category);
+					ps.setBoolean(4, withdrawn);
+		            return ps;
+		        }
+		    },
+		    keyHolder);
+		System.out.println(keyHolder.getKey());
+		long productId = (long)keyHolder.getKey();
+		/*
+		 * For each tag insert it in the Tag table if not exists and then insert it in the Product_Tag table.
+		 */
+		Long tagId;
+		int count;
+		for (String tag: tags) { 
+			count = jdbcTemplate.queryForObject("select count(*) from Tag where "
+					+ "name=?", new Object[] { tag }, Integer.class);
+			if (count > 0) {
+				tagId = jdbcTemplate.queryForObject("select id from Tag where "
+						+ "name=?", new Object[] { tag }, Long.class);
 			}
-		};
-		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-		int cnt = jdbcTemplate.update(psc, keyHolder);
-
-		if (cnt == 1) {
-			//New row has been added
-	    	List<String> tags = Arrays.asList(tagsString.split("\\s*,\\s*"));
-			Product product = new Product(
-					keyHolder.getKey().longValue(), //the newly created project id
+			else {
+				/*
+				 * Insert tag in Tag table.
+				 */
+				keyHolder = new GeneratedKeyHolder();
+				jdbcTemplate.update(
+				    new PreparedStatementCreator() {
+				        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				            PreparedStatement ps =
+				                connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+				            ps.setString(1, tag);
+				            return ps;
+				        }
+				    },
+				    keyHolder);
+				tagId = (long)keyHolder.getKey();
+			}
+			jdbcTemplate.update("INSERT INTO Product_Tag(ProductId, TagId) VALUES(?, ?)", new Object[] { productId, tagId  });			
+		}
+		List<String> extraDataList = Arrays.asList(extraDataString.split(","));
+		Map<String, String> extraData = new HashMap<>();
+		if (category.equals("Laptop")) {
+			if (extraDataList.size() != 6) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 6");
+			}
+			/*
+			 * Extra data supported for Laptops
+			 */
+			extraData.put("CPU", extraDataList.get(0));
+			extraData.put("RAM", extraDataList.get(1));
+			extraData.put("Hard Drive", extraDataList.get(2));
+			extraData.put("OS", extraDataList.get(3));
+			extraData.put("Screen Size", extraDataList.get(4));
+			extraData.put("Graphics Card", extraDataList.get(5));
+		}
+		else if (category.equals("TV")) {
+			if (extraDataList.size() != 3) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 3");
+			}
+			/*
+			 * Extra data supported for TVs
+			 */
+			if (extraDataList.get(0).equals("4k") || extraDataList.get(0).equals("4K")) {
+				extraData.put("4K", "Yes");
+			}
+			else {
+				extraData.put("4K", "No");
+			}
+			if (extraDataList.get(1).equals("Smart") || extraDataList.get(1).equals("SMART")) {
+				extraData.put("Smart", "Yes");
+			}
+			else {
+				extraData.put("Smart", "No");
+			}			
+			extraData.put("Frequency", extraDataList.get(2));
+		}
+		else if (category.equals("Smartphone")) {
+			if (extraDataList.size() != 7) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 7");
+			}
+			/*
+			 * Extra data supported for Smartphones
+			 */
+			extraData.put("CPU cores", extraDataList.get(0));
+			extraData.put("CPU frequency", extraDataList.get(1));
+			extraData.put("RAM", extraDataList.get(2));
+			extraData.put("Capacity", extraDataList.get(3));
+			extraData.put("Front camera", extraDataList.get(4));
+			extraData.put("Selfie camera", extraDataList.get(5));
+			extraData.put("OS", extraDataList.get(6));
+		}
+		else {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category " + category + " is not supported in stingy");
+		}
+		/*
+		* Create product and return it.
+		*/
+		Product product = new Product(
+					productId, //the newly created project id
 					name,
 					description,
 					category,
 					withdrawn,
 					tags,
-					extraDataString
+					extraData
 					);
-			return product;
-
-		}
-		else {
-			throw new RuntimeException("Creation of Product failed");
-		}
-	}
+		return product;
+}
 
 	public Optional<Product> getProduct(long id) {
 		Long[] params = new Long[]{id};
@@ -401,6 +487,4 @@ public class DataAccess {
 	    return namedJdbcTemplate.query(sqlStm, parameters, new RecordRowMapper());
 	}
 	
-	
-
 }

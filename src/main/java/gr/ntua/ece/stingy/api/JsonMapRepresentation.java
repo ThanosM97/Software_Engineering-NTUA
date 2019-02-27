@@ -1,3 +1,6 @@
+/*
+ * This class converts a Map in a json format.
+ */
 package gr.ntua.ece.stingy.api;
 
 import com.google.gson.Gson;
