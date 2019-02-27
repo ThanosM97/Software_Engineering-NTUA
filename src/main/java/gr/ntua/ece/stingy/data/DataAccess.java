@@ -81,14 +81,14 @@ public class DataAccess {
 		 * Get number of all products
 		 */
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
-		jdbcTemplate.query("select * from product order by id", countCallback);
+		jdbcTemplate.query("select * from Product order by id", countCallback);
 		int rowCount = countCallback.getRowCount();
 		limits.setTotal(rowCount);
 		/*
 		 * Return products based on the limits.
 		 */
 		//TODO: fix error in descending order 
-		return jdbcTemplate.query("select * from product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+		return jdbcTemplate.query("select * from Product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
 	}
 
 	public Product addProduct(String name, String description, String category, boolean withdrawn, ArrayList<String> tags, String extraDataString ) {
@@ -153,11 +153,18 @@ public class DataAccess {
 			 * Extra data supported for Laptops
 			 */
 			extraData.put("CPU", extraDataList.get(0));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(CPU, ?, ?)", new Object[] { extraDataList.get(0), productId});			
 			extraData.put("RAM", extraDataList.get(1));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(RAM, ?, ?)", new Object[] { extraDataList.get(1), productId});			
 			extraData.put("Hard Drive", extraDataList.get(2));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(Hard Drive, ?, ?)", new Object[] { extraDataList.get(2), productId});			
 			extraData.put("OS", extraDataList.get(3));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(OS, ?, ?)", new Object[] { extraDataList.get(3), productId});			
 			extraData.put("Screen Size", extraDataList.get(4));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(Screen Size, ?, ?)", new Object[] {  extraDataList.get(4), productId});			
 			extraData.put("Graphics Card", extraDataList.get(5));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(Graphics Card, ?, ?)", new Object[] { extraDataList.get(5), productId});			
+
 		}
 		else if (category.equals("TV")) {
 			if (extraDataList.size() != 3) {
@@ -179,6 +186,10 @@ public class DataAccess {
 				extraData.put("Smart", "No");
 			}			
 			extraData.put("Frequency", extraDataList.get(2));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(4K, ?, ?)", new Object[] { extraDataList.get(0), productId});			
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(Smart, ?, ?)", new Object[] { extraDataList.get(1), productId});			
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(Frequency, ?, ?)", new Object[] { extraDataList.get(2), productId});			
+
 		}
 		else if (category.equals("Smartphone")) {
 			if (extraDataList.size() != 7) {
@@ -188,12 +199,19 @@ public class DataAccess {
 			 * Extra data supported for Smartphones
 			 */
 			extraData.put("CPU cores", extraDataList.get(0));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(CPU cores, ?, ?)", new Object[] { extraDataList.get(0), productId});			
 			extraData.put("CPU frequency", extraDataList.get(1));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(CPU frequency, ?, ?)", new Object[] { extraDataList.get(1), productId});			
 			extraData.put("RAM", extraDataList.get(2));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(RAM, ?, ?)", new Object[] { extraDataList.get(2), productId});			
 			extraData.put("Capacity", extraDataList.get(3));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(Capacity, ?, ?)", new Object[] { extraDataList.get(3), productId});			
 			extraData.put("Front camera", extraDataList.get(4));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(Front camera, ?, ?)", new Object[] { extraDataList.get(4), productId});			
 			extraData.put("Selfie camera", extraDataList.get(5));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(Selfie camera, ?, ?)", new Object[] { extraDataList.get(5), productId});			
 			extraData.put("OS", extraDataList.get(6));
+			jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(OS, ?, ?)", new Object[] { extraDataList.get(6), productId});			
 		}
 		else {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category " + category + " is not supported in stingy");
