@@ -41,7 +41,7 @@ DROP TABLE IF EXISTS `Tag`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Tag` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`name` varchar(45) NOT NULL,
+	`name` varchar(45) NOT NULL UNIQUE,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
