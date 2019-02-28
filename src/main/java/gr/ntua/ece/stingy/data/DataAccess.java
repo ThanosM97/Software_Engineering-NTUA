@@ -10,8 +10,10 @@ import gr.ntua.ece.stingy.data.model.Shop;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowCountCallbackHandler;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -21,6 +23,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -89,6 +92,25 @@ public class DataAccess {
 		 */
 		//TODO: fix error in descending order 
 		return jdbcTemplate.query("select * from Product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+	}
+	
+	public List<String> getTagsById(long id){
+		String query = "select distinct Tag.name from Product_Tag, Tag where productId=? and tagId = Tag.id";
+		return jdbcTemplate.queryForList(query, new Object[] { id }, String.class);
+	}
+	
+	public Map<String, String> getExtraDataById(long id){
+		String query = "SELECT extraData.characteristic, extraData.value FROM extraData where productId = ?";
+		return jdbcTemplate.query(query ,new Object[] { id }, new ResultSetExtractor<Map>(){
+		    @Override
+		    public Map extractData(ResultSet rs) throws SQLException,DataAccessException {
+		        HashMap<String,String> mapRet= new HashMap<String,String>();
+		        while(rs.next()){
+		            mapRet.put(rs.getString("characteristic"),rs.getString("value"));
+		        }
+		        return mapRet;
+		    }
+		});
 	}
 
 	public Product addProduct(String name, String description, String category, boolean withdrawn, ArrayList<String> tags, String extraDataString ) {
