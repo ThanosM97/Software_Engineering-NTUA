@@ -1,4 +1,6 @@
 import {ProductList} from '../components/ProductList.js';
+import NavBar from '../components/NavBar';
+import Footer from '../components/Footer';
 
 // I'm going to assume that We get the data at some point to this format
 const products = [
@@ -12,9 +14,11 @@ const products = [
 
 var content = (
     <div>
+            <NavBar />
             <h1>Coming Soon :)</h1>
             <a>Related Products:</a>
             <ProductList products={products} />
+            <Footer />
     </div>
 );
 export default () => content;
