@@ -16,7 +16,7 @@ export class ProductList extends React.Component{
         // Maybe use the same Component for displaying specs here? We'll see
         return(
             <div >
-                  <div class='productbox'>{product_list}</div>
+                  <div>{product_list}</div>
             </div>
         );
     }
