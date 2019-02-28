@@ -12,6 +12,9 @@ const myExampleShops = [
 ];
 
 const smartphone = "../static/images/smartphone250x250.png";
+const like = "../static/images/like.png";
+const unlike = "../static/images/unlike.png";
+const questionmark = "../static/images/questionmark.png";
 
 
 export class ProductView extends React.Component{
@@ -27,7 +30,7 @@ export class ProductView extends React.Component{
     }
 }
 
-class ProductViewSpecs extends React.Component{
+export class ProductViewSpecs extends React.Component{
     render(){
         let product_render;
         switch (this.props.product.device){
@@ -155,10 +158,11 @@ class ProductViewShopList extends React.Component{
     render(){
         const shoplist = this.props.shops.map(shop => 
             <div class='shopbox'>
-                <as>Όνομα: {shop.name} </as><br></br>
-                <as>Τιμή: {shop.price} </as><br></br> 
+                <as class='shopname'>{shop.name} </as>
+                <as class='price'>{shop.price} </as><br></br> 
                 <as>Άλλα στοιχεία: {shop.otherData} </as><br></br>
-                <as>Αξιοπιστία καταχώρησης: <at></at></as>
+                <as>Αξιοπιστία καταχώρησης: <img src={like} class='like-img'/> <img src={unlike} class='like-img'/><img src={questionmark} class='questionmark-img'/></as><br></br>
+                <as class='address'>Αλέκου Παναγούλη 9, Νίκαια </as><br></br>
             </div>
             );
         return(

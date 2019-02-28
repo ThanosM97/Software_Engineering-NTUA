@@ -1,5 +1,6 @@
 import {ProductView} from '../components/ProductView.js';
 import NavBar from '../components/NavBar';
+import Footer from '../components/Footer';
 
 
 const myExampleProduct = {
@@ -26,6 +27,7 @@ var content = (
         <div>
             <NavBar />
             <ProductView product={myExampleProduct} shops={myExampleShops} />
+            <Footer />
         </div>
     </div>
 );
