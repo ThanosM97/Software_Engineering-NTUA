@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>My google Map</title>
+    <style>
+      .dropbtn {
+        background-color: #3498DB;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .dropbtn:hover, .dropbtn:focus {
+        background-color: #2980B9;
+      }
+
+      .dropdown {
+        position: relative;
+        display:inline-block;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 50%;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+      }
+
+      .dropdown a:hover {background-color: #ddd;}
+
+      .show {display: block;}
+      
+      #myInput:focus {outline: 3px solid #ddd;}
+
+      #map {
+        height:400px;
+        width:100%;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="dropdown">
+      <button onclick="Kostas()" class="dropbtn">Melinas Merkouri 21</button>
+      <div id="myDropdown" class="dropdown-content">
+          <div id="map"></div>
+          <script>
+              function initMap(){
+                var options = {
+                  zoom: 8,
+                  center:{lat:37.983810, lng:23.727539}
+                }
+                var map = new google.maps.Map(document.getElementById("map"), options);
+                var marker = new google.maps.Marker({
+                  position:{lat:37.983810, lng:23.727539},
+                  map:map
+                });
+              }
+            </script>
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMZm-VfcJmBlUcfm-OZGltQDgujt8-HEM&callback=initMap"></script>
+        </div>
+    </div>
+
+    <script>
+        /* When the user clicks on the button, 
+        toggle between hiding and showing the dropdown content */
+        function Kostas() {
+          document.getElementById("myDropdown").classList.toggle("show");
+        }
+        
+        //When the click in on button hide the map
+        function filterFunction() {
+          var input, filter, ul, li, a, i;
+          input = document.getElementById("myInput");
+          filter = input.value.toUpperCase();
+          div = document.getElementById("myDropdown");
+          a = div.getElementsByTagName("a");
+          for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              a[i].style.display = "";
+            } else {
+              a[i].style.display = "none";
+            } 
+          }
+        }
+      </script>
+  </body>
+</html>
