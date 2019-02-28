@@ -1,0 +1,46 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+h3 {
+    margin-left:5%;
+    margin-top: 3%;
+    text-align: left;
+}
+
+.background{
+    background-color: beige;
+}
+
+.product-entry{
+    margin-right: 5%;
+    margin-left: 5%;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    padding: 3%;
+    border: 1px solid black;
+    background-color: rgb(255, 255, 255);
+}
+
+.product-image{
+    width: 10%;
+    height: 10%;
+}
+
+.product-name{
+    position: relative;
+    border: 1px solid black;
+    font-size: 150%;
+}
+
+.product-specs{
+    color: grey;
+    font-size: 70%;
+    position: relative;
+    left: 10%
+}
+
+.product-price{
+    float: right;
+}

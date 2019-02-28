@@ -1,12 +1,12 @@
 * {
     margin: 0;
     padding: 0;
-  }
+}
 
-  td {
-      font-family: Georgia, 'Times New Roman', Times, serif;
-      border-collapse: collapse;
-  }
+td {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    border-collapse: collapse;
+}
 
 h3 {
     text-align: center;
