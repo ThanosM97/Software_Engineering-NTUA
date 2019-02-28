@@ -11,6 +11,9 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class ProductResource extends ServerResource {
@@ -71,7 +74,7 @@ public class ProductResource extends ServerResource {
         Optional<Message> optional = dataAccess.deleteProduct(id);
         Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
         /*
-         * Return product's json representation.
+         * Return message.
          */
         return new JsonMessageRepresentation(message);
     }
@@ -79,10 +82,12 @@ public class ProductResource extends ServerResource {
     @Override
     protected Representation put(Representation entity) throws ResourceException {
         /*
-         * get the product id and check if it is valid 
+         * Get the product id.
          */
     	String idAttr = getAttribute("id");
-
+    	/*
+    	 * Check if it is valid 
+    	 */
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing product id");
         }
@@ -94,19 +99,45 @@ public class ProductResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid product id: " + idAttr);
         }
-        //Create a new restlet form
+        /*
+         * Create a new restlet form
+         */
         Form form = new Form(entity);
-        //Read the parameters
+        /*
+         * Read the parameters
+         */
         String name = form.getFirstValue("name");
         String description = form.getFirstValue("description");
         String category = form.getFirstValue("category");
         boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
         String tagsString = form.getFirstValue("tags");
         String extraDataString = form.getFirstValue("extraData");
+        
         /*
-         * update the certain product
+		 *  Validate the values (in the general case)
+		 */
+		if (name == null || name.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Name is required");
+		}
+		if (description == null || description.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Description is required");
+		}
+		if (category == null || category.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category is required");
+		}
+		if (tagsString == null || tagsString.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
+		}
+		
+        /*
+		 * Convert tagString that represents a list of tags to a list.
+		 */
+		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
+		
+        /*
+         * Update the certain product
          */
-        Optional<Product> optional = dataAccess.updateProduct(id, name, description, category, withdrawn, tagsString, extraDataString);
+        Optional<Product> optional = dataAccess.updateProduct(id, name, description, category, withdrawn, tags, extraDataString);
         Product product = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
         return new JsonProductRepresentation(product);
     }
