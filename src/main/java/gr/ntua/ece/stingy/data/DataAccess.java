@@ -261,7 +261,7 @@ public class DataAccess {
 
 	public Optional<Product> getProduct(long id) {
 		Long[] params = new Long[]{id};
-		List<Product> products = jdbcTemplate.query("select * from product where id = ?", params, new ProductRowMapper());
+		List<Product> products = jdbcTemplate.query("select * from Product where id = ?", params, new ProductRowMapper());
 		if (products.size() == 1)  {
 			return Optional.of(products.get(0));
 		}

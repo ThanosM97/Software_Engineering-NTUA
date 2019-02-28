@@ -21,11 +21,15 @@ public class ProductResource extends ServerResource {
     protected Representation get() throws ResourceException {
 
         String idAttr = getAttribute("id");
-
+        /*
+         * Check if given id is not null.
+         */
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing product id");
         }
-
+        /*
+         * Convert given id tos long.
+         */
         Long id = null;
         try {
             id = Long.parseLong(idAttr);
@@ -33,7 +37,9 @@ public class ProductResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid product id: " + idAttr);
         }
-
+        /*
+         * Get product based on the given id.
+         */
         Optional<Product> optional = dataAccess.getProduct(id);
         Product product = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
 
