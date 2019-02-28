@@ -272,7 +272,10 @@ public class DataAccess {
 
 	public Optional<Message> deleteProduct(long id) {
 		Long[] params = new Long[]{id};
-		int found = jdbcTemplate.update("delete from product where id=?", params);
+		/*
+		 * Delete product from Product table and return 'OK' message.
+		 */
+		int found = jdbcTemplate.update("delete from Product where id=?", params);
 		if (found == 1)  {
 			return Optional.of(new Message("OK"));
 		}

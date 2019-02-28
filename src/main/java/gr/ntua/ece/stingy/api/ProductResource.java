@@ -49,11 +49,15 @@ public class ProductResource extends ServerResource {
     @Override
     protected Representation delete() throws ResourceException {
         String idAttr = getAttribute("id");
-
+        /*
+         * Check if given id is null.
+         */
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing product id");
         }
-
+        /*
+         * Convert given id to long.
+         */
         Long id = null;
         try {
             id = Long.parseLong(idAttr);
@@ -61,10 +65,14 @@ public class ProductResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid product id: " + idAttr);
         }
-
+        /*
+         * Delete product based on the id.
+         */
         Optional<Message> optional = dataAccess.deleteProduct(id);
         Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
-
+        /*
+         * Return product's json representation.
+         */
         return new JsonMessageRepresentation(message);
     }
     
