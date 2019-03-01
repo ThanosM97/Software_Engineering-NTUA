@@ -19,7 +19,6 @@ var content = (
         </head>
         <div class='background'>
                 <NavBar />
-                <h3>Related Products:</h3>
                 <ProductList products={products} />
                 <Footer />
         </div>
