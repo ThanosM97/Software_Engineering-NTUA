@@ -5,22 +5,23 @@ package gr.ntua.ece.stingy.data.model;
 
 import java.util.Objects;
 import java.util.Date;
+import java.util.List;
 
 public class Record {
 
     private final double price;
     private final String productName;
     private final long productId;
-    private final String productTags;
+    private final List<String> productTags;
     private final long shopId;
     private final String shopName;
-    private final String shopTags;
+    private final List<String> shopTags;
     private final String shopAddress;
     private final int shopDist;
     private final Date date;
     
-	public Record(double price, String productName, long productId, String productTags, long shopId, String shopName,
-			String shopTags, String shopAddress, int shopDist, Date date) {
+	public Record(double price, String productName, long productId, List<String> productTags, long shopId, String shopName,
+			List<String> shopTags, String shopAddress, int shopDist, Date date) {
 		this.price = price;
 		this.productName = productName;
 		this.productId = productId;
@@ -57,7 +58,7 @@ public class Record {
 	/**
 	 * @return the productTags
 	 */
-	public String getProductTags() {
+	public List<String> getProductTags() {
 		return productTags;
 	}
 
@@ -78,7 +79,7 @@ public class Record {
 	/**
 	 * @return the shopTags
 	 */
-	public String getShopTags() {
+	public List<String> getShopTags() {
 		return shopTags;
 	}
 
@@ -125,9 +126,6 @@ public class Record {
 				&& Objects.equals(shopAddress, other.shopAddress) && shopDist == other.shopDist
 				&& Objects.equals(shopId, other.shopId) && Objects.equals(shopName, other.shopName)
 				&& Objects.equals(shopTags, other.shopTags);
-	}
-    
+	}   
 	
-    
-    
 }

@@ -794,20 +794,12 @@ public class DataAccess {
 
 
 	public List<Record> getRecords(Limits limits, String geoDistString, String geoLngString, String geoLatString, String dateFrom, String dateTo, 
-			String shops, String products, String tags , String sort) {
+			String shops, String products, List<String> tags , String sort) {
 		String sort_type = sort.replaceAll("\\|", " ");
-		/*
-		 * Initialize withdrawn based on the status value
-		 */
-		/*
-		 * Get number of all products
-		 */
 
 		/*
-		 * Return products based on the limits.
+		 * Initialize named parameters
 		 */
-
-		//shopTagsNew
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("geoLng", geoLngString);
 		parameters.addValue("geoLat", geoLatString);
@@ -834,37 +826,45 @@ public class DataAccess {
 		String sqlStm;
 
 		if (geoDistString != null) {
-			sqlStm = "SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, \n" + 
-					"SQRT(POW(shop.lng - :geoLng, 2) + POW(shop.lat - :geoLat, 2)) as dist, record.date\n" + 
-					"FROM shop, product, record\n" + 
-					"WHERE SQRT(POW(shop.lng - :geoLng, 2) + POW(shop.lat - :geoLat, 2)) < :geoDist\n" + 
-					"AND record.shopId = shop.id \n" + 
-					"AND record.productId = product.id\n" + 
-					"AND record.date > :dateFrom and record.date <= :dateTo\n";
-
+			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
+					"SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) as dist, Record.date\n" + 
+					"FROM Shop, Product, Record ";
+			if (tags!= null) {
+				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
+			}
+				sqlStm += "WHERE SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) < :geoDist\n" + 
+					"AND Record.shopId = Shop.id \n" + 
+					"AND Record.productId = Product.id\n" + 
+					"AND Record.date > :dateFrom and Record.date <= :dateTo\n";
 		}
 		else {
-			sqlStm = "SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, -1 as dist, \n" + 
-					" record.date\n" + 
-					"FROM shop, product, record\n" + 
-					"WHERE \n" + 
-					"record.shopId = shop.id \n" + 
-					"AND record.productId = product.id\n" + 
-					"AND record.date > :dateFrom and record.date <= :dateTo\n";
+			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
+					" Record.date\n" + 
+					"FROM Shop, Product, Record ";
+			if (tags!= null) {
+				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
+			}
+				sqlStm += "WHERE \n" + 
+					"Record.shopId = Shop.id \n" + 
+					"AND Record.productId = Product.id\n" + 
+					"AND Record.date > :dateFrom and Record.date <= :dateTo\n";
 		}
 
 		if (products != null) {
-			sqlStm += "AND record.productId in (:products)\n";
+			sqlStm += "AND Record.productId in (:products)\n";
 		}
 		if (shops != null) {
-			sqlStm += "AND record.shopId in (:shops)\n";
+			sqlStm += "AND Record.shopId in (:shops)\n";
 		}
 		if (tags != null) {
-			sqlStm += "AND (\n" + 
-					"product.tags REGEXP :productTags\n" + 
-					"OR shop.tags REGEXP :shopTags\n" + 
-					")\n";
+			sqlStm += "AND ((Tag.name in (:productTags)\n" + 
+					"		and Tag.id = Product_Tag.TagId\n" + 
+					"		and Product_Tag.ProductId = Product.id)\n" + 
+					"		or (Tag.id = Shop_Tag.TagId\n" + 
+					"		and Shop_Tag.ShopId = Shop.id\n" + 
+					"		and Tag.name in (:shopTags)))";
 		}
+		System.out.println(sqlStm);
 
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
 		namedJdbcTemplate.query(sqlStm, parameters, countCallback);
@@ -872,7 +872,6 @@ public class DataAccess {
 		limits.setTotal(rowCount);
 
 		sqlStm += "order by :sort limit :start, :count";
-		System.out.println(sqlStm);
 		return namedJdbcTemplate.query(sqlStm, parameters, new RecordRowMapper());
 	}
 
