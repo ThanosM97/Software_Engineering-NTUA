@@ -121,7 +121,7 @@ CREATE TABLE `Product` (
 	`name` varchar(255) NOT NULL,
 	`description` mediumtext,
 	`category` varchar(128) NOT NULL,
-	`withdrawn` bit(1) NOT NULL DEFAULT b'0',
+	`withdrawn` bit(1) NOT NULL,
 	`image` varchar(300) NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -311,21 +311,21 @@ Smartphones have the following extra data: CPU cores, cpu freq, RAM, capacity, s
 */
 LOCK TABLES `Product` WRITE;
 /*!40000 ALTER TABLE `Product` DISABLE KEYS */;
-INSERT INTO `Product` VALUES (1,'Samsung TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image1.png','\0'),
-							 (2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image2.png','\0'),
-							 (3,'Dell Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image3.png','\0'),
-							 (4,'Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image4.png', '\0'),
-							 (5,'Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image5.png','\0'),
-							 (6,'Samsung Galaxy J4 PLUS DUAL SIM GOLD','Με True HD+ Infinity Display, Dual-SIM και Emotify για ξεχωριστή επικοινωνία, Snapdragon SoC και Android Oreο απολαμβάνεις μια ανώτερη εμπειρία χρήσης','Smartphone','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image6.png','\0'),
-							 (7,'Apple iPhone XS','Με τη μεγαλύτερη οθόνη σε iPhone, Super Retina 6,5" τεχνολογίας OLED, το πιο έξυπνο & ισχυρό επεξεργαστή σε smartphone, ταχύτερη αναγνώριση προσώπου Face ID και διπλή πίσω κάμερα για μοναδικές λήψεις','Smartphone','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image7.png','\0'),
-							 (8,'Honor 10 Lite Smartphone Blue', 'Dewdrop οθόνη 6,21" με FHD+ ανάλυση, Dual AI και 24MP Selfie κάμερες, 8πύρηνο SoC Kirin 710 με GPU Turbo και EMUI 9.0 out-of-the-box!', 'Smartphone','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image8.png','\0'),
-							 (9,'Huawei Mate 20 Pro Smartphone Μαύρο', 'Μεγάλη FullView 2K+ οθόνη 6,39 ιντσών, 8πύρηνος Kirin 980 με διπλό NPU, 6GB μνήμης RAM, μπαταρία 4.200mAh, σύστημα τριπλής AI κάμερας και αντοχή σε νερό και σκόνη', 'Smartphone', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image9.png','\0'),
-							 (10,'Apple MacBook Air 13\'\' MQD42GR/A', 'Απίστευτα ελαφρύ και απίστευτα λεπτό MacBook Air, με μπαταρία που κρατάει 12 συνεχόμενες ώρες, φωτιζόμενο keyboard και μεγάλες ταχύτητες μεταφοράς δεδομένων', 'Laptop','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image10.png','\0'),
-							 (11,'Dell Alienware 17 R5 Laptop','Με Intel Core i7-7700HQ επεξεργαστή, αυτόνομη κάρτα γραφικών 4GB, 12GB RAM και 17’’ οθόνη Full HD IPS το extreme gaming πάει παντού!','Laptop','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image11.png', '\0'),
-							 (12,'Toshiba Tecra X40-D-10H Laptop','Ένας δυνατός φορητός με βάρος μόλις 1,25 Kg επεξεργαστή Intel Core i7-7500U, 16GB RAM DDR4, Intel HD Graphics 620 και SSD με χωρητικότητα 512GB','Laptop','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image12.png','\0'),
-							 (13,'Apple iPad mini 4 Tablet 7.9\'\'Gold','Είναι πολύ λεπτό, απίστευτα ελαφρύ και ασυμβίβαστα ισχυρό! Έχει κάμερα στα 8MP, Retina οθόνη και iOS9.','Tablet','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image13.png','\0'),
-							 (14,'Samsung Galaxy Tab S4 T835 Tablet 10.5\'\'  Γκρι','Με εντυπωσιακή οθόνη Super AMOLED 10,5", 8πυρηνο Snapdragon 835 και 4GB μνήμης RAM, σύνδεση σε 4G δίκτυα, αποθηκευτικό χώρο 64GB, νέο S-Pen, 4 ηχεία AKG και μεγάλη μπαταρία 7.300mAh','Tablet','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image14.png','\0'),
-							 (15,'LG OLED TV OLED77C8 77\'\'', 'Υψηλή αισθητική και UHD ευκρίνεια, με τεχνολογίες OLED και Cinema HDR, επεξεργαστή α9, ήχο Dolby Atmos και webOS 4.0 για πρόσβαση σε multimedia περιεχόμενο','TV','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image15.png','\0');
+INSERT INTO `Product` VALUES (1,'Samsung TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV', b'0', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image1.png'),
+							 (2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV', b'0', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image2.png'),
+							 (3,'Dell Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop', b'0', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image3.png'),
+							 (4,'Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop', b'0', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image4.png'),
+							 (5,'Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', b'0', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image5.png'),
+							 (6,'Samsung Galaxy J4 PLUS DUAL SIM GOLD','Με True HD+ Infinity Display, Dual-SIM και Emotify για ξεχωριστή επικοινωνία, Snapdragon SoC και Android Oreο απολαμβάνεις μια ανώτερη εμπειρία χρήσης','Smartphone', b'0', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image6.png'),
+							 (7,'Apple iPhone XS','Με τη μεγαλύτερη οθόνη σε iPhone, Super Retina 6,5" τεχνολογίας OLED, το πιο έξυπνο & ισχυρό επεξεργαστή σε smartphone, ταχύτερη αναγνώριση προσώπου Face ID και διπλή πίσω κάμερα για μοναδικές λήψεις','Smartphone', b'0', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image7.png'),
+							 (8,'Honor 10 Lite Smartphone Blue', 'Dewdrop οθόνη 6,21" με FHD+ ανάλυση, Dual AI και 24MP Selfie κάμερες, 8πύρηνο SoC Kirin 710 με GPU Turbo και EMUI 9.0 out-of-the-box!', 'Smartphone', b'0','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image8.png'),
+							 (9,'Huawei Mate 20 Pro Smartphone Μαύρο', 'Μεγάλη FullView 2K+ οθόνη 6,39 ιντσών, 8πύρηνος Kirin 980 με διπλό NPU, 6GB μνήμης RAM, μπαταρία 4.200mAh, σύστημα τριπλής AI κάμερας και αντοχή σε νερό και σκόνη', 'Smartphone', b'0', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image9.png'),
+							 (10,'Apple MacBook Air 13\'\' MQD42GR/A', 'Απίστευτα ελαφρύ και απίστευτα λεπτό MacBook Air, με μπαταρία που κρατάει 12 συνεχόμενες ώρες, φωτιζόμενο keyboard και μεγάλες ταχύτητες μεταφοράς δεδομένων', 'Laptop', b'0', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image10.png'),
+							 (11,'Dell Alienware 17 R5 Laptop','Με Intel Core i7-7700HQ επεξεργαστή, αυτόνομη κάρτα γραφικών 4GB, 12GB RAM και 17’’ οθόνη Full HD IPS το extreme gaming πάει παντού!','Laptop', b'0','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image11.png'),
+							 (12,'Toshiba Tecra X40-D-10H Laptop','Ένας δυνατός φορητός με βάρος μόλις 1,25 Kg επεξεργαστή Intel Core i7-7500U, 16GB RAM DDR4, Intel HD Graphics 620 και SSD με χωρητικότητα 512GB','Laptop', b'0','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image12.png'),
+							 (13,'Apple iPad mini 4 Tablet 7.9\'\'Gold','Είναι πολύ λεπτό, απίστευτα ελαφρύ και ασυμβίβαστα ισχυρό! Έχει κάμερα στα 8MP, Retina οθόνη και iOS9.','Tablet', b'0','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image13.png'),
+							 (14,'Samsung Galaxy Tab S4 T835 Tablet 10.5\'\'  Γκρι','Με εντυπωσιακή οθόνη Super AMOLED 10,5", 8πυρηνο Snapdragon 835 και 4GB μνήμης RAM, σύνδεση σε 4G δίκτυα, αποθηκευτικό χώρο 64GB, νέο S-Pen, 4 ηχεία AKG και μεγάλη μπαταρία 7.300mAh','Tablet', b'0', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image14.png'),
+							 (15,'LG OLED TV OLED77C8 77\'\'', 'Υψηλή αισθητική και UHD ευκρίνεια, με τεχνολογίες OLED και Cinema HDR, επεξεργαστή α9, ήχο Dolby Atmos και webOS 4.0 για πρόσβαση σε multimedia περιεχόμενο','TV', b'0','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image15.png');
 /*!40000 ALTER TABLE `Product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -460,67 +460,6 @@ INSERT INTO `Record` VALUES (1, 300, '2018-12-12', NULL, 1, 1, 1),  (2, 250, '20
 							(54,8999,'2018-10-01',NULL,15,1,1), (55,8999,'2018-10-01',NULL,15,2,1),(56,8999,'2018-10-01',NULL,15,4,1);
 /*!40000 ALTER TABLE `Record` ENABLE KEYS */;
 UNLOCK TABLES;
-
-
-
-/*-------------------------
------------VIEWS-----------
----------------------------*/
-
-DROP VIEW IF EXISTS `Top_Trends`;
-
-CREATE VIEW `Top_Trends` 
-AS SELECT new.name, new.description, new.image, new.avg
-FROM ( SELECT DISTINCT p.name, p.description, p.image, AVG(ur.Stars) AS avg
-	   FROM Product p, User_Rating ur
-       WHERE p.id=ur.ProductId
-       GROUP BY ur.ProductId ) AS new
-ORDER BY new.avg
-DESC LIMIT 5;
-
-
-DROP VIEW IF EXISTS `Hot_Offers`;
-CREATE VIEW `Hot_Offers` 
-AS SELECT new.name, new.description, new.image, new.price
-FROM ( SELECT p.name, p.description, p.image, r.price
-	   FROM Record r,  Product p
-	   WHERE p.id=r.productId
-       GROUP BY r.productId, r.shopId
-       HAVING COUNT(*) >= 2
-       ORDER BY r.price
-       DESC LIMIT 1 ) AS new
-ORDER BY new.price
-DESC LIMIT 5;
-     
-
-
-/*-------------------------
------------TRIGGERS---------
----------------------------*/
-
-/*Email Constraint, ensure that the given value is in the right format*/
--- validate email
-CREATE TRIGGER `user_validate_email_insert`
-	BEFORE INSERT ON `User` FOR EACH ROW
-	BEGIN
-		IF NEW.`email` NOT LIKE '%_@%_.__%' THEN
-			SIGNAL SQLSTATE VALUE '45000'
-				SET MESSAGE_TEXT = '[table:User] - `email` column is not valid';
-		END IF;
-	END;
-
-
-
-/*First Name and Last Name before insert or update*/
-
-CREATE TRIGGER `user_validate_name_insert`
-     BEFORE INSERT ON `User` FOR EACH ROW
-     BEGIN
-          IF (NOT(NEW.`firstName` REGEXP '^[A-Za-z]+$') AND NOT(NEW.`lastName` REGEXP '^[A-Za-z]+$')) THEN
-               SIGNAL SQLSTATE '45000'
-                    SET MESSAGE_TEXT = '[table:User] - `firstName` or `lastName`  column is not valid';
-          END IF;
-     END;
 
 
 
