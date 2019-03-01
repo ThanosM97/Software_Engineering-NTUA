@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Record {
 
+	private final long id;
     private final double price;
     private final String productName;
     private final long productId;
@@ -18,10 +19,12 @@ public class Record {
     private final List<String> shopTags;
     private final String shopAddress;
     private final int shopDist;
-    private final Date date;
+    private final Date dateFrom;
+    private final Date dateTo;
     
-	public Record(double price, String productName, long productId, List<String> productTags, long shopId, String shopName,
-			List<String> shopTags, String shopAddress, int shopDist, Date date) {
+	public Record(long id, double price, String productName, long productId, List<String> productTags, long shopId, String shopName,
+			List<String> shopTags, String shopAddress, int shopDist, Date dateFrom, Date dateTo) {
+		this.id = id;
 		this.price = price;
 		this.productName = productName;
 		this.productId = productId;
@@ -31,7 +34,8 @@ public class Record {
 		this.shopTags = shopTags;
 		this.shopAddress = shopAddress;
 		this.shopDist = shopDist;
-		this.date = date;
+		this.dateFrom = dateFrom;
+		this.dateTo = dateTo;
 	}
 
 	/**

@@ -25,6 +25,7 @@ public class RecordRowMapper implements RowMapper {
 	@Override
 	public Record mapRow(ResultSet rs, int rowNum) throws SQLException {
 	    
+		long id				= rs.getLong("id");
 		double price            = rs.getDouble("price");
 		long productId        = rs.getLong("productId");
 		String productName = rs.getString("productName");
@@ -32,11 +33,12 @@ public class RecordRowMapper implements RowMapper {
 		String shopName   = rs.getString("shopName");
 		String shopAddress   = rs.getString("address");
 		int shopDist	= rs.getInt("dist");
-		Date date 		= rs.getDate("date");
+		Date dateFrom 		= rs.getDate("dateFrom");
+		Date dateTo 		= rs.getDate("dateTo");		
 		
 		List<String> shopTags = dataAccess.getShopTagsById(shopId);
-		List<String> productTags = dataAccess.getShopTagsById(productId);		
-		return new Record(price, productName, productId, productTags, shopId, shopName, shopTags, shopAddress, shopDist, date);
+		List<String> productTags = dataAccess.getProductTagsById(productId);		
+		return new Record(id, price, productName, productId, productTags, shopId, shopName, shopTags, shopAddress, shopDist, dateFrom, dateTo);
 	}
 
 }

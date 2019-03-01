@@ -28,8 +28,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -591,7 +595,7 @@ public class DataAccess {
 		/*
 		 * Insert the new shop in the Product table
 		 */
-		KeyHolder keyHolder = new GeneratedKeyHolder();	// for keeping the product id
+		KeyHolder keyHolder = new GeneratedKeyHolder();	// for keeping the shop id
 		jdbcTemplate.update(
 				new PreparedStatementCreator() {
 					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -826,7 +830,7 @@ public class DataAccess {
 		String sqlStm;
 
 		if (geoDistString != null) {
-			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
+			sqlStm = "SELECT distinct Record.id as id, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
 					"SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) as dist, Record.date\n" + 
 					"FROM Shop, Product, Record ";
 			if (tags!= null) {
@@ -835,7 +839,7 @@ public class DataAccess {
 				sqlStm += "WHERE SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) < :geoDist\n" + 
 					"AND Record.shopId = Shop.id \n" + 
 					"AND Record.productId = Product.id\n" + 
-					"AND Record.date > :dateFrom and Record.date <= :dateTo\n";
+					"AND Record.dateFrom < :dateFrom and Record.date <= :dateTo\n";
 		}
 		else {
 			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
@@ -864,7 +868,6 @@ public class DataAccess {
 					"		and Shop_Tag.ShopId = Shop.id\n" + 
 					"		and Tag.name in (:shopTags)))";
 		}
-		System.out.println(sqlStm);
 
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
 		namedJdbcTemplate.query(sqlStm, parameters, countCallback);
@@ -875,4 +878,65 @@ public class DataAccess {
 		return namedJdbcTemplate.query(sqlStm, parameters, new RecordRowMapper());
 	}
 
+	
+	public Record addRecord(double price, String dateFromString, String dateToString, long productId, long shopId, long userId, int validity) {
+		/*
+		 * Insert the new record in the Record table
+		 */
+		KeyHolder keyHolder = new GeneratedKeyHolder();	// for keeping the record id
+		jdbcTemplate.update(
+				new PreparedStatementCreator() {
+					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+						PreparedStatement ps =
+								connection.prepareStatement("insert into Record(price, dateFrom, dateTo, productId, shopId, userId) "
+										+ "values(?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+						ps.setDouble(1, price);
+						ps.setString(2, dateFromString);
+						ps.setString(3,   dateToString);
+						ps.setLong(4, productId);
+						ps.setLong(5, shopId);
+						ps.setLong(6, userId);
+						return ps;
+					}
+				},
+				keyHolder);
+		long recordId = (long)keyHolder.getKey();
+		Optional<Product> productOpt = getProduct(productId);
+		Optional<Shop> shopOpt = getShop(shopId);
+        Product product = productOpt.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + productId));
+        Shop shop = shopOpt.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + shopId));
+        /*
+         * Convert dates from String to Date.
+         */
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-DD"); 
+        Date dateFrom = null;
+        Date dateTo = null;
+        try {
+			dateFrom = (Date)formatter.parse(dateFromString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			dateTo = (Date)formatter.parse(dateToString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Record record = new Record(
+					recordId, //the newly created record id
+					price, 
+					product.getName(),
+					productId, 
+					product.getTags(),
+					shopId,
+					shop.getName(),
+					shop.getTags(),
+					shop.getAddress(),
+					-1,
+					dateFrom,
+					dateTo
+					);
+			return record;
+	}
 }
