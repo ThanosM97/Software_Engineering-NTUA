@@ -145,14 +145,16 @@ public class ShopResource extends ServerResource {
     @Override
     protected Representation patch(Representation entity) throws ResourceException {
     	/*
-         * get the shop id and check if it is valid 
+         * Get the shop id and check if it is valid 
          */
     	String idAttr = getAttribute("id");
 
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing shop id");
         }
-
+        /*
+         * Convert given id to long
+         */
         Long id = null;
         try {
             id = Long.parseLong(idAttr);
@@ -160,14 +162,18 @@ public class ShopResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
         }
-        //Create a new restlet form
+        /*
+         * Create a new restlet form
+         */
         Form form = new Form(entity);
-        //Read the parameters
+        /*
+         * Read the parameters
+         */
         String name = form.getFirstValue("name");
         String address = form.getFirstValue("address");
         String lng = form.getFirstValue("lng");
         String lat = form.getFirstValue("lat");
-        String tags = form.getFirstValue("tags");
+        String tagsString = form.getFirstValue("tags");
         String withdrawn = form.getFirstValue("withdrawn");
         /*
          * patch the certain shop based on the non null value.
@@ -188,8 +194,8 @@ public class ShopResource extends ServerResource {
     	else if (lat != null) {
             optional = dataAccess.patchShop(id, lat, "lat");
     	}
-    	else if (tags != null) {
-            optional = dataAccess.patchShop(id, tags, "tags");
+    	else if (tagsString != null) {
+            optional = dataAccess.patchShop(id, tagsString, "tags");
     	}
     	else if (withdrawn != null) {
             optional = dataAccess.patchShop(id, withdrawn, "withdrawn");

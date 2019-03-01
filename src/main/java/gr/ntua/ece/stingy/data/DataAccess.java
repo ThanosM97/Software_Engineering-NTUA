@@ -726,32 +726,71 @@ public class DataAccess {
 	}
 
 	public Optional<Shop> patchShop(long id, String value, String field ) {
-		// Updates the new shop record based on the non null value
+		/*
+		 *  Updates the new shop record based on the non null value
+		 */
 		int rows;
 		if (field.equals("withdrawn")) {
 			boolean withdrawn = Boolean.valueOf(value);
-			rows = jdbcTemplate.update("update shop set " + field + "=? where id =?", new Object[] {withdrawn, id});
+			rows = jdbcTemplate.update("update Shop set " + field + "=? where id =?", new Object[] {withdrawn, id});
 		}
 		else if (field.equals("lng")) {
 			double lng = Double.valueOf(value);
-			rows = jdbcTemplate.update("update shop set " + field + "=? where id =?", new Object[] {lng, id});
+			rows = jdbcTemplate.update("update Shop set " + field + "=? where id =?", new Object[] {lng, id});
 		}
 		else if (field.equals("lat")) {
 			double lat = Double.valueOf(value);
-			rows = jdbcTemplate.update("update shop set " + field + "=? where id =?", new Object[] {lat, id});
+			rows = jdbcTemplate.update("update Shop set " + field + "=? where id =?", new Object[] {lat, id});
+		}
+		else if (field.equals("tags")){
+			/*
+			 * Convert tagString that represents a list of tags to a list.
+			 */
+			ArrayList<String> tags = new Gson().fromJson(value, ArrayList.class);
+			/*
+			 * Delete existing tags
+			 */
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			Long tagId;
+			int count;
+			jdbcTemplate.update("delete from Shop_Tag where ShopId = ?", new Object[] { id});
+			for (String tag: tags) { 
+				count = jdbcTemplate.queryForObject("select count(*) from Tag where "
+						+ "name=?", new Object[] { tag }, Integer.class);
+				if (count > 0) {
+					tagId = jdbcTemplate.queryForObject("select id from Tag where "
+							+ "name=?", new Object[] { tag }, Long.class);
+				}
+				else {
+					/*
+					 * Insert tag in Tag table.
+					 */
+					keyHolder = new GeneratedKeyHolder();
+					jdbcTemplate.update(
+							new PreparedStatementCreator() {
+								public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+									PreparedStatement ps =
+											connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+									ps.setString(1, tag);
+									return ps;
+								}
+							},
+							keyHolder);
+					tagId = (long)keyHolder.getKey();
+				}
+				rows = jdbcTemplate.update("INSERT INTO Shop_Tag(ShopId, TagId) VALUES(?, ?)", new Object[] { id, tagId  });			
+			}
 		}
 		else {
-			rows = jdbcTemplate.update("update shop set " + field + "=? where id =?", new Object[] {value, id});
+			rows = jdbcTemplate.update("update Shop set " + field + "=? where id =?", new Object[] {value, id});
 		}
-		// Check if the shop exists
-		if (rows == 1)  {
-			// return the product that was updated.
-			return getShop(id);
-		}
-		else {
-			return Optional.empty();
-		}
-	}
+
+		/*
+		 *  return the shop that was updated.
+		 */
+		return getShop(id);
+		
+}
 
 
 	public List<Record> getRecords(Limits limits, String geoDistString, String geoLngString, String geoLatString, String dateFrom, String dateTo, 
