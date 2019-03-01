@@ -664,7 +664,7 @@ public class DataAccess {
 
 	public Optional<Message> deleteShop(long id) {
 		Long[] params = new Long[]{id};
-		int found = jdbcTemplate.update("delete from shop where id=?", params);
+		int found = jdbcTemplate.update("delete from Shop where id=?", params);
 		if (found == 1)  {
 			return Optional.of(new Message("OK"));
 		}
