@@ -108,8 +108,6 @@ CREATE TABLE `Administrator` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
-
 --
 -- Table structure for table 'Product`
 --
@@ -286,11 +284,6 @@ INSERT INTO `User_Rating` VALUES (1,1,1,8),(2,1,2,9),(3,1,3,8),(4,1,5,7),(5,1,9,
 
 /*!40000 ALTER TABLE `User_Rating` ENABLE KEYS */;
 UNLOCK TABLES;
-
-
-
-
-
 
 
 
