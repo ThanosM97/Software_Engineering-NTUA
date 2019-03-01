@@ -673,13 +673,51 @@ public class DataAccess {
 		}
 	}
 
-	public Optional<Shop> updateShop(long id, String name, String address, double lng, double lat, String tags, boolean withdrawn ) {
-		// Updates the new shop record
-		int rows = jdbcTemplate.update("update shop set name=?, address=?, lng=?, lat=?, tags =?, withdrawn=? where id =?", new Object[] {name, address, lng, lat, tags, withdrawn, id});
-		System.out.println(rows);
-		// Check if the product exists
+	public Optional<Shop> updateShop(long id, String name, String address, double lng, double lat, List<String> tags, boolean withdrawn ) {
+		/*
+		 *  Updates the new shop record
+		 */
+		int rows = jdbcTemplate.update("update Shop set name=?, address=?, lng=?, lat=?,  withdrawn=? where id =?", new Object[] {name, address, lng, lat, withdrawn, id});
+		/*
+		 *  Check if the product exists
+		 */
+		KeyHolder keyHolder = new GeneratedKeyHolder();
 		if (rows == 1)  {
-			// return the product that was updated.
+			/*
+			 * Delete existing tags
+			 */
+			Long tagId;
+			int count;
+			jdbcTemplate.update("delete from Shop_Tag where ShopId = ?", new Object[] { id});
+			for (String tag: tags) { 
+				count = jdbcTemplate.queryForObject("select count(*) from Tag where "
+						+ "name=?", new Object[] { tag }, Integer.class);
+				if (count > 0) {
+					tagId = jdbcTemplate.queryForObject("select id from Tag where "
+							+ "name=?", new Object[] { tag }, Long.class);
+				}
+				else {
+					/*
+					 * Insert tag in Tag table.
+					 */
+					keyHolder = new GeneratedKeyHolder();
+					jdbcTemplate.update(
+							new PreparedStatementCreator() {
+								public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+									PreparedStatement ps =
+											connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+									ps.setString(1, tag);
+									return ps;
+								}
+							},
+							keyHolder);
+					tagId = (long)keyHolder.getKey();
+				}
+				jdbcTemplate.update("INSERT INTO Shop_Tag(ShopId, TagId) VALUES(?, ?)", new Object[] { id, tagId  });			
+			}
+			/*
+			 *  return the shop that was updated.
+			 */
 			return getShop(id);
 		}
 		else {
