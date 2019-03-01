@@ -8,6 +8,10 @@ td {
     border-collapse: collapse;
 }
 
+td:hover {
+    background-color: grey;
+}
+
 h3 {
     text-align: center;
 }
@@ -75,6 +79,11 @@ h3 {
 .like-img{
     width: 2%;
     height: 20%;
+}
+
+.like-img:hover {
+    cursor:pointer;
+    background-color: grey;
 }
 
 .questionmark-img{
