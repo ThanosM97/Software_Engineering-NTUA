@@ -653,7 +653,7 @@ public class DataAccess {
 
 	public Optional<Shop> getShop(long id) {
 		Long[] params = new Long[]{id};
-		List<Shop> shops = jdbcTemplate.query("select * from shop where id = ?", params, new ShopRowMapper());
+		List<Shop> shops = jdbcTemplate.query("select * from Shop where id = ?", params, new ShopRowMapper());
 		if (shops.size() == 1)  {
 			return Optional.of(shops.get(0));
 		}

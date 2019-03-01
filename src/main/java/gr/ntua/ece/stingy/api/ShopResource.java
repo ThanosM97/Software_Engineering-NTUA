@@ -20,13 +20,17 @@ public class ShopResource extends ServerResource {
 
     @Override
     protected Representation get() throws ResourceException {
-
+    	/*
+    	 * Get given id and check its validity.
+    	 */
         String idAttr = getAttribute("id");
 
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing shop id");
         }
-
+        /*
+         * Convert it to long.
+         */
         Long id = null;
         try {
             id = Long.parseLong(idAttr);
@@ -34,10 +38,14 @@ public class ShopResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
         }
-
+        /*
+         * Get shop based on the given id.
+         */
         Optional<Shop> optional = dataAccess.getShop(id);
         Shop shop = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
-
+        /*
+         * Return the json representation of the shop.
+         */
         return new JsonShopRepresentation(shop);
     }
     
