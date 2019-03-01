@@ -145,7 +145,7 @@ public class ProductResource extends ServerResource {
     @Override
     protected Representation patch(Representation entity) throws ResourceException {
     	/*
-         * get the product id and check if it is valid 
+         * Get the product id and check if it is valid 
          */
     	String idAttr = getAttribute("id");
 
@@ -160,9 +160,13 @@ public class ProductResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid product id: " + idAttr);
         }
-        //Create a new restlet form
+        /*
+         * Create a new restlet form
+         */
         Form form = new Form(entity);
-        //Read the parameters
+        /*
+         * Read the parameters
+         */
         String name = form.getFirstValue("name");
         String description = form.getFirstValue("description");
         String category = form.getFirstValue("category");

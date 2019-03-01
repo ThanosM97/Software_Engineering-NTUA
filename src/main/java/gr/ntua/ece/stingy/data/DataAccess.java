@@ -20,6 +20,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import com.google.gson.Gson;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -417,23 +419,138 @@ public class DataAccess {
 	}
 
 	public Optional<Product> patchProduct(long id, String value, String field ) {
-		// Updates the new product record based on the non null value
+		/*
+		 *  Updates the new product record based on the non null value
+		 */
 		int rows;
 		if (field.equals("withdrawn")) {
 			boolean withdrawn = Boolean.valueOf(value);
-			rows = jdbcTemplate.update("update product set " + field + "=? where id =?", new Object[] {withdrawn, id});
+			rows = jdbcTemplate.update("update Product set " + field + "=? where id =?", new Object[] {withdrawn, id});
+		}
+		else if (field.equals("tags")){
+			/*
+			 * Convert tagString that represents a list of tags to a list.
+			 */
+			ArrayList<String> tags = new Gson().fromJson(value, ArrayList.class);
+			/*
+			 * Delete existing tags
+			 */
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			Long tagId;
+			int count;
+			jdbcTemplate.update("delete from Product_Tag where ProductId = ?", new Object[] { id});
+			for (String tag: tags) { 
+				count = jdbcTemplate.queryForObject("select count(*) from Tag where "
+						+ "name=?", new Object[] { tag }, Integer.class);
+				if (count > 0) {
+					tagId = jdbcTemplate.queryForObject("select id from Tag where "
+							+ "name=?", new Object[] { tag }, Long.class);
+				}
+				else {
+					/*
+					 * Insert tag in Tag table.
+					 */
+					keyHolder = new GeneratedKeyHolder();
+					jdbcTemplate.update(
+					    new PreparedStatementCreator() {
+					        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+					            PreparedStatement ps =
+					                connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+					            ps.setString(1, tag);
+					            return ps;
+					        }
+					    },
+					    keyHolder);
+					tagId = (long)keyHolder.getKey();
+				}
+				rows = jdbcTemplate.update("INSERT INTO Product_Tag(ProductId, TagId) VALUES(?, ?)", new Object[] { id, tagId  });			
+			}
+		}
+		else if (field.equals("extraData")){
+			Map<String, String> extraData;
+			List<String> extraDataList = Arrays.asList(value.split(","));
+			extraData = new HashMap<>();
+			String category = jdbcTemplate.queryForObject("select category from Product where id = ?", new Object[] { id }, String.class);
+			if (category.equals("Laptop")) {
+				if (extraDataList.size() != 6) {
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 6");
+				}
+				/*
+				 * Extra data supported for Laptops
+				 */
+				extraData.put("CPU", extraDataList.get(0));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPU'", new Object[] { extraDataList.get(0), id});			
+				extraData.put("RAM", extraDataList.get(1));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='RAM'", new Object[] { extraDataList.get(1), id});			
+				extraData.put("Hard Drive", extraDataList.get(2));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Hard Drive'", new Object[] { extraDataList.get(2), id});			
+				extraData.put("OS", extraDataList.get(3));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='OS'", new Object[] { extraDataList.get(3), id});			
+				extraData.put("Screen Size", extraDataList.get(4));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Screen Size'", new Object[] {  extraDataList.get(4), id});			
+				extraData.put("Graphics Card", extraDataList.get(5));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Graphics Card'", new Object[] { extraDataList.get(5), id});			
+	
+			}
+			else if (category.equals("TV")) {
+				if (extraDataList.size() != 3) {
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 3");
+				}
+				/*
+				 * Extra data supported for TVs
+				 */
+				if (extraDataList.get(0).equals("4k") || extraDataList.get(0).equals("4K")) {
+					extraData.put("4K", "Yes");
+				}
+				else {
+					extraData.put("4K", "No");
+				}
+				if (extraDataList.get(1).equals("Smart") || extraDataList.get(1).equals("SMART")) {
+					extraData.put("Smart", "Yes");
+				}
+				else {
+					extraData.put("Smart", "No");
+				}			
+				extraData.put("Frequency", extraDataList.get(2));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='4K'", new Object[] { extraDataList.get(0), id});			
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Smart'", new Object[] { extraDataList.get(1), id});			
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Frequency'", new Object[] { extraDataList.get(2), id});			
+	
+			}
+			else if (category.equals("Smartphone")) {
+				if (extraDataList.size() != 7) {
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 7");
+				}
+				/*
+				 * Extra data supported for Smartphones
+				 */
+				extraData.put("CPU cores", extraDataList.get(0));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPU cores'", new Object[] { extraDataList.get(0), id});			
+				extraData.put("CPU frequency", extraDataList.get(1));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPU frequency'", new Object[] { extraDataList.get(1), id});			
+				extraData.put("RAM", extraDataList.get(2));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='RAM'", new Object[] { extraDataList.get(2), id});			
+				extraData.put("Capacity", extraDataList.get(3));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Capacity'", new Object[] { extraDataList.get(3), id});			
+				extraData.put("Front camera", extraDataList.get(4));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Front camera'", new Object[] { extraDataList.get(4), id});			
+				extraData.put("Selfie camera", extraDataList.get(5));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Selfie camera'", new Object[] { extraDataList.get(5), id});			
+				extraData.put("OS", extraDataList.get(6));
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='OS'", new Object[] { extraDataList.get(6), id});			
+			}
+			else {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category " + category + " is not supported in stingy");
+			}
 		}
 		else {
-			rows = jdbcTemplate.update("update product set " + field + "=? where id =?", new Object[] {value, id});
+			rows = jdbcTemplate.update("update Product set " + field + "=? where id =?", new Object[] {value, id});
 		}
-		// Check if the product exists
-		if (rows == 1)  {
-			// return the product that was updated.
-			return getProduct(id);
-		}
-		else {
-			return Optional.empty();
-		}
+		
+		/*
+		 * Return the product that was updated.
+		 */
+		return getProduct(id);
 	}
 
 	public List<Shop> getShops(Limits limits, String status, String sort) {
