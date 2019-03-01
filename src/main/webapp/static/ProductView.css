@@ -12,11 +12,17 @@ h3 {
     text-align: center;
 }
 
+.main{
+    height: 100%;
+    background-color: beige;
+}
+
 .specs {
     width: 30%;
     background-color: #9b384f;
     padding: 3%;
     float: left;
+    margin-bottom: 7vw;
 }
 
 .product-name {
@@ -41,6 +47,7 @@ h3 {
 
 .myshoplist{
     display: grid;
+    margin-bottom: 7vw;
 }
 
 .shopbox{
