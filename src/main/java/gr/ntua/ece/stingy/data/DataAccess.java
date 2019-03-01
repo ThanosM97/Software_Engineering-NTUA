@@ -139,7 +139,6 @@ public class DataAccess {
 					}
 				},
 				keyHolder);
-		System.out.println(keyHolder.getKey());
 		long productId = (long)keyHolder.getKey();
 		/*
 		 * For each tag insert it in the Tag table if not exists and then insert it in the Product_Tag table.
@@ -588,31 +587,60 @@ public class DataAccess {
 		return jdbcTemplate.query("select * from Shop where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn,sort_type, limits.getStart(), limits.getCount() }, new ShopRowMapper());
 	}
 
-	public Shop addShop(String name, String address,double lng, double lat, String tags, boolean withdrawn ) {
-		//Create the new shop record using a prepared statement
-		PreparedStatementCreator psc = new PreparedStatementCreator() {
-			@Override
-			public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-				PreparedStatement ps = con.prepareStatement(
-						"insert into shop(name, address, lng, lat, tags, withdrawn) values(?, ?, ?, ?, ?,?)",
-						Statement.RETURN_GENERATED_KEYS
-						);
-				ps.setString(1, name);
-				ps.setString(2, address);
-				ps.setDouble(3,  lng);
-				ps.setDouble(4, lat);
-				ps.setString(5, tags);
-				ps.setBoolean(6, withdrawn);
-				return ps;
+	public Shop addShop(String name, String address,double lng, double lat, List<String> tags, boolean withdrawn ) {
+		/*
+		 * Insert the new shop in the Product table
+		 */
+		KeyHolder keyHolder = new GeneratedKeyHolder();	// for keeping the product id
+		jdbcTemplate.update(
+				new PreparedStatementCreator() {
+					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+						PreparedStatement ps =
+								connection.prepareStatement("insert into Shop(name, address, lng, lat, withdrawn) "
+										+ "values(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+						ps.setString(1, name);
+						ps.setString(2, address);
+						ps.setDouble(3,  lng);
+						ps.setDouble(4, lat);
+						ps.setBoolean(5, withdrawn);
+						return ps;
+					}
+				},
+				keyHolder);
+		long shopId = (long)keyHolder.getKey();
+		/*
+		 * For each tag insert it in the Tag table if not exists and then insert it in the Shop_Tag table.
+		 */
+		Long tagId;
+		int count;
+		for (String tag: tags) { 
+			count = jdbcTemplate.queryForObject("select count(*) from Tag where "
+					+ "name=?", new Object[] { tag }, Integer.class);
+			if (count > 0) {
+				tagId = jdbcTemplate.queryForObject("select id from Tag where "
+						+ "name=?", new Object[] { tag }, Long.class);
 			}
-		};
-		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-		int cnt = jdbcTemplate.update(psc, keyHolder);
-/*
-		if (cnt == 1) {
-			//New row has been added
-			Shop shop = new Shop(
-					keyHolder.getKey().longValue(), //the newly created project id
+			else {
+				/*
+				 * Insert tag in Tag table.
+				 */
+				keyHolder = new GeneratedKeyHolder();
+				jdbcTemplate.update(
+						new PreparedStatementCreator() {
+							public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+								PreparedStatement ps =
+										connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+								ps.setString(1, tag);
+								return ps;
+							}
+						},
+						keyHolder);
+				tagId = (long)keyHolder.getKey();
+			}
+			jdbcTemplate.update("INSERT INTO Shop_Tag(ShopId, TagId) VALUES(?, ?)", new Object[] { shopId, tagId  });			
+		}
+		Shop shop = new Shop(
+					shopId, //the newly created project id
 					name,
 					address,
 					lng,
@@ -621,13 +649,6 @@ public class DataAccess {
 					withdrawn
 					);
 			return shop;
-
-		}
-		else {
-			throw new RuntimeException("Creation of Product failed");
-		}
-		*/
-		return null;
 	}
 
 	public Optional<Shop> getShop(long id) {
