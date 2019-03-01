@@ -95,23 +95,28 @@ public class DataAccess {
 		//TODO: fix error in descending order 
 		return jdbcTemplate.query("select * from Product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
 	}
-	
-	public List<String> getTagsById(long id){
+
+	public List<String> getProductTagsById(long id){
 		String query = "select distinct Tag.name from Product_Tag, Tag where productId=? and tagId = Tag.id";
 		return jdbcTemplate.queryForList(query, new Object[] { id }, String.class);
 	}
 	
+	public List<String> getShopTagsById(long id){
+		String query = "select distinct Tag.name from Shop_Tag, Tag where ShopId=? and TagId = Tag.id";
+		return jdbcTemplate.queryForList(query, new Object[] { id }, String.class);
+	}
+
 	public Map<String, String> getExtraDataById(long id){
 		String query = "SELECT extraData.characteristic, extraData.value FROM extraData where productId = ?";
 		return jdbcTemplate.query(query ,new Object[] { id }, new ResultSetExtractor<Map>(){
-		    @Override
-		    public Map extractData(ResultSet rs) throws SQLException,DataAccessException {
-		        HashMap<String,String> mapRet= new HashMap<String,String>();
-		        while(rs.next()){
-		            mapRet.put(rs.getString("characteristic"),rs.getString("value"));
-		        }
-		        return mapRet;
-		    }
+			@Override
+			public Map extractData(ResultSet rs) throws SQLException,DataAccessException {
+				HashMap<String,String> mapRet= new HashMap<String,String>();
+				while(rs.next()){
+					mapRet.put(rs.getString("characteristic"),rs.getString("value"));
+				}
+				return mapRet;
+			}
 		});
 	}
 
@@ -121,19 +126,19 @@ public class DataAccess {
 		 */
 		KeyHolder keyHolder = new GeneratedKeyHolder();	// for keeping the product id
 		jdbcTemplate.update(
-		    new PreparedStatementCreator() {
-		        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-		            PreparedStatement ps =
-		                connection.prepareStatement("insert into Product(name, description, category, withdrawn) "
-		                		+ "values(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-		            ps.setString(1, name);
-					ps.setString(2, description);
-					ps.setString(3, category);
-					ps.setBoolean(4, withdrawn);
-		            return ps;
-		        }
-		    },
-		    keyHolder);
+				new PreparedStatementCreator() {
+					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+						PreparedStatement ps =
+								connection.prepareStatement("insert into Product(name, description, category, withdrawn) "
+										+ "values(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+						ps.setString(1, name);
+						ps.setString(2, description);
+						ps.setString(3, category);
+						ps.setBoolean(4, withdrawn);
+						return ps;
+					}
+				},
+				keyHolder);
 		System.out.println(keyHolder.getKey());
 		long productId = (long)keyHolder.getKey();
 		/*
@@ -154,15 +159,15 @@ public class DataAccess {
 				 */
 				keyHolder = new GeneratedKeyHolder();
 				jdbcTemplate.update(
-				    new PreparedStatementCreator() {
-				        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				            PreparedStatement ps =
-				                connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
-				            ps.setString(1, tag);
-				            return ps;
-				        }
-				    },
-				    keyHolder);
+						new PreparedStatementCreator() {
+							public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+								PreparedStatement ps =
+										connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+								ps.setString(1, tag);
+								return ps;
+							}
+						},
+						keyHolder);
 				tagId = (long)keyHolder.getKey();
 			}
 			jdbcTemplate.update("INSERT INTO Product_Tag(ProductId, TagId) VALUES(?, ?)", new Object[] { productId, tagId  });			
@@ -190,7 +195,7 @@ public class DataAccess {
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('Screen Size', ?, ?)", new Object[] {  extraDataList.get(4), productId});			
 				extraData.put("Graphics Card", extraDataList.get(5));
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('Graphics Card', ?, ?)", new Object[] { extraDataList.get(5), productId});			
-	
+
 			}
 			else if (category.equals("TV")) {
 				if (extraDataList.size() != 3) {
@@ -215,7 +220,7 @@ public class DataAccess {
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('4K', ?, ?)", new Object[] { extraDataList.get(0), productId});			
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('Smart', ?, ?)", new Object[] { extraDataList.get(1), productId});			
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('Frequency', ?, ?)", new Object[] { extraDataList.get(2), productId});			
-	
+
 			}
 			else if (category.equals("Smartphone")) {
 				if (extraDataList.size() != 7) {
@@ -247,19 +252,19 @@ public class DataAccess {
 			extraData = null;
 		}
 		/*
-		* Create product and return it.
-		*/
+		 * Create product and return it.
+		 */
 		Product product = new Product(
-					productId, //the newly created project id
-					name,
-					description,
-					category,
-					withdrawn,
-					tags,
-					extraData
-					);
+				productId, //the newly created project id
+				name,
+				description,
+				category,
+				withdrawn,
+				tags,
+				extraData
+				);
 		return product;
-}
+	}
 
 	public Optional<Product> getProduct(long id) {
 		Long[] params = new Long[]{id};
@@ -315,15 +320,15 @@ public class DataAccess {
 					 */
 					keyHolder = new GeneratedKeyHolder();
 					jdbcTemplate.update(
-					    new PreparedStatementCreator() {
-					        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-					            PreparedStatement ps =
-					                connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
-					            ps.setString(1, tag);
-					            return ps;
-					        }
-					    },
-					    keyHolder);
+							new PreparedStatementCreator() {
+								public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+									PreparedStatement ps =
+											connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+									ps.setString(1, tag);
+									return ps;
+								}
+							},
+							keyHolder);
 					tagId = (long)keyHolder.getKey();
 				}
 				jdbcTemplate.update("INSERT INTO Product_Tag(ProductId, TagId) VALUES(?, ?)", new Object[] { id, tagId  });			
@@ -351,7 +356,7 @@ public class DataAccess {
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Screen Size'", new Object[] {  extraDataList.get(4), id});			
 					extraData.put("Graphics Card", extraDataList.get(5));
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Graphics Card'", new Object[] { extraDataList.get(5), id});			
-		
+
 				}
 				else if (category.equals("TV")) {
 					if (extraDataList.size() != 3) {
@@ -376,7 +381,7 @@ public class DataAccess {
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='4K'", new Object[] { extraDataList.get(0), id});			
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Smart'", new Object[] { extraDataList.get(1), id});			
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Frequency'", new Object[] { extraDataList.get(2), id});			
-		
+
 				}
 				else if (category.equals("Smartphone")) {
 					if (extraDataList.size() != 7) {
@@ -452,15 +457,15 @@ public class DataAccess {
 					 */
 					keyHolder = new GeneratedKeyHolder();
 					jdbcTemplate.update(
-					    new PreparedStatementCreator() {
-					        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-					            PreparedStatement ps =
-					                connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
-					            ps.setString(1, tag);
-					            return ps;
-					        }
-					    },
-					    keyHolder);
+							new PreparedStatementCreator() {
+								public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+									PreparedStatement ps =
+											connection.prepareStatement("INSERT INTO Tag(name) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
+									ps.setString(1, tag);
+									return ps;
+								}
+							},
+							keyHolder);
 					tagId = (long)keyHolder.getKey();
 				}
 				rows = jdbcTemplate.update("INSERT INTO Product_Tag(ProductId, TagId) VALUES(?, ?)", new Object[] { id, tagId  });			
@@ -490,7 +495,7 @@ public class DataAccess {
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Screen Size'", new Object[] {  extraDataList.get(4), id});			
 				extraData.put("Graphics Card", extraDataList.get(5));
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Graphics Card'", new Object[] { extraDataList.get(5), id});			
-	
+
 			}
 			else if (category.equals("TV")) {
 				if (extraDataList.size() != 3) {
@@ -515,7 +520,7 @@ public class DataAccess {
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='4K'", new Object[] { extraDataList.get(0), id});			
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Smart'", new Object[] { extraDataList.get(1), id});			
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Frequency'", new Object[] { extraDataList.get(2), id});			
-	
+
 			}
 			else if (category.equals("Smartphone")) {
 				if (extraDataList.size() != 7) {
@@ -546,7 +551,7 @@ public class DataAccess {
 		else {
 			rows = jdbcTemplate.update("update Product set " + field + "=? where id =?", new Object[] {value, id});
 		}
-		
+
 		/*
 		 * Return the product that was updated.
 		 */
@@ -556,7 +561,7 @@ public class DataAccess {
 	public List<Shop> getShops(Limits limits, String status, String sort) {
 		String sort_type = sort.replaceAll("\\|", " ");   
 		/*
-		 * initialize withdrawn based on the status value
+		 * Initialize withdrawn based on the status value
 		 */
 		String withdrawn = null;
 		if (status.equals("ALL")) {
@@ -570,17 +575,17 @@ public class DataAccess {
 		}
 
 		/*
-		 * get number of shops
+		 * Get number of shops
 		 */
-		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
-		jdbcTemplate.query("select * from shop order by id", countCallback);
+		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  /* not reusable */
+		jdbcTemplate.query("select * from Shop order by id", countCallback);
 		int rowCount = countCallback.getRowCount();
 		limits.setTotal(rowCount);
 		/*
-		 * return shops based on the limits.
+		 * Return shops based on the limits.
 		 */
 		//TODO: fix error in descending order 
-		return jdbcTemplate.query("select * from shop where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn,sort_type, limits.getStart(), limits.getCount() }, new ShopRowMapper());
+		return jdbcTemplate.query("select * from Shop where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn,sort_type, limits.getStart(), limits.getCount() }, new ShopRowMapper());
 	}
 
 	public Shop addShop(String name, String address,double lng, double lat, String tags, boolean withdrawn ) {
@@ -603,7 +608,7 @@ public class DataAccess {
 		};
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 		int cnt = jdbcTemplate.update(psc, keyHolder);
-
+/*
 		if (cnt == 1) {
 			//New row has been added
 			Shop shop = new Shop(
@@ -621,6 +626,8 @@ public class DataAccess {
 		else {
 			throw new RuntimeException("Creation of Product failed");
 		}
+		*/
+		return null;
 	}
 
 	public Optional<Shop> getShop(long id) {
@@ -686,8 +693,8 @@ public class DataAccess {
 			return Optional.empty();
 		}
 	}
-	
-	
+
+
 	public List<Record> getRecords(Limits limits, String geoDistString, String geoLngString, String geoLatString, String dateFrom, String dateTo, 
 			String shops, String products, String tags , String sort) {
 		String sort_type = sort.replaceAll("\\|", " ");
@@ -697,78 +704,78 @@ public class DataAccess {
 		/*
 		 * Get number of all products
 		 */
-		
+
 		/*
 		 * Return products based on the limits.
 		 */
-		
+
 		//shopTagsNew
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("geoLng", geoLngString);
-	    parameters.addValue("geoLat", geoLatString);
-	    parameters.addValue("geoDist", geoDistString);
-	    parameters.addValue("dateFrom", dateFrom);
-	    parameters.addValue("dateTo", dateTo);
-	    parameters.addValue("shops", shops);
-	    parameters.addValue("products", products);
-	    parameters.addValue("productTags", tags);
-	    parameters.addValue("shopTags", tags);
-	    parameters.addValue("sort", sort_type);
-	    parameters.addValue("start", limits.getStart());
-	    parameters.addValue("count", limits.getCount());
+		parameters.addValue("geoLat", geoLatString);
+		parameters.addValue("geoDist", geoDistString);
+		parameters.addValue("dateFrom", dateFrom);
+		parameters.addValue("dateTo", dateTo);
+		parameters.addValue("shops", shops);
+		parameters.addValue("products", products);
+		parameters.addValue("productTags", tags);
+		parameters.addValue("shopTags", tags);
+		parameters.addValue("sort", sort_type);
+		parameters.addValue("start", limits.getStart());
+		parameters.addValue("count", limits.getCount());
 
-	    System.out.println(geoLngString);
-	    System.out.println(geoLatString);
-	    System.out.println(geoDistString);
-	    System.out.println(dateFrom);
-	    System.out.println(dateTo);
-	    System.out.println(shops);
-	    System.out.println(products);
-	    System.out.println(tags);
-	    System.out.println(sort_type);
-	    String sqlStm;
-	    
-	    if (geoDistString != null) {
-	    	sqlStm = "SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, \n" + 
+		System.out.println(geoLngString);
+		System.out.println(geoLatString);
+		System.out.println(geoDistString);
+		System.out.println(dateFrom);
+		System.out.println(dateTo);
+		System.out.println(shops);
+		System.out.println(products);
+		System.out.println(tags);
+		System.out.println(sort_type);
+		String sqlStm;
+
+		if (geoDistString != null) {
+			sqlStm = "SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, \n" + 
 					"SQRT(POW(shop.lng - :geoLng, 2) + POW(shop.lat - :geoLat, 2)) as dist, record.date\n" + 
 					"FROM shop, product, record\n" + 
 					"WHERE SQRT(POW(shop.lng - :geoLng, 2) + POW(shop.lat - :geoLat, 2)) < :geoDist\n" + 
 					"AND record.shopId = shop.id \n" + 
 					"AND record.productId = product.id\n" + 
 					"AND record.date > :dateFrom and record.date <= :dateTo\n";
-	    
-	    }
-	    else {
-	    	sqlStm = "SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, -1 as dist, \n" + 
+
+		}
+		else {
+			sqlStm = "SELECT price, product.id as productId, product.name as productName, product.tags as productTags, shop.id as shopId, shop.name as shopName, shop.tags as shopTags, shop.address, -1 as dist, \n" + 
 					" record.date\n" + 
 					"FROM shop, product, record\n" + 
 					"WHERE \n" + 
 					"record.shopId = shop.id \n" + 
 					"AND record.productId = product.id\n" + 
 					"AND record.date > :dateFrom and record.date <= :dateTo\n";
-	    }
-	    
-	    if (products != null) {
-	    	sqlStm += "AND record.productId in (:products)\n";
-	    }
-	    if (shops != null) {
-	    	sqlStm += "AND record.shopId in (:shops)\n";
-	    }
-	    if (tags != null) {
-	    	sqlStm += "AND (\n" + 
+		}
+
+		if (products != null) {
+			sqlStm += "AND record.productId in (:products)\n";
+		}
+		if (shops != null) {
+			sqlStm += "AND record.shopId in (:shops)\n";
+		}
+		if (tags != null) {
+			sqlStm += "AND (\n" + 
 					"product.tags REGEXP :productTags\n" + 
 					"OR shop.tags REGEXP :shopTags\n" + 
 					")\n";
-	    }
-	    
-	    RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
-	    namedJdbcTemplate.query(sqlStm, parameters, countCallback);
+		}
+
+		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
+		namedJdbcTemplate.query(sqlStm, parameters, countCallback);
 		int rowCount = countCallback.getRowCount();
 		limits.setTotal(rowCount);
-	    
-	    sqlStm += "order by :sort limit :start, :count";
-	    System.out.println(sqlStm);
-	    return namedJdbcTemplate.query(sqlStm, parameters, new RecordRowMapper());
+
+		sqlStm += "order by :sort limit :start, :count";
+		System.out.println(sqlStm);
+		return namedJdbcTemplate.query(sqlStm, parameters, new RecordRowMapper());
 	}
-	
+
 }

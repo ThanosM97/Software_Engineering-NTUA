@@ -64,13 +64,10 @@ public class ShopsResource extends ServerResource {
 	    	map.put("count", count);
 	    } else{
 	    	/*
-	    	 * default value for count is 20.
+	    	 * Δefault value for count is 20.
 	    	 */
 	    	map.put("count", 20);
 	    }
-	    /*
-	     * get shops based on the limits.
-	     */
 	    /*
 	     * set default values for status and sort
 	     */
@@ -83,13 +80,15 @@ public class ShopsResource extends ServerResource {
 	    if (!status.equals("ALL") && !status.equals("WITHDRAWN") && !status.equals("ACTIVE")) {
 	    	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid status: " + status);
 	    }
-	    System.out.println(sort);
 	    if (!sort.equals("id|ASC") && !sort.equals("id|DESC") && !sort.equals("name|ASC") && !sort.equals("name|DESC")) {
 	    	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid sort: " + sort);
 	    }
+	    /*
+	     * Get shops based on the limits.
+	     */
 	    List<Shop> shops = dataAccess.getShops(limits, status, sort);
 	    /*
-	     * set current total products.
+	     * Set current total products.
 	     */
 	    map.put("total", limits.getTotal());
 	    map.put("shops", shops);
