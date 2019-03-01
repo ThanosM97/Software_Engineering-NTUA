@@ -3,6 +3,7 @@ package gr.ntua.ece.stingy.data;
  * A class that converts the result of a query in the product table into a product object. 
  */
 
+import gr.ntua.ece.stingy.conf.Configuration;
 import gr.ntua.ece.stingy.data.model.Product;
 
 import org.restlet.data.Status;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ProductRowMapper implements RowMapper {
+	private final DataAccess dataAccess = Configuration.getInstance().getDataAccess();
 
 	@Override
 	public Product mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -31,8 +33,9 @@ public class ProductRowMapper implements RowMapper {
 		/*
 		 * Convert tags to a list of tags (tags are separated by comma).
 		 */
-	//	return new Product(id, name, description, category, withdrawn, tags, extraData);
-		return null;
+		List<String> tags = dataAccess.getProductTagsById(id);
+		Map<String, String> extraData = dataAccess.getExtraDataById(id); 
+		return new Product(id, name, description, category, withdrawn, tags, extraData);
 	}
 
 }

@@ -1,19 +1,32 @@
 * {
     margin: 0;
     padding: 0;
-  }
+}
 
-  td {
-      font-family: Georgia, 'Times New Roman', Times, serif;
-      border: 1px solid black;
-      border-collapse: collapse;
-  }
+td {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    border-collapse: collapse;
+}
+
+td:hover {
+    background-color: grey;
+}
+
+h3 {
+    text-align: center;
+}
+
+.main{
+    height: 100%;
+    background-color: beige;
+}
 
 .specs {
     width: 30%;
-    background-color: #e5e5e5;
+    background-color: #9b384f;
     padding: 3%;
     float: left;
+    margin-bottom: 7vw;
 }
 
 .product-name {
@@ -25,7 +38,6 @@
 .product-image {
     width: 50%;
     height: 50%;
-    border: 1px solid black;
     margin-top: 10%;
     margin-bottom: 5%;
 }
@@ -39,10 +51,42 @@
 
 .myshoplist{
     display: grid;
+    margin-bottom: 7vw;
 }
 
 .shopbox{
     padding: 5px;
     margin-top: 10px;
     background-color: rgb(113, 153, 153);
+}
+
+.price{
+    padding-left: 10%;
+    border-left: 1px solid tomato;
+    height: 100%;
+    float: right;
+}
+
+.shopname{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 150%;
+}
+
+.address{
+    border-bottom: 1px solid black;
+}
+
+.like-img{
+    width: 2%;
+    height: 20%;
+}
+
+.like-img:hover {
+    cursor:pointer;
+    background-color: grey;
+}
+
+.questionmark-img{
+    width: 2%;
+    height: 20%;
 }

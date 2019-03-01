@@ -158,7 +158,10 @@ nav a {
 .categories-container {
   position: relative;
   left: 15%;
-  margin: 50px 0;
+  margin-top: 50px;
+  margin-bottom: 7vw;
+  margin-left: 0;
+  margin-right: 0;
   display: grid;
   width: 70%;
   height: 40vw;

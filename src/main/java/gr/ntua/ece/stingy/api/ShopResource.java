@@ -12,6 +12,9 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class ShopResource extends ServerResource {
@@ -20,13 +23,17 @@ public class ShopResource extends ServerResource {
 
     @Override
     protected Representation get() throws ResourceException {
-
+    	/*
+    	 * Get given id and check its validity.
+    	 */
         String idAttr = getAttribute("id");
 
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing shop id");
         }
-
+        /*
+         * Convert it to long.
+         */
         Long id = null;
         try {
             id = Long.parseLong(idAttr);
@@ -34,21 +41,30 @@ public class ShopResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
         }
-
+        /*
+         * Get shop based on the given id.
+         */
         Optional<Shop> optional = dataAccess.getShop(id);
         Shop shop = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
-
+        /*
+         * Return the json representation of the shop.
+         */
         return new JsonShopRepresentation(shop);
     }
     
     @Override
     protected Representation delete() throws ResourceException {
-        String idAttr = getAttribute("id");
+    	/*
+    	 * Get given id and check its validity.
+    	 */
+    	String idAttr = getAttribute("id");
 
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing shop id");
         }
-
+        /*
+         * Convert it to long.
+         */
         Long id = null;
         try {
             id = Long.parseLong(idAttr);
@@ -56,24 +72,27 @@ public class ShopResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
         }
-
+        /*
+         * Delete shop based on the given id and return 'OK' message.
+         */
         Optional<Message> optional = dataAccess.deleteShop(id);
         Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
-
         return new JsonMessageRepresentation(message);
     }
     
     @Override
     protected Representation put(Representation entity) throws ResourceException {
         /*
-         * get the shop id and check if it is valid 
+         * Get the shop id and check if it is valid 
          */
     	String idAttr = getAttribute("id");
 
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing shop id");
         }
-
+        /*
+         * Convert given id to long.
+         */
         Long id = null;
         try {
             id = Long.parseLong(idAttr);
@@ -81,17 +100,42 @@ public class ShopResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
         }
-        //Create a new restlet form
+        /*
+         * Create a new restlet form
+         */
         Form form = new Form(entity);
-        //Read the parameters
+        /*
+         * Read the parameters
+         */
         String name = form.getFirstValue("name");
         String address = form.getFirstValue("address");
-        double lng = Double.valueOf(form.getFirstValue("lng"));
-        double lat = Double.valueOf(form.getFirstValue("lat"));
-        String tags = form.getFirstValue("tags");
+        Double lng = Double.valueOf(form.getFirstValue("lng"));
+        Double lat = Double.valueOf(form.getFirstValue("lat"));
+        String tagsString = form.getFirstValue("tags");
         boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
         /*
-         * update the certain product
+         *  Validate the values (in the general case)
+     	*/
+     	if (name == null || name.isEmpty()) {
+     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Name is required");
+     	}
+     	if (address == null || address.isEmpty()) {
+     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Description is required");
+     	}
+     	if (lng == null || lat == null) {
+     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Longitude and latitude are required");
+     	}
+     	if (tagsString == null || tagsString.isEmpty()) {
+     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
+     	}
+     		
+     	/*
+     	 * Convert tagString that represents a list of tags to a list.
+     	 */
+     	ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class); 
+        
+        /*
+         * Update the certain shop
          */
         Optional<Shop> optional = dataAccess.updateShop(id, name, address, lng, lat, tags, withdrawn);
         Shop shop = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
@@ -101,14 +145,16 @@ public class ShopResource extends ServerResource {
     @Override
     protected Representation patch(Representation entity) throws ResourceException {
     	/*
-         * get the shop id and check if it is valid 
+         * Get the shop id and check if it is valid 
          */
     	String idAttr = getAttribute("id");
 
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing shop id");
         }
-
+        /*
+         * Convert given id to long
+         */
         Long id = null;
         try {
             id = Long.parseLong(idAttr);
@@ -116,14 +162,18 @@ public class ShopResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
         }
-        //Create a new restlet form
+        /*
+         * Create a new restlet form
+         */
         Form form = new Form(entity);
-        //Read the parameters
+        /*
+         * Read the parameters
+         */
         String name = form.getFirstValue("name");
         String address = form.getFirstValue("address");
         String lng = form.getFirstValue("lng");
         String lat = form.getFirstValue("lat");
-        String tags = form.getFirstValue("tags");
+        String tagsString = form.getFirstValue("tags");
         String withdrawn = form.getFirstValue("withdrawn");
         /*
          * patch the certain shop based on the non null value.
@@ -144,8 +194,8 @@ public class ShopResource extends ServerResource {
     	else if (lat != null) {
             optional = dataAccess.patchShop(id, lat, "lat");
     	}
-    	else if (tags != null) {
-            optional = dataAccess.patchShop(id, tags, "tags");
+    	else if (tagsString != null) {
+            optional = dataAccess.patchShop(id, tagsString, "tags");
     	}
     	else if (withdrawn != null) {
             optional = dataAccess.patchShop(id, withdrawn, "withdrawn");

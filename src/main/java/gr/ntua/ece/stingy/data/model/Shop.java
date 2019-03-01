@@ -1,5 +1,6 @@
 package gr.ntua.ece.stingy.data.model;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Shop {
@@ -9,10 +10,10 @@ public class Shop {
     private final String address;
     private final double lng;
     private final double lat;
-    private final String tags;
+    private final List<String> tags;
     private final boolean withdrawn;
     
-	public Shop(long id, String name, String address, double lng, double lat, String tags, boolean withdrawn) {
+	public Shop(long id, String name, String address, double lng, double lat, List<String> tags, boolean withdrawn) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -60,7 +61,7 @@ public class Shop {
 	/**
 	 * @return the tags
 	 */
-	public String getTags() {
+	public List<String> getTags() {
 		return tags;
 	}
 

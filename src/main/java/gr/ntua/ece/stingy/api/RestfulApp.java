@@ -1,7 +1,11 @@
 package gr.ntua.ece.stingy.api;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import org.restlet.Application;
 import org.restlet.Restlet;
+import org.restlet.engine.application.CorsFilter;
 import org.restlet.routing.Router;
 
 public class RestfulApp extends Application {
@@ -11,6 +15,13 @@ public class RestfulApp extends Application {
 
 		Router router = new Router(getContext());
 
+		 /*
+		  *  Add a CORS filter to allow cross-domain requests
+		  */
+		 CorsFilter corsFilter = new CorsFilter(getContext(), router);
+		 corsFilter.setAllowedOrigins(new HashSet<String>(Arrays.asList("*")));
+		 corsFilter.setAllowedCredentials(true);
+		
 		/**
 		 * Attach all resources to the corresponding URIs.
 		 */
@@ -40,7 +51,8 @@ public class RestfulApp extends Application {
 		 */
 		router.attach("/prices", PricesResource.class);
 
-		return router;
+		return corsFilter;
+		// return router;
 	}
 
 }

@@ -72,6 +72,41 @@ CREATE TABLE `User_Rating` (
 
 
 
+--
+-- Table structure for table `User_Comment`
+--
+DROP TABLE IF EXISTS `User_Comment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `User_Comment` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`UserId` int(11) NOT NULL,
+	`ProductId` int(11) NOT NULL,
+	`Comment` TEXT NOT NULL,
+  	CONSTRAINT fk_userCom1 FOREIGN KEY (ProductId) REFERENCES Product(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  	CONSTRAINT fk_userCom2 FOREIGN KEY (UserId) REFERENCES User(id) ON DELETE CASCADE ON UPDATE CASCADE,  
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Table structure for table `User_Like`
+--
+DROP TABLE IF EXISTS `User_Like`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `User_Like` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`UserId` int(11) NOT NULL,
+	`CommentId` int(11) NOT NULL,
+  	CONSTRAINT fk_userLike1 FOREIGN KEY (UserId) REFERENCES User(id) ON DELETE CASCADE ON UPDATE CASCADE,  
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
 
 --
 -- Table structure for table `Company`
@@ -106,6 +141,8 @@ CREATE TABLE `Administrator` (
 	`email` varchar(45) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 
 
 --
@@ -223,24 +260,66 @@ CREATE TABLE `Record` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
+
+-- Table structure for table `Record_Validation`
+--
+DROP TABLE IF EXISTS `Record_Validation`;
+
+CREATE TABLE `Record_Validation` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`recordId` int(11) NOT NULL,
+	`userId` int(11) NOT NULL,
+  	CONSTRAINT fk_recordVal1 FOREIGN KEY (UserId) REFERENCES User(id) ON DELETE CASCADE ON UPDATE CASCADE,  
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
 --
 -- Dumping data for table `User`
 --
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES (1,'junkietech','GngN4+tJ#1VX', 'Nikolaos','Papantoniou', 'nEpwYsBHGBLHNaJ9', 'eDoCmblwHzkY7SmT','junkiepapa@gmail.com','+30 69 63064771',50,'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/profiles/profile1.png'),
-						  (2,'bulletproofmaniactech','S6~xE*l&t[|-', 'Dimitrios','Anagnostou', 'o$NlUy1Ef|@5S;I-', 'Hug#G$h/:|`ymu./','bulletanagnostou@gmail.com','+30 69 32161887',61,'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/profiles/profile2.png'),
-                          (3,'responsibleapple','z},/gG|Jsak+', 'Antonios','Koutsouris', 'Aa@cl1b41XXR$d5`','xyT{<@^[2y:%b>5!' ,'responsiblekoutsouris@gmail.com','+30 69 14612977',18,'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/profiles/profile3.png'),
-                          (4,'nightowlcybernetics','Bn,!1jg">EL7', 'Marios','Pagourtzis', '9&z@ivo-LKBQX3/2', 'G^I:EU*3Hajwi)Mq','cyberneticspagourtzis@yahoo.com',' +30 696 9578413',75,'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/profiles/profile4.png'),
-                          (5,'biomedicalmonitor','qQX{"_|jI[U]', 'Nikolados','Tsanakas', 'MvH._:6!m)UgHIPN','2^bk8=.u%kG!EedH' ,'biomedicaltsanakas@yahoo.com','+30 69 47029338',0,'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/profiles/profile5.png'),
-                          (6,'skilledelectro','8ht)Ed=lT;^c', 'Anastasios','Xanthakis','u;8Uda71mk?cBA!.' , 'u3UHVg(Fbqx~lea(','skilledxanthakis@gmail.com','+30 69 20216577',34,'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/profiles/profile6.png'),
-                          (7,'anonymousneural','8(fi~f#1Ps2?', 'Fotis','Sykas','t:Xbb!<W 4%VUo|>' ,'yJ1*Ih$CYK~%Bn Z' ,'neuralsykas@gmail.com','+30 69 80608764',45,'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/profiles/profile7.png'),
-                          (8,'investingcs','o,_{qUVPT5Iq', 'Kostantinos','Theodorou','BL{!*<I|w)a1L/A.' , 'p<=8fKUIT^VLlUS9','investingtheodorou@gmail.com','+30 69 06029084',39,'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/profiles/profile8.png'),
-                          (9,'bluewavequantum','tIpdknWw/+F>', 'Maria','Papaspirou', 'X?D75oKaMM.Y["k^', 'aS(Y=]!l4b9 >yUB','bluewavepapaspirou@yahoo.com','+30 69 89677280',27,'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/profiles/profile9.png'),
-                          (10,'balancedcryptology','8(fi~f#1Ps2?', 'Eleni','Nikita', 'ay[yt~@P"sT_s&1:','3%]B*{yY5W6XuWn2' ,'cryptologynikita@yahoo.com',' +30 69 17568463',33,'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/profiles/profile10.png');
+INSERT INTO `User` VALUES (1,'junkietech','GngN4+tJ#1VX', 'Nikolaos','Papantoniou', 'nEpwYsBHGBLHNaJ9', 'eDoCmblwHzkY7SmT','junkiepapa@gmail.com','+30 69 63064771',50,'localhost:3000/static/profiles/profile1.png'),
+						  (2,'bulletproofmaniactech','S6~xE*l&t[|-', 'Dimitrios','Anagnostou', 'o$NlUy1Ef|@5S;I-', 'Hug#G$h/:|`ymu./','bulletanagnostou@gmail.com','+30 69 32161887',61,'localhost:3000/static/profiles/profile2.png'),
+                          (3,'responsibleapple','z},/gG|Jsak+', 'Antonios','Koutsouris', 'Aa@cl1b41XXR$d5`','xyT{<@^[2y:%b>5!' ,'responsiblekoutsouris@gmail.com','+30 69 14612977',18,'localhost:3000/static/profiles/profile3.png'),
+                          (4,'nightowlcybernetics','Bn,!1jg">EL7', 'Marios','Pagourtzis', '9&z@ivo-LKBQX3/2', 'G^I:EU*3Hajwi)Mq','cyberneticspagourtzis@yahoo.com',' +30 696 9578413',75,'localhost:3000/static/profiles/profile4.png'),
+                          (5,'biomedicalmonitor','qQX{"_|jI[U]', 'Nikolados','Tsanakas', 'MvH._:6!m)UgHIPN','2^bk8=.u%kG!EedH' ,'biomedicaltsanakas@yahoo.com','+30 69 47029338',0,'localhost:3000/static/profiles/profile5.png'),
+                          (6,'skilledelectro','8ht)Ed=lT;^c', 'Anastasios','Xanthakis','u;8Uda71mk?cBA!.' , 'u3UHVg(Fbqx~lea(','skilledxanthakis@gmail.com','+30 69 20216577',34,'localhost:3000/static/profiles/profile6.png'),
+                          (7,'anonymousneural','8(fi~f#1Ps2?', 'Fotis','Sykas','t:Xbb!<W 4%VUo|>' ,'yJ1*Ih$CYK~%Bn Z' ,'neuralsykas@gmail.com','+30 69 80608764',45,'localhost:3000/static/profiles/profile7.png'),
+                          (8,'investingcs','o,_{qUVPT5Iq', 'Kostantinos','Theodorou','BL{!*<I|w)a1L/A.' , 'p<=8fKUIT^VLlUS9','investingtheodorou@gmail.com','+30 69 06029084',39,'localhost:3000/static/profiles/profile8.png'),
+                          (9,'bluewavequantum','tIpdknWw/+F>', 'Maria','Papaspirou', 'X?D75oKaMM.Y["k^', 'aS(Y=]!l4b9 >yUB','bluewavepapaspirou@yahoo.com','+30 69 89677280',27,'localhost:3000/static/profiles/profile9.png'),
+                          (10,'balancedcryptology','8(fi~f#1Ps2?', 'Eleni','Nikita', 'ay[yt~@P"sT_s&1:','3%]B*{yY5W6XuWn2' ,'cryptologynikita@yahoo.com',' +30 69 17568463',33,'localhost:3000/static/profiles/profile10.png');
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
+
+--
+-- Dumping data for table `Administrator`
+--
+LOCK TABLES `Administrator` WRITE;
+/*!40000 ALTER TABLE `Administrator` DISABLE KEYS */;
+INSERT INTO `Administrator` VALUES (1,'admin1','RFjknN^+FWFw)<', 'Panagiotis','Antoniou', 'admin1@stingy.com'),
+								   (2,'admin2','1Ps2^+FWFw)<(e', 'Pantelis','Eustathiou', 'admin2@stingy.com');
+/*!40000 ALTER TABLE `Administrator` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+
+--
+-- Dumping data for table `Company`
+--
+LOCK TABLES `Company` WRITE;
+/*!40000 ALTER TABLE `Company` DISABLE KEYS */;
+
+INSERT INTO `Company` VALUES (1,'plaisio','GngN4+tJ#1VX', 'Plaisio', '324dsfqwf4qf)erw', '245wrfwcdwetqef<23','plaisio@info.gr','2102895000','localhost:3000/static/company_profiles/plaisio.png'),
+						  (2,'kotsovolos','S6~xE*l&t[|-', 'Kotsovolos', 'o$NlUy1Ef|@5S;I-', 'Hug#G$h/:|`ymu./','kotsovolos@info.gr','2102899999','localhost:3000/static/company_profiles/kotsovolos.png'),
+                          (3,'Public','z},/gG|Jsak+', 'Public', 'Aa@cl1b41XXR$d5`','xyT{<@^[2y:%b>5!' ,'public@info.gr','2108181333','localhost:3000/static/company_profiles/public.png');
+/*!40000 ALTER TABLE `Company` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 
@@ -264,10 +343,8 @@ INSERT INTO `User_Favourites` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,5),(5,1,9),(6,
 UNLOCK TABLES;
 
 
-
-
 --
--- Dumping data for table `User`
+-- Dumping data for table `User_Rating`
 --
 LOCK TABLES `User_Rating` WRITE;
 /*!40000 ALTER TABLE `User_Rating` DISABLE KEYS */;
@@ -286,7 +363,69 @@ INSERT INTO `User_Rating` VALUES (1,1,1,8),(2,1,2,9),(3,1,3,8),(4,1,5,7),(5,1,9,
 UNLOCK TABLES;
 
 
+--
+-- Dumping data for table `User_Comment`
+--
+LOCK TABLES `User_Comment` WRITE;
+/*!40000 ALTER TABLE `User_Comment` DISABLE KEYS */;
+INSERT INTO `User_Comment` VALUES (1,1,1,'Εξαιρετική τηλεόραση. Η εικόνα είναι πεντακάθαρη και πολύ ζωηρή. Με τις κατάλληλες ρυθμίσεις το αποτέλεσμα είναι εκπληκτικό. '),
+								 (2,1,2,'Περίμενα κάτι καλό για τα λεφτά της, τελικά έκανα λάθος. Η τηλεόραση είναι εξαιρετική. Δεν της λείπει τίποτα σε σχέση με άλλες που έχουν την διπλάσια τιμή. Έχει γρήγορη απόκριση στις εναλλαγές καναλιών.'),
+								 (4,1,5,'Με προβληματίζουν κάποια θέματα που αφορούν την κάμερα, την εμπρόσθια συγκεκριμένα. Μια φορά μόνο, λειτουργούσε με χρονοκαθυστέρηση 1 δευτερολέπτου τουλάχιστον. Θα επανέλθω αν το ξανακάνει.'),
+								 (5,1,9,'Απλά υπέροχο κινητό και πολύ όμορφο "Ο βασιλιάς των android"..όχι δε μιλάω υπερβολικά..πιστέψτε με.....φοβερά γρήγορο και "πανέξυπνο" ...μεγάλη oled οθόνη με σούπερ ανάλυση,ζωντανά χρώματα, φοβερή απόκριση και με σούπερ αναλογία, έχω BOE οθόνη και κανένα πρόβλημα μέχρι τώρα'),
+								 (7,1,14,'Δεν αξίζει τα λεφτά του σε καμία περίπτωση..ελπίζω τουλάχιστον να αντέξει...'),
+								 (8,2,5,'Διάβασα τις κριτικές εδώ κι έτσι αποφάσισα να πάρω το συγκεκριμένο τηλέφωνο. Δεν το μετάνιωσα καθόλου!! Είναι αψογο, για τις δικές μου ανάγκες τουλάχιστον. Έχει πολύ ωραίο design, είναι γρήγορο, με πολύ καθαρη οθονη και μπαταρία που αντέχει παρα πολυ'), 
+								 (9,2,6,'Για το κόστος που έχει είναι πολύ καλό, καλή κατασκευή χτυπάει τα xiaomi με αυτό η Samsung'),
+								 (10,2,9,'το καλυτερο κινητο μακραν που εχει βγει εως τωρα μαζι ισως με το note 9. Aπιστευτη μπαταρια που δεν τελειωνει ποτε απιστευτη ποιοτητα κατασκευης και φωτογραφιες που σε κανουν να ασχοληθεις με τη φωτογραφια ακομα κι αν δε σε ενδιεφερε μεχρι τωρα. '),
+								 (11,2,5,'λόγω υψηλού sar head το τηλέφωνο ψήνει κανονικά τον εγκέφαλο ακόμα κ με hands free είναι επικίνδυνα υψηλο. κρίμα.'),
+								 (12,2,7,'Υπερβολικά και τρομερά καλό κινητό αλλά...€1000+ δεν τα αξίζει! (Δείτε το βίντεο: https://youtu.be/8DbkK0xs5hQ) Με τα μισά λεφτά παίρνεις κάτι εξίσου τρομερά και φανταστικά καλό!'), 
+								 (13,2,8,'λόγω της δουλειάς μου ασχολούμαι με πάρα πολλά κινητά λοιπόν το κινητό πέρα της άριστης οθόνης και τον ήχο στις κλήσεις.......... είναι για πέταμα ο κυριν 710 σέρνεται κολλάει Στο Facebook κολλάει στο messenger κολλάει Στο multitasking κολλάει στα πιο απλά πράγματα μου σπάσε τα νεύρα και για αυτό το έδωσα φαίνεται ο επεξεργαστής ζορίζεται.'),
+								 (14,3,4,'ΕΞΑΙΡΕΤΙΚΟ, ειδικα σε επιπεδα multitasking που αφορυν και την δουλεια μου'),
+								 (15,3,7,'Πέρα από το χορταστικό μέγεθος και την απίστευτα καθαρή οθόνη σε βάθος, χρώμα, η συσκευή είναι ένα κόσμημα που σου δίνει άπειρες δυνατότητες. Σαφής βελτίωση στη μπαταρία από τη προηγούμενη μου συσκευή ενώ το μέγεθος του με βοηθάει να επεξεργάζομαι άνετα βίντεο μέσω εφαρμογής (luma) που μου είναι απαραίτητο.'), 
+								 (16,3,8,'ενικά η Huawei με τους επεξεργαστές της έχει ένα θέμα Αν δεν πάρεις ναυαρχίδα είσαι μες στο λακ ακόμα και ναυαρχίδα το p20 Pro ας πούμε στο fortnite κολλάει δεν μπορείς να το παίξεις οπότε από θέμα επεξεργαστή είναι απλά για πέταμα..... οι φωτογραφίες του είναι μέτριες πολύ και το βράδυ χάλια Ειδικά το night mode απλά αυτό που κάνει είναι να ανεβαζει απλα Το κλαριτι... το βίντεο χάλια...'),
+								 (17,3,11,'Πληρώνεις το όνομα δεκαετιών. Να έυχεσαι να μην σου πάθει κάτι γιατί άντε να στο φτιάξουν. Κλασικη Apple που βγάζει προϊον χωρίς τα αντίστοιχα ανταλλακτικα διαθέσιμα. θυμωμένη με την επιλογή μου. Πέρα ότι η μπαταρία για να κρατήσει όσο γράφει πρέπει να είσαι σε low vision στην οθόνη.'),
+								 (18,4,7,'Πραγματικα σχεδόν ολοκληρωμενο σαν συνολο.. Εψαχνα κατι με καλη μπαταρια και καμερα.. Θεωρω οτι ειναι απο τις καλυτερες επιλογες για αυτα,αν οχι η καλυτερη.. Αψογο σε ολα του! Πρωην κατοχος S9+, μπορω να πω με απολυτη σιγουρια οτι δεν υπαρχει καμια επαφη μεταξυ τους..'), 
+								 (19,4,10,'Τι να πρώτο πω.. Εμφάνιση απίστευτη..η καλύτερη κάμερα που υπάρχει σε αφήνει με το στόμα ανοιχτό.. Οθόνη υπέροχη (να αναφέρω ότι βλέπω εδώ τα σχόλια οι μισοί από αυτούς ούτε καν το έχουν πιάσει στα χέρια τους) μπαταρία 2 μέρες με βαριά χρήση.. '),
+								 (20,4,12,'καλη ΟθόνηΤαχύτητα, Touchpad, Διάρκεια μπαταρίας, Θερμοκρασία, Σχέση ποιότητας τιμής'), 
+								 (21,4,6,'Τα αρνητικά τώρα:  1. Γυάλινη πλάτη που λατρεύει υπέρμετρα τις δαχτυλιές και προφανώς εύθραστη όσο και γλυστερή. Μια θήκη τουλάχιστον πλάτης εντελώς απαραίτητη συν ένα τζαμάκι μπροστά. 2. Δεν έχει led ειδοποιήσεων, πυξίδα. 3. Μέτριο το εξωτερικό ηχείο.  4. Κάμερα πολύ μέτρια περισσότερο εξαιτίας του λογισμικού. Συνιστάται να την έχετε μόνιμα γυρισμένη στο HDR όπου σαφώς βελτιώνονται οι φωτογραφίες. Βραδυνές ξεχάστε τις αν δεν υπάρχει επαρκής φωτισμός. Το φλας απαράδεκτο όσο και το βίντεο. Για σέλφι ούτε συζήτηση.  5. Αργός και πλέον ξεπερασμένος επεξεργαστής Snapdragon 425, έχει ξεπεράσει τη διετία. Όπως και είναι λίγα πια τα 2 RAM. Δεν κάνει για βαριά χρήση, ούτε σαν παιχνιδομηχανή για το έφηβο παιδί σας που θα θέλει να παίζει και Fortnite με τις ώρες. Πάρτε του κάτι σαφώς πολύ καλύτερο, πχ με 150-180€ σκρουτζοτιμή ένα Xiaomi, θα σας ευγνωμονεί μετά.  6. Δεν έχει δακτυλικό αποτύπωμα (γιατί;) ενώ η αναγνώριση προσώπου είναι για τα κλάματα. Τη δική μου φάτσα έβαλα, το ξεκλειδώνει η αδερφή μου. '), 
+								 (22,4,14,'Απαγορευτικά κακός ήχος'),
+								 (23,5,10,'Έχω τον υπολογιστή στα χέρια μου 2 μήνες. Στην αρχή είχα διλημματα αλλα αποδείχθηκε πολύ καλός υπολογιστής και δεν μετανιώνω ούτε μία στιγμη. Αν και είναι του 2017 ο υπολογιστής είναι σαν του 2019, πετάει. Η οθόνη απλώς τα σπάει και δεν κολλάει πουθενά. Μερικοί λένε πως επιδή είναι apple δεν αξίζει. Ένα έχω να πω μην το σκέφτεστε καθόλου πάρτε τον.'),
+								 (24,5,1,'Κακή εικόνα και αλλοιωμένα χρώματα! Αν δεν βλέπεις στην απόλυτη ευθεία και είσαι ελαφρώς στο πλάι, η εικόνα δεν είναι καθόλου καλή. Από οποιαδήποτε γωνία θέασης τα μπλε είναι γαλάζια και τα κόκκινα ροζ. Ο ήχος καλός και το μενού εύκολο.'),
+								 (25,5,1,'Την αγόρασα γεμάτος ενθουσιασμό τέλη Νοέμβρη, καθότι και η προηγούμενη μου FULL HD ήτανε Samsung και εξαιρετική. Με μεγάλη μου λύπη διαπίστωσα άμεσα σχεδόν ότι έπασχε απο αισθητό backlight bleed και άμεσα κινητοποίησα διαδικασίες για αντικατάσταση.Απο την Samsung μου πρότειναν αντικατάσταση πάνελ, κάτι που πρακτικά δεν λύνει τίποτε, καθώς σε αυτές τις περιπτώσεις φταίνε 99% τα ledακια. Δέχθηκα με την ελπίδα ότι θα αντικατασταθεί σύντομα. Αμ δε. Έναν μήνα σχεδόν στα τηλέφωνα να προσπαθώ να μάθω πότε θα την παραλάβω και να μην ξέρει ΚΑΝΕΝΑΣ να μου απαντήσει υπεύθυνα σαν να μιλάμε για απολεσθέν αντικείμενο.'),
+								 (26,6,5,'Καλές φωτογραφίες γενικά πολύ καλές !  Το μεγάλο πρόβλημα όμως είναι ένα !  Το κινητό κολλάει αρκετά ειδικά όταν το βάζεις σε πλάγια θέση και μετά σε ευθεία πάλι παίζει να έχει 2-3 second delay + οτι πολλές φορές "Freezάρει" και κολλάει για 5-6 δευτερόλεπτα χωρίς να κάνει τίποτα '), 
+ 								 (27,6,7,'Χωράει άνετα στην τσέπη  Το χρησιμοποιείς άνετα με το ένα χέρι  Οθόνη καταπληκτική  Με χαλάει μερικές φορές το True Tone '),
+ 								 (28,6,13,'Το ταμπλετ αυτό εγώ προσωπικά το πήρα με προσφορά στα 150€ είναι πραγματ ελπίζω τουλάχιστον να αντέξει...'),
+ 								 (29,6,2,'Δεν ξέρω εαν έπεσα στην περίπτωση αλλά σε αυτην που αγόρασα ισχύουν τα εξής. 1. Έλειπε το τηλεκοντρόλ 2. Η εικόνα Είναι πραγματικα πολύ κακή 3 το INTERNET σέρνεται . Την αγόρασα σήμερα και αύριο θα κοιτάξω να δω εαν μπορώ να την επιστρέψω,  γιατι εσν δεν ελαττωματική τοτε πραγματικά ειναι πολυ κακη αγορα.'),
+							     (30,7,8,'Πολύ καλό κινητό αξίζει τα λεφτά του το μόνο που δεν μου αρέσει ειναι το ηχείο. Είναι κακής ποιότητας απο τη μέση και πάνω παραμορφώνει παααααρα πολύ.. Με ακουστικά είναι μια χαρά '),
+	  							 (31,8,13,'Το ταμπλετ αυτό εγώ προσωπικά το πήρα με προσφορά στα 150€ είναι πραγματικά ένα μικρό διαμάντι. Τα κάνει όλα απροβλημάτιστα. Έχω πολύ καιρό να ανοίξω το pc. Το προτείνω ανεπιφύλακτα ειδικά σε όσους έχουν επίσης συσκευή iPhone καθώς η σύνδεση μεταξύ τους είναι εκπληκτική'),
+	  							 (32,8,2,'αρκετά καλή. Καθαρή εικόνα και σε 4κ βίντεο δεν κόλλησε ούτε στο ελάχιστο. Εύκολη χρήση youtube. Το μόνο που θέλω να δοκιμάσω είναι το netflix για να έχω πλήρη εικόνα της tv. Το μόνο αρνητικό θα έλεγα είναι τα πλαστικά της.'),
+	  							 (33,9,7,'αν και νομίζω ότι μέχρι το iPhone 7 έβγαζες φυσικές φωτός, τώρα σαν να τονίζει λίγο παραπάνω τα χρώματα, που δεν μ αρέσει αυτό. Η μπαταρία δεν σε βγάζει μια μέρα με βαριά χρήση. Βάλε ρε Apple κι εσύ μπαταρίες 4000mh να γουστάρουμε.'),
+	  							 (34,9,8,'Κοιτάξτε εγώ το χω 2 μέρες μέχρι στιγμής... Είναι απίστευτα γρήγορο σε σχέση με το Α3 που είχα.... Έχει απίστευτη ανάλυση και οι φώτο και γενικά αλλά με χαλάει το ότι δν έχει φλας μπροστά αλλά η κάμερα είναι φοβερή... '),
+	  							 (35,10,8,'Πανέμορφο κινητό(στο μπλέ χρώμα από τα πιο όμορφα κινητά που κυκλοφορούν στην αγορά).Εκπληκτική οθόνη και χρώματα!Θα ικανοποιήση στο έπακρο τον μέσο χρήστη.Στην τιμή του ότι καλύτερο!'), 
+	  							 (36,10,5,'ένα αστέρι γιατί. από τη 2ή μέρα ξεκίνησε να καταναλώνει μπαταρία και επικοινώνησα με το κατάστημα που το πήρα,το πήγα στο σέρβις και εν τέλει μου επιστρέφουν τα χρήματα πίσω... μητρική κυρίες και κύριοι. δυστυχώς περίμενα παραπάνω από την εταιρεία. απογοήτευση...');
 
+/*!40000 ALTER TABLE `User_Comment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+
+--
+-- Dumping data for table `User_Like`
+--
+LOCK TABLES `User_Like` WRITE;
+/*!40000 ALTER TABLE `User_Like` DISABLE KEYS */;
+INSERT INTO `User_Like` VALUES (1,1,1), (2,1,4), (3,1,7), (4,1, 28),
+							   (5,2,1), (6,2,4), (7,2,7), (8,2, 28), (9,2,20), (10,2,36), (11,2,25),
+							   (12,3,5), (13,3,13), (14,3,19), (15,3,23),
+							   (16,4,10), (17,4,12), (18,4,5), (19,4,9), (20,4,3),
+							   (21,5,11), (22,5,12), (23,5,13), (24,5,18), (25,5,32),
+							   (26,6,32), (27,6,35), (28,6,31), (29,6,1), (30,6,24),
+							   (31,7,15), (32,7,16), (33,7,17), (34,7,18), (35,7,19),
+							   (36,8,6), (37,8,9), (38,8,12), (39,8,15), (40,8,20),
+							   (41,9,29), (42,9,31), (43,9,36), (44,9,17),
+							   (45,10,22), (46,10,23), (47,10,24), (48,10,26);
+	  							 
+/*!40000 ALTER TABLE `User_Like` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 --
@@ -304,21 +443,21 @@ Smartphones have the following extra data: CPU cores, cpu freq, RAM, capacity, s
 */
 LOCK TABLES `Product` WRITE;
 /*!40000 ALTER TABLE `Product` DISABLE KEYS */;
-INSERT INTO `Product` VALUES (1,'Samsung TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image1.png','\0'),
-							 (2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image2.png','\0'),
-							 (3,'Dell Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image3.png','\0'),
-							 (4,'Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image4.png', '\0'),
-							 (5,'Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image5.png','\0'),
-							 (6,'Samsung Galaxy J4 PLUS DUAL SIM GOLD','Με True HD+ Infinity Display, Dual-SIM και Emotify για ξεχωριστή επικοινωνία, Snapdragon SoC και Android Oreο απολαμβάνεις μια ανώτερη εμπειρία χρήσης','Smartphone','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image6.png','\0'),
-							 (7,'Apple iPhone XS','Με τη μεγαλύτερη οθόνη σε iPhone, Super Retina 6,5" τεχνολογίας OLED, το πιο έξυπνο & ισχυρό επεξεργαστή σε smartphone, ταχύτερη αναγνώριση προσώπου Face ID και διπλή πίσω κάμερα για μοναδικές λήψεις','Smartphone','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image7.png','\0'),
-							 (8,'Honor 10 Lite Smartphone Blue', 'Dewdrop οθόνη 6,21" με FHD+ ανάλυση, Dual AI και 24MP Selfie κάμερες, 8πύρηνο SoC Kirin 710 με GPU Turbo και EMUI 9.0 out-of-the-box!', 'Smartphone','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image8.png','\0'),
-							 (9,'Huawei Mate 20 Pro Smartphone Μαύρο', 'Μεγάλη FullView 2K+ οθόνη 6,39 ιντσών, 8πύρηνος Kirin 980 με διπλό NPU, 6GB μνήμης RAM, μπαταρία 4.200mAh, σύστημα τριπλής AI κάμερας και αντοχή σε νερό και σκόνη', 'Smartphone', 'https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image9.png','\0'),
-							 (10,'Apple MacBook Air 13\'\' MQD42GR/A', 'Απίστευτα ελαφρύ και απίστευτα λεπτό MacBook Air, με μπαταρία που κρατάει 12 συνεχόμενες ώρες, φωτιζόμενο keyboard και μεγάλες ταχύτητες μεταφοράς δεδομένων', 'Laptop','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image10.png','\0'),
-							 (11,'Dell Alienware 17 R5 Laptop','Με Intel Core i7-7700HQ επεξεργαστή, αυτόνομη κάρτα γραφικών 4GB, 12GB RAM και 17’’ οθόνη Full HD IPS το extreme gaming πάει παντού!','Laptop','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image11.png', '\0'),
-							 (12,'Toshiba Tecra X40-D-10H Laptop','Ένας δυνατός φορητός με βάρος μόλις 1,25 Kg επεξεργαστή Intel Core i7-7500U, 16GB RAM DDR4, Intel HD Graphics 620 και SSD με χωρητικότητα 512GB','Laptop','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image12.png','\0'),
-							 (13,'Apple iPad mini 4 Tablet 7.9\'\'Gold','Είναι πολύ λεπτό, απίστευτα ελαφρύ και ασυμβίβαστα ισχυρό! Έχει κάμερα στα 8MP, Retina οθόνη και iOS9.','Tablet','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image13.png','\0'),
-							 (14,'Samsung Galaxy Tab S4 T835 Tablet 10.5\'\'  Γκρι','Με εντυπωσιακή οθόνη Super AMOLED 10,5", 8πυρηνο Snapdragon 835 και 4GB μνήμης RAM, σύνδεση σε 4G δίκτυα, αποθηκευτικό χώρο 64GB, νέο S-Pen, 4 ηχεία AKG και μεγάλη μπαταρία 7.300mAh','Tablet','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image14.png','\0'),
-							 (15,'LG OLED TV OLED77C8 77\'\'', 'Υψηλή αισθητική και UHD ευκρίνεια, με τεχνολογίες OLED και Cinema HDR, επεξεργαστή α9, ήχο Dolby Atmos και webOS 4.0 για πρόσβαση σε multimedia περιεχόμενο','TV','https://github.com/ThanosM97/SoftEng-JavaMagkes/blob/master/src/main/webapp/static/images1/image15.png','\0');
+INSERT INTO `Product` VALUES (1,'Samsung TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV','localhost:3000/static/images1/image1.png','\0'),
+							 (2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV','localhost:3000/static/images1/image2.png','\0'),
+							 (3,'Dell Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop','localhost:3000/static/images1/image3.png','\0'),
+							 (4,'Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop','localhost:3000/static/images1/image4.png', '\0'),
+							 (5,'Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', 'localhost:3000/static/images1/image5.png','\0'),
+							 (6,'Samsung Galaxy J4 PLUS DUAL SIM GOLD','Με True HD+ Infinity Display, Dual-SIM και Emotify για ξεχωριστή επικοινωνία, Snapdragon SoC και Android Oreο απολαμβάνεις μια ανώτερη εμπειρία χρήσης','Smartphone','localhost:3000/static/images1/image6.png','\0'),
+							 (7,'Apple iPhone XS','Με τη μεγαλύτερη οθόνη σε iPhone, Super Retina 6,5" τεχνολογίας OLED, το πιο έξυπνο & ισχυρό επεξεργαστή σε smartphone, ταχύτερη αναγνώριση προσώπου Face ID και διπλή πίσω κάμερα για μοναδικές λήψεις','Smartphone','localhost:3000/static/images1/image7.png','\0'),
+							 (8,'Honor 10 Lite Smartphone Blue', 'Dewdrop οθόνη 6,21" με FHD+ ανάλυση, Dual AI και 24MP Selfie κάμερες, 8πύρηνο SoC Kirin 710 με GPU Turbo και EMUI 9.0 out-of-the-box!', 'Smartphone','localhost:3000/static/images1/image8.png','\0'),
+							 (9,'Huawei Mate 20 Pro Smartphone Μαύρο', 'Μεγάλη FullView 2K+ οθόνη 6,39 ιντσών, 8πύρηνος Kirin 980 με διπλό NPU, 6GB μνήμης RAM, μπαταρία 4.200mAh, σύστημα τριπλής AI κάμερας και αντοχή σε νερό και σκόνη', 'Smartphone', 'localhost:3000/static/images1/image9.png','\0'),
+							 (10,'Apple MacBook Air 13\'\' MQD42GR/A', 'Απίστευτα ελαφρύ και απίστευτα λεπτό MacBook Air, με μπαταρία που κρατάει 12 συνεχόμενες ώρες, φωτιζόμενο keyboard και μεγάλες ταχύτητες μεταφοράς δεδομένων', 'Laptop','localhost:3000/static/images1/image10.png','\0'),
+							 (11,'Dell Alienware 17 R5 Laptop','Με Intel Core i7-7700HQ επεξεργαστή, αυτόνομη κάρτα γραφικών 4GB, 12GB RAM και 17’’ οθόνη Full HD IPS το extreme gaming πάει παντού!','Laptop','localhost:3000/static/images1/image11.png', '\0'),
+							 (12,'Toshiba Tecra X40-D-10H Laptop','Ένας δυνατός φορητός με βάρος μόλις 1,25 Kg επεξεργαστή Intel Core i7-7500U, 16GB RAM DDR4, Intel HD Graphics 620 και SSD με χωρητικότητα 512GB','Laptop','localhost:3000/static/images1/image12.png','\0'),
+							 (13,'Apple iPad mini 4 Tablet 7.9\'\'Gold','Είναι πολύ λεπτό, απίστευτα ελαφρύ και ασυμβίβαστα ισχυρό! Έχει κάμερα στα 8MP, Retina οθόνη και iOS9.','Tablet','localhost:3000/static/images1/image13.png','\0'),
+							 (14,'Samsung Galaxy Tab S4 T835 Tablet 10.5\'\'  Γκρι','Με εντυπωσιακή οθόνη Super AMOLED 10,5", 8πυρηνο Snapdragon 835 και 4GB μνήμης RAM, σύνδεση σε 4G δίκτυα, αποθηκευτικό χώρο 64GB, νέο S-Pen, 4 ηχεία AKG και μεγάλη μπαταρία 7.300mAh','Tablet','localhost:3000/static/images1/image14.png','\0'),
+							 (15,'LG OLED TV OLED77C8 77\'\'', 'Υψηλή αισθητική και UHD ευκρίνεια, με τεχνολογίες OLED και Cinema HDR, επεξεργαστή α9, ήχο Dolby Atmos και webOS 4.0 για πρόσβαση σε multimedia περιεχόμενο','TV','localhost:3000/static/images1/image15.png','\0');
 /*!40000 ALTER TABLE `Product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -455,6 +594,79 @@ INSERT INTO `Record` VALUES (1, 300, '2018-12-12', NULL, 1, 1, 1),  (2, 250, '20
 UNLOCK TABLES;
 
 
+--
+-- Dumping data for table `Record_Validation`
+--
+LOCK TABLES `Record_Validation` WRITE;
+/*!40000 ALTER TABLE `Record_Validation` DISABLE KEYS */;
+INSERT INTO `Record_Validation` VALUES (1,1,2), (2,1,3),
+									   (3,2,2), (4,2,3),
+									   (5,3,3), (6,3,4),
+									   (7,4,5), (8,4,6),
+									   (9,5,7), (10,5,8),
+									   (11,6,9), (12,6,10),
+									   (13,7,1), (14,7,2),
+									   (15,8,7), (16,8,9),
+									   (17,9,5), (18,9,6),
+									   (19,10,9),
+									   (20,11,8), (21,11,9), (22,11,6),
+									   (23,12,5), (24,12,1),
+									   (25,13,2), (26,13,3),
+									   (27,14,3), (28,14,4),
+									   (29,15,4), (30,15,10), (31,15, 9),
+									   (32,16,1), (33,16,2),
+									   (34,17,3), (35,17,4),
+									   (36,18,1), (37,18,6),
+									   (38,19,5), (39,19,6),
+									   (40,20,6), (41,20,7),
+									   (42,21,8), (43,21,9),
+									   (44,22,1), (45,22,2), (46,22,3), (47,22,4),
+									   (48,23,2), (49,23,5),
+									   (50,24,7), (51,24,8),
+									   (52,25,8), (53,25,9),
+									   (54,26,2), (55,26,10),
+									   (56,27,8), (57,27,3),
+									   (58,28,10), (59,28,7),
+									   (60,29,1), (61,29,10),
+									   (62,30,3), (63,30,4),
+									   (64,31,4), (65,31,5),
+									   (66,32,6), (67,32,7),
+									   (68,33,9), (69,33,10),
+									   (70,34,5), (71,34,2),
+									   (72,35,3), (73,35,3),
+									   (74,36,7), (75,36,8),
+									   (76,37,2), (77,37,3), (78,37,7),
+									   (79,38,5), (80,38,6),
+									   (81,39,3), (82,39,6), (83,39,9), (84,39,10),
+									   (85,40,2), (86,40,3),
+									   (87,41,6), (88,41,7),
+									   (89,42,5), (90,42,6),
+									   (91,43,7), (92,43,8),
+									   (93,44,8), (94,44,9), (95,44,10),
+									   (96,45,3), (97,48,4),
+									   (98,45,5), (99,45,6),
+									   (100,46,1), (101,46,2),
+									   (102,47,2), (103,47,3),
+									   (104,48,2), (105,48,10),
+									   (106,49,3), (107,49,5),
+									   (108,50,10), (109,50,6),
+									   (110,51,5), (111,51,6),
+									   (112,52,2), (113,52,3),
+									   (114,53,2), (115,53,3), (116,53,4), (117,53,5),
+									   (118,54,9), (119,54,10),
+									   (120,55,8), (121,55,9),
+									   (122,56,9), (123,56,8), (124,56,7), (125,56,6);
+
+/*!40000 ALTER TABLE `Record_Validation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+
+
+
+
+
+
 
 /*-------------------------
 -----------VIEWS-----------
@@ -492,33 +704,50 @@ DESC LIMIT 5;
 ---------------------------*/
 
 /*Email Constraint, ensure that the given value is in the right format*/
--- validate email
-CREATE TRIGGER `user_validate_email_insert`
-	BEFORE INSERT ON `User` FOR EACH ROW
+DELIMITER $$
+CREATE TRIGGER `user_validate_email_insert` BEFORE INSERT  ON `User`
+FOR EACH ROW
 	BEGIN
-		IF NEW.`email` NOT LIKE '%_@%_.__%' THEN
-			SIGNAL SQLSTATE VALUE '45000'
-				SET MESSAGE_TEXT = '[table:User] - `email` column is not valid';
+		IF NOT (SELECT NEW.email REGEXP '$[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$') THEN
+			SIGNAL SQLSTATE VALUE '45000';
 		END IF;
-	END;
+	END$$
+
+CREATE TRIGGER `user_validate_email_update` BEFORE UPDATE  ON `User`
+FOR EACH ROW
+	BEGIN
+		IF NOT (SELECT NEW.email REGEXP '$[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$') THEN
+			SIGNAL SQLSTATE VALUE '45000';
+		END IF;
+	END$$
+
+DELIMITER ;
 
 
 
 /*First Name and Last Name before insert or update*/
 
-CREATE TRIGGER `user_validate_name_insert`
-     BEFORE INSERT ON `User` FOR EACH ROW
-     BEGIN
-          IF (NOT(NEW.`firstName` REGEXP '^[A-Za-z]+$') AND NOT(NEW.`lastName` REGEXP '^[A-Za-z]+$')) THEN
-               SIGNAL SQLSTATE '45000'
-                    SET MESSAGE_TEXT = '[table:User] - `firstName` or `lastName`  column is not valid';
-          END IF;
-     END;
+DELIMITER $$
+CREATE TRIGGER `user_validate_name_insert` BEFORE INSERT  ON `User` 
+FOR EACH ROW
+	BEGIN
+		IF NOT(NEW.`firstName` REGEXP '^[A-Za-z]+$') THEN
+			SIGNAL SQLSTATE VALUE '45000';
+		END IF;
+	END$$
 
+CREATE TRIGGER `user_validate_name_update` BEFORE UPDATE  ON `User`
+FOR EACH ROW
+	BEGIN
+		IF NOT(NEW.`firstName` REGEXP '^[A-Za-z]+$') THEN
+			SIGNAL SQLSTATE VALUE '45000';
+		END IF;
+	END$$
+
+DELIMITER ;
 
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

@@ -11,7 +11,10 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import com.google.gson.Gson;
+
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,9 +41,13 @@ public class PricesResource extends ServerResource {
     	
     	String shops = queryParams.getValues("shops");
     	String products = queryParams.getValues("products");
-    	String tags = queryParams.getValues("tags");
+    	String tagsString = queryParams.getValues("tags");
     	String sort = queryParams.getFirstValue("sort");
-    	
+    	/*
+		 * Convert tagString that represents a list of tags to a list.
+		 */
+		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
+		
         Map<String, Object> map = new HashMap<>();
         Limits limits = new Limits();
         /**
@@ -58,7 +65,7 @@ public class PricesResource extends ServerResource {
         	map.put("start", start);
         } else {
         	/*
-        	 * default value for start is 0.
+        	 * Default value for start is 0.
         	 */
         	map.put("start", 0);
         }
@@ -74,17 +81,14 @@ public class PricesResource extends ServerResource {
         	map.put("count", count);
         } else{
         	/*
-        	 * default value for count is 20.
+        	 * Default value for count is 20.
         	 */
         	map.put("count", 20);
         }
         /*
-         * get prices based on the limits.
+         * Set default values for sort
          */
-        /*
-         * set default values for sort
-         */
-        
+
         if (sort == null) {
         	sort = "price|ASC";
         }
@@ -104,13 +108,14 @@ public class PricesResource extends ServerResource {
         	dateFrom = new SimpleDateFormat("yyyy-MM-dd").format(date);
         	dateTo = new SimpleDateFormat("yyyy-MM-dd").format(date);
         }
-        System.out.println(geoLngString +  geoLatString + dateFrom + dateTo + shops + products + tags + sort);
         
-        
+        /*
+         * Get prices based on the limits.
+         */
     	List<Record> records = dataAccess.getRecords(limits, geoDistString, geoLngString, geoLatString, dateFrom, dateTo, 
     			shops, products, tags ,sort);
     	/*
-    	 * set current total products.
+    	 * Set current total products.
     	 */
         map.put("total", limits.getTotal());
         map.put("prices", records);

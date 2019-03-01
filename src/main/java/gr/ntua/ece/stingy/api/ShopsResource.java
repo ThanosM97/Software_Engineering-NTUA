@@ -11,6 +11,9 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,13 +67,10 @@ public class ShopsResource extends ServerResource {
 	    	map.put("count", count);
 	    } else{
 	    	/*
-	    	 * default value for count is 20.
+	    	 * Δefault value for count is 20.
 	    	 */
 	    	map.put("count", 20);
 	    }
-	    /*
-	     * get shops based on the limits.
-	     */
 	    /*
 	     * set default values for status and sort
 	     */
@@ -83,13 +83,15 @@ public class ShopsResource extends ServerResource {
 	    if (!status.equals("ALL") && !status.equals("WITHDRAWN") && !status.equals("ACTIVE")) {
 	    	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid status: " + status);
 	    }
-	    System.out.println(sort);
 	    if (!sort.equals("id|ASC") && !sort.equals("id|DESC") && !sort.equals("name|ASC") && !sort.equals("name|DESC")) {
 	    	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid sort: " + sort);
 	    }
+	    /*
+	     * Get shops based on the limits.
+	     */
 	    List<Shop> shops = dataAccess.getShops(limits, status, sort);
 	    /*
-	     * set current total products.
+	     * Set current total products.
 	     */
 	    map.put("total", limits.getTotal());
 	    map.put("shops", shops);
@@ -99,21 +101,55 @@ public class ShopsResource extends ServerResource {
     @Override
     protected Representation post(Representation entity) throws ResourceException {
 
-        //Create a new restlet form
+        /*
+         * Create a new restlet form
+         */
         Form form = new Form(entity);
-        //Read the parameters
+        /*
+         * Read the parameters
+         */
         String name = form.getFirstValue("name");
         String address = form.getFirstValue("address");
-        double lng = Double.valueOf(form.getFirstValue("lng"));
-        double lat = Double.valueOf(form.getFirstValue("lat"));
-        String tags = form.getFirstValue("tags");
-        boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
+        Double lng = Double.valueOf(form.getFirstValue("lng"));
+        Double lat = Double.valueOf(form.getFirstValue("lat"));
+        String tagsString = form.getFirstValue("tags");
+        String withdrawnString = form.getFirstValue("withdrawn");
 
-        //validate the values (in the general case)
-        //...
-
+        /*
+		 *  Validate the values (in the general case)
+		 */
+		if (name == null || name.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Name is required");
+		}
+		if (address == null || address.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Address is required");
+		}
+		if (lng == null || lat == null) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Longitude and latitude are required");
+		}
+		if (tagsString == null || tagsString.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
+		}
+		
+		/*
+		 * If withdrawn is not set, use default value.
+		 */
+		boolean withdrawn;
+		if (withdrawnString == null) {
+			withdrawn = false;
+		}
+		else {
+			withdrawn = Boolean.valueOf(withdrawnString);
+		}
+		/*
+		 * Convert tagString that represents a list of tags to a list.
+		 */
+		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
+		
         Shop shop = dataAccess.addShop(name, address, lng, lat, tags, withdrawn);
-
+        /*
+         * Return the json representation of the shop.
+         */
         return new JsonShopRepresentation(shop);
     }
 }

@@ -1,17 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const myExampleProduct = {
-    device: 'smartphone', name: 'Testphone', screen: '5"', ram: '4GB', rom: '64GB', backCamera: '20Mp', 
-    frontCamera: '4Mp', cpuCores: '4', manufacturer: 'Samsung'
-};
-
-const myExampleShops = [
-    {name: 'Λαική αγορά Αιγαλέου', price: '5$', otherData: ''},
-    {name: 'Public Συντάγματος', price: '1000$', otherData: ''}
-];
-
 const smartphone = "../static/images/smartphone250x250.png";
+const like = "../static/images/like.png";
+const unlike = "../static/images/unlike.png";
+const questionmark = "../static/images/questionmark.png";
 
 
 export class ProductView extends React.Component{
@@ -27,7 +20,7 @@ export class ProductView extends React.Component{
     }
 }
 
-class ProductViewSpecs extends React.Component{
+export class ProductViewSpecs extends React.Component{
     render(){
         let product_render;
         switch (this.props.product.device){
@@ -37,12 +30,6 @@ class ProductViewSpecs extends React.Component{
             case 'tv':
                 product_render = ( <ProductViewTv product={this.props.product} />);
                 break;
-            case 'monitor':
-                product_render = ( <ProductViewMonitor product={this.props.product} />);
-                break;
-            case 'tablet':
-                product_render = ( <ProductViewTablet product={this.props.product} />);
-                break;
             case 'laptop':
                 product_render = ( <ProductViewLaptop product={this.props.product} />);
                 break;
@@ -50,12 +37,6 @@ class ProductViewSpecs extends React.Component{
                 product_render = ( <div> Oops! Invalid product type :( </div> );
             }
 
-        // if (this.props.product.device == 'smartphone'){
-        //     product_render = ( <ProductViewSmartphone product={this.props.product} />);
-        // }
-        // else if
-        //     product_render = ( <div> Oops! </div> );
-        // }
         return(
                 <div class='specs'>
                     <div>{product_render}</div>
@@ -72,32 +53,36 @@ class ProductViewSmartphone extends React.Component{
                 <img src={smartphone} class='product-image' /><br />
                 <table class='specs-table'>
                     <tr>
-                        <td>Οθόνη</td> 
-                        <td>{this.props.product.screen}</td>
+                        <td>Λειτουργικό Σύστημα:</td> 
+                        <td>{this.props.product.OS}</td>
                     </tr>
                     <tr>
-                        <td>Μνήμη RAM</td> 
+                        <td>Οθόνη:</td> 
+                        <td>{this.props.product.size}</td>
+                    </tr>
+                    <tr>
+                        <td>Μνήμη RAM:</td> 
                         <td>{this.props.product.ram}</td>
                     </tr>
                     <tr>
-                        <td>Μνήμη ROM</td> 
-                        <td>{this.props.product.rom}</td>
+                        <td>Χωρητικότητα:</td> 
+                        <td>{this.props.product.capacity}</td>
                     </tr>
                     <tr>
-                        <td>Κάμερα</td> 
+                        <td>Κάμερα:</td> 
                         <td>{this.props.product.backCamera}</td>
                     </tr>
                     <tr>
-                    <td>Selfie</td> 
-                    <td>{this.props.product.frontCamera}</td>
+                        <td>Selfie:</td> 
+                        <td>{this.props.product.frontCamera}</td>
                     </tr>
                     <tr>
-                        <td>Πυρήνες Επεξεργαστή</td> 
+                        <td>Πυρήνες Επεξεργαστή:</td> 
                         <td>{this.props.product.cpuCores}</td>
                     </tr>
                     <tr>
-                        <td>Κατασκευαστής</td> 
-                        <td>{this.props.product.manufacturer}</td>
+                        <td>Ταχύτητα Επεξεργαστή:</td> 
+                        <td>{this.props.product.cpuFrequency}</td>
                     </tr>
                 </table>
             </div>
@@ -109,56 +94,71 @@ class ProductViewTv extends React.Component{
     render(){
         return(
             <div>
-                <a>Όνομα: {this.props.name}</a>
-                <a>Διαγώνιος: {this.props.inches}</a>
-                <a>Ευκρίνεια: {this.props.resolution}</a>
-                <a>Τύπος Panel: {this.props.panel}</a>
-                <a>Smart: {this.props.isSmart}</a>
-                <a>Κατασκευαστής: {this.props.manufacturer}</a>
+                <a class='product-name'>{this.props.product.name}</a><br />
+                <img src={smartphone} class='product-image' /><br />
+                <table class='specs-table'></table>
+                    <tr>
+                        <td>4K:</td>
+                        <td>{this.props.product.fourk}</td>
+                    </tr>
+                    <tr>
+                        <td>Smart:</td>
+                        <td>{this.props.product.smart}</td>
+                    </tr>
+                    <tr>
+                        <td>Συχνότητα:</td>
+                        <td>{this.props.product.frequency}</td>
+                    </tr>
             </div>
         );
     }
 }
 
-class ProductViewMonitor extends React.Component{
-	render(){
-		<h1>Coming Soon</h1>
-	}
-}
-
-
-class ProductViewTablet extends React.Component{
-	render(){
-		<h1>Coming Soon</h1>
-	}
-}
-
 class ProductViewLaptop extends React.Component{
 	render(){
-		<h1>Coming Soon</h1>
+		return(
+            <div>
+                <a class='product-name'>{this.props.product.name}</a><br />
+                <img src={laptop} class='product-image' /><br />
+                <table class='specs-table'></table>
+                    <tr>
+                        <td>CPU:</td>
+                        <td>{this.props.product.cpu}</td>
+                    </tr>
+                    <tr>
+                        <td>RAM:</td>
+                        <td>{this.props.product.ram}</td>
+                    </tr>
+                    <tr>
+                        <td>Σκληρός Δίσκος:</td>
+                        <td>{this.props.product.harddrive}</td>
+                    </tr>
+                    <tr>
+                        <td>Λειτουργικό Σύστημα:</td>
+                        <td>{this.props.product.OS}</td>
+                    </tr>
+                    <tr>
+                        <td>Μέγεθος Οθόνης:</td>
+                        <td>{this.props.product.screensize}</td>
+                    </tr>
+                    <tr>
+                        <td>Κάρτα Γραφικών:</td>
+                        <td>{this.props.product.graphicscard}</td>
+                    </tr>
+            </div>
+        )
 	}
 }
-
-// class ProductViewShop extends React.Component{
-//     render(){
-//         return(
-//             <div>
-//                 <a>Όνομα: {this.props.shop.name}</a><br />
-//                 <a>Τιμή: {this.props.shop.price}</a><br />
-//                 <a>Άλλα στοιχεία: {this.props.shop.otherData}</a><br />
-//             </div>
-//         );
-//     }
-// }
 
 class ProductViewShopList extends React.Component{
     render(){
         const shoplist = this.props.shops.map(shop => 
             <div class='shopbox'>
-                <as>Όνομα: {shop.name} </as><br></br>
-                <as>Τιμή: {shop.price} </as><br></br> 
+                <as class='shopname'>{shop.name} </as>
+                <as class='price'>{shop.price} </as><br></br> 
                 <as>Άλλα στοιχεία: {shop.otherData} </as><br></br>
-                <as>Αξιοπιστία καταχώρησης: <at></at></as>
+                <as>Αξιοπιστία καταχώρησης: <img src={like} class='like-img'/> <img src={unlike} class='like-img'/><img src={questionmark} class='questionmark-img'/></as><br></br>
+                <as class='address'>Αλέκου Παναγούλη 9, Νίκαια </as><br></br>
             </div>
             );
         return(
