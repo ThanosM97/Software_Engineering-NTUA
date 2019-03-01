@@ -100,6 +100,7 @@ class Sidebar extends React.Component{
                     <input type='checkbox'/> έως 120Hz <br></br>
                     <input type='checkbox'/> >120Hz <br></br>
                 </div>
+                <input type="button" class='button' value='Πάμε'/> 
             </div>
         )
         const laptop_filters = (
@@ -147,12 +148,27 @@ class Sidebar extends React.Component{
                     <input type='checkbox'/> AMD <br></br>
                     <input type='checkbox'/> Intel <br></br>
                 </div>
+                <input type="button" class='button' value='Πάμε'/> 
             </div>
         )
+        let filters;
+        switch(this.props.category){
+            case 'smartphone':
+                filters = smartphone_filters;
+                break;
+            case 'tv':
+                filters = tv_filters;
+                break;
+            case 'laptop':
+                filters = laptop_filters;
+                break;
+            default:
+                filters = smartphone_filters;
+        }
         return(
             <div class='filters'>
                 <div class='filter-name'>Φίλτρα</div>
-                {tv_filters}
+                {filters}
             </div>
         );
     }
