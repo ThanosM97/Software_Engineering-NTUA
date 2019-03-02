@@ -27,17 +27,21 @@
 .nav-left img{
   float:left;
 }
-
-.nav-left input {
+.form {
+  position:relative;
+  height:100%;
+}
+.form input {
   position:relative;
   margin-top:4%;
   margin-left: 2%;
   padding-left:5px;
   width:45%;
-  height: 35%;
+  height: 38%;
+  border: 1px solid black;
 }
 
-.nav-left input[type="submit"] {
+.form input[type="submit"] {
   margin-left: -0.2%;
   width:15%;
   height: 40%;
@@ -57,14 +61,14 @@
   cursor: pointer;
 }
 
-.nav-left input[type="submit"]:hover{
+.form input[type="submit"]:hover{
   background-color: #737373;
   cursor:pointer;
 }
 
-.nav-left input:hover{
+.form input:hover{
   border-color: #808080;
 }
-.nav-left input:focus{
+.form input:focus{
   outline-color: #808080;
 }
