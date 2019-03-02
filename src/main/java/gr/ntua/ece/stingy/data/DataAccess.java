@@ -830,8 +830,8 @@ public class DataAccess {
 		String sqlStm;
 
 		if (geoDistString != null) {
-			sqlStm = "SELECT distinct Record.id as id, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
-					"SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) as dist, Record.date\n" + 
+			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
+					"SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) as dist, Record.dateFrom, Record.dateTo\n" + 
 					"FROM Shop, Product, Record ";
 			if (tags!= null) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
@@ -839,11 +839,11 @@ public class DataAccess {
 				sqlStm += "WHERE SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) < :geoDist\n" + 
 					"AND Record.shopId = Shop.id \n" + 
 					"AND Record.productId = Product.id\n" + 
-					"AND Record.dateFrom < :dateFrom and Record.date <= :dateTo\n";
+					"AND Record.dateFrom <= :dateTo and Record.dateTo >= :dateFrom\n";
 		}
 		else {
 			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
-					" Record.date\n" + 
+					" Record.dateFrom, Record.dateTo\n" + 
 					"FROM Shop, Product, Record ";
 			if (tags!= null) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
@@ -851,7 +851,7 @@ public class DataAccess {
 				sqlStm += "WHERE \n" + 
 					"Record.shopId = Shop.id \n" + 
 					"AND Record.productId = Product.id\n" + 
-					"AND Record.date > :dateFrom and Record.date <= :dateTo\n";
+					"AND Record.dateFrom <= :dateTo and Record.dateTo >= :dateFrom\n";
 		}
 
 		if (products != null) {
@@ -883,7 +883,6 @@ public class DataAccess {
 		/*
 		 * Insert the new record in the Record table
 		 */
-		KeyHolder keyHolder = new GeneratedKeyHolder();	// for keeping the record id
 		jdbcTemplate.update(
 				new PreparedStatementCreator() {
 					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -898,9 +897,7 @@ public class DataAccess {
 						ps.setLong(6, userId);
 						return ps;
 					}
-				},
-				keyHolder);
-		long recordId = (long)keyHolder.getKey();
+				});
 		Optional<Product> productOpt = getProduct(productId);
 		Optional<Shop> shopOpt = getShop(shopId);
         Product product = productOpt.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + productId));
@@ -924,8 +921,7 @@ public class DataAccess {
 			e.printStackTrace();
 		}
 		Record record = new Record(
-					recordId, //the newly created record id
-					price, 
+					price,
 					product.getName(),
 					productId, 
 					product.getTags(),
