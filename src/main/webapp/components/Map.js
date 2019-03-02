@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+import Head from 'next/head';
 
-class App extends Component {
+class Map extends Component {
 
   state = {
     venues: []
@@ -47,6 +48,9 @@ class App extends Component {
   render() {
     return (
       <main>
+        <Head>
+          <link href="../static/Map.css" rel="stylesheet" />
+        </Head>
         <div id="map"></div>
       </main>
     )
@@ -62,4 +66,4 @@ function loadScript(url) {
   index.parentNode.insertBefore(script, index)
 }
 
-export default App;
+export default Map;
