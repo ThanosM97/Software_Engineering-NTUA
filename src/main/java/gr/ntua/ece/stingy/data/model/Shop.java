@@ -12,8 +12,9 @@ public class Shop {
     private final double lat;
     private final List<String> tags;
     private final boolean withdrawn;
+    private final String image;
     
-	public Shop(long id, String name, String address, double lng, double lat, List<String> tags, boolean withdrawn) {
+	public Shop(long id, String name, String address, double lng, double lat, List<String> tags, boolean withdrawn, String image) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -21,6 +22,7 @@ public class Shop {
 		this.lat = lat;
 		this.tags = tags;
 		this.withdrawn = withdrawn;
+		this.image = image;
 	}
 
 	/**

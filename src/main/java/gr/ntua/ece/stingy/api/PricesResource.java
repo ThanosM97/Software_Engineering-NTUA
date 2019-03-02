@@ -5,6 +5,8 @@ import gr.ntua.ece.stingy.data.DataAccess;
 import gr.ntua.ece.stingy.data.Limits;
 import gr.ntua.ece.stingy.data.model.Product;
 import gr.ntua.ece.stingy.data.model.Record;
+import gr.ntua.ece.stingy.data.model.Shop;
+
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -13,6 +15,8 @@ import org.restlet.resource.ServerResource;
 
 import com.google.gson.Gson;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -122,6 +126,86 @@ public class PricesResource extends ServerResource {
         return new JsonMapRepresentation(map);
     }
 
-
-
+    
+    @Override
+    protected Representation post(Representation entity) throws ResourceException {
+    	/*
+         * Create a new restlet form
+         */
+        Form form = new Form(entity);
+        /*
+         * Read the parameters
+         */
+        Double price = Double.valueOf(form.getFirstValue("price"));
+        String dateFrom = form.getFirstValue("dateFrom");
+        String dateTo = form.getFirstValue("dateTo");
+        String productIdString = form.getFirstValue("productId");
+        String shopIdString = form.getFirstValue("shopId");
+        String userIdString = form.getFirstValue("userId");
+        String validityString = form.getFirstValue("validity");
+        
+        
+        /*
+		 *  Validate the values (in the general case)
+		 */
+		if (price == null) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Price is required");
+		}
+		if (productIdString == null || productIdString.isEmpty()) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Product Id is required");
+		}
+		if (shopIdString == null || shopIdString == null) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Shop Id is required");
+		}
+		/*
+		 * Set 1 as default value for user that corresponds to the administrator.
+		 */
+		Long userId = null;
+		if (userIdString != null ) {
+        	try {
+                userId = Long.parseLong(userIdString);
+            }
+            catch(Exception e) {
+                throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid userId: " + userId);
+            }
+        } else{
+        	/*
+        	 * Default value for userId is 1 (administrator).
+        	 */
+        	userId = (long) 1;
+        }
+		/*
+		 * Set 0 as default value for validity.
+		 */
+		int validity;
+		if (validityString == null || validityString.isEmpty()) {
+			validity = 0;
+		}
+		else {
+			validity = Integer.parseInt(validityString);
+		}
+		Long productId;
+		Long shopId;
+		try {
+            productId = Long.parseLong(productIdString);
+        }
+        catch(Exception e) {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid productId: " + productIdString);
+        }
+		try {
+            shopId = Long.parseLong(shopIdString);
+        }
+        catch(Exception e) {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shopId: " + shopIdString);
+        }
+		
+		Record record = dataAccess.addRecord(price, dateFrom, dateTo, productId, shopId, userId, validity);
+        /*
+         * Return the json representation of the record.
+         */
+        return new JsonRecordRepresentation(record);
+       
+    
+    }
+ 
 }

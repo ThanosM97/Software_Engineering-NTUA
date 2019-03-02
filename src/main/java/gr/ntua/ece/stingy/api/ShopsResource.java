@@ -114,6 +114,7 @@ public class ShopsResource extends ServerResource {
         Double lat = Double.valueOf(form.getFirstValue("lat"));
         String tagsString = form.getFirstValue("tags");
         String withdrawnString = form.getFirstValue("withdrawn");
+        String image = form.getFirstValue("image");
 
         /*
 		 *  Validate the values (in the general case)
@@ -146,7 +147,7 @@ public class ShopsResource extends ServerResource {
 		 */
 		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
 		
-        Shop shop = dataAccess.addShop(name, address, lng, lat, tags, withdrawn);
+        Shop shop = dataAccess.addShop(name, address, lng, lat, tags, withdrawn, image);
         /*
          * Return the json representation of the shop.
          */

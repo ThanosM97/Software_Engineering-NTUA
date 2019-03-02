@@ -28,12 +28,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 public class DataAccess {
 
@@ -587,22 +592,23 @@ public class DataAccess {
 		return jdbcTemplate.query("select * from Shop where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn,sort_type, limits.getStart(), limits.getCount() }, new ShopRowMapper());
 	}
 
-	public Shop addShop(String name, String address,double lng, double lat, List<String> tags, boolean withdrawn ) {
+	public Shop addShop(String name, String address,double lng, double lat, List<String> tags, boolean withdrawn, String image) {
 		/*
 		 * Insert the new shop in the Product table
 		 */
-		KeyHolder keyHolder = new GeneratedKeyHolder();	// for keeping the product id
+		KeyHolder keyHolder = new GeneratedKeyHolder();	// for keeping the shop id
 		jdbcTemplate.update(
 				new PreparedStatementCreator() {
 					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 						PreparedStatement ps =
-								connection.prepareStatement("insert into Shop(name, address, lng, lat, withdrawn) "
-										+ "values(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+								connection.prepareStatement("insert into Shop(name, address, lng, lat, withdrawn, image) "
+										+ "values(?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 						ps.setString(1, name);
 						ps.setString(2, address);
 						ps.setDouble(3,  lng);
 						ps.setDouble(4, lat);
 						ps.setBoolean(5, withdrawn);
+						ps.setString(6, image);
 						return ps;
 					}
 				},
@@ -646,7 +652,8 @@ public class DataAccess {
 					lng,
 					lat,
 					tags,
-					withdrawn
+					withdrawn,
+					image
 					);
 			return shop;
 	}
@@ -673,11 +680,11 @@ public class DataAccess {
 		}
 	}
 
-	public Optional<Shop> updateShop(long id, String name, String address, double lng, double lat, List<String> tags, boolean withdrawn ) {
+	public Optional<Shop> updateShop(long id, String name, String address, double lng, double lat, List<String> tags, boolean withdrawn, String image) {
 		/*
 		 *  Updates the new shop record
 		 */
-		int rows = jdbcTemplate.update("update Shop set name=?, address=?, lng=?, lat=?,  withdrawn=? where id =?", new Object[] {name, address, lng, lat, withdrawn, id});
+		int rows = jdbcTemplate.update("update Shop set name=?, address=?, lng=?, lat=?,  withdrawn=?, image=? where id =?", new Object[] {name, address, lng, lat, withdrawn, image, id});
 		/*
 		 *  Check if the product exists
 		 */
@@ -813,7 +820,7 @@ public class DataAccess {
 		parameters.addValue("sort", sort_type);
 		parameters.addValue("start", limits.getStart());
 		parameters.addValue("count", limits.getCount());
-
+		/*
 		System.out.println(geoLngString);
 		System.out.println(geoLatString);
 		System.out.println(geoDistString);
@@ -823,11 +830,12 @@ public class DataAccess {
 		System.out.println(products);
 		System.out.println(tags);
 		System.out.println(sort_type);
+		*/
 		String sqlStm;
 
 		if (geoDistString != null) {
 			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
-					"SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) as dist, Record.date\n" + 
+					"SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) as dist, Record.dateFrom, Record.dateTo\n" + 
 					"FROM Shop, Product, Record ";
 			if (tags!= null) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
@@ -835,11 +843,11 @@ public class DataAccess {
 				sqlStm += "WHERE SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) < :geoDist\n" + 
 					"AND Record.shopId = Shop.id \n" + 
 					"AND Record.productId = Product.id\n" + 
-					"AND Record.date > :dateFrom and Record.date <= :dateTo\n";
+					"AND Record.dateFrom <= :dateTo and Record.dateTo >= :dateFrom\n";
 		}
 		else {
 			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
-					" Record.date\n" + 
+					" Record.dateFrom, Record.dateTo\n" + 
 					"FROM Shop, Product, Record ";
 			if (tags!= null) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
@@ -847,7 +855,7 @@ public class DataAccess {
 				sqlStm += "WHERE \n" + 
 					"Record.shopId = Shop.id \n" + 
 					"AND Record.productId = Product.id\n" + 
-					"AND Record.date > :dateFrom and Record.date <= :dateTo\n";
+					"AND Record.dateFrom <= :dateTo and Record.dateTo >= :dateFrom\n";
 		}
 
 		if (products != null) {
@@ -864,7 +872,6 @@ public class DataAccess {
 					"		and Shop_Tag.ShopId = Shop.id\n" + 
 					"		and Tag.name in (:shopTags)))";
 		}
-		System.out.println(sqlStm);
 
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
 		namedJdbcTemplate.query(sqlStm, parameters, countCallback);
@@ -875,4 +882,113 @@ public class DataAccess {
 		return namedJdbcTemplate.query(sqlStm, parameters, new RecordRowMapper());
 	}
 
+	
+	public Record addRecord(double price, String dateFromString, String dateToString, long productId, long shopId, long userId, int validity) {
+		/*
+		 * Insert the new record in the Record table
+		 */
+		jdbcTemplate.update(
+				new PreparedStatementCreator() {
+					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+						PreparedStatement ps =
+								connection.prepareStatement("insert into Record(price, dateFrom, dateTo, productId, shopId, userId) "
+										+ "values(?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+						ps.setDouble(1, price);
+						ps.setString(2, dateFromString);
+						ps.setString(3,   dateToString);
+						ps.setLong(4, productId);
+						ps.setLong(5, shopId);
+						ps.setLong(6, userId);
+						return ps;
+					}
+				});
+		Optional<Product> productOpt = getProduct(productId);
+		Optional<Shop> shopOpt = getShop(shopId);
+        Product product = productOpt.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + productId));
+        Shop shop = shopOpt.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + shopId));
+        /*
+         * Convert dates from String to Date.
+         */
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-DD"); 
+        Date dateFrom = null;
+        Date dateTo = null;
+        try {
+			dateFrom = (Date)formatter.parse(dateFromString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			dateTo = (Date)formatter.parse(dateToString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Record record = new Record(
+					price,
+					product.getName(),
+					productId, 
+					product.getTags(),
+					shopId,
+					shop.getName(),
+					shop.getTags(),
+					shop.getAddress(),
+					-1,
+					dateFrom,
+					dateTo
+					);
+			return record;
+	}
+	
+	
+	public String getToken( String username, String password) {
+		int count = jdbcTemplate.queryForObject("select count(*) from User where "
+				+ "username=? and password=?", new Object[] { username, password }, Integer.class);
+		String token;
+		if (count > 0) {
+			int id = jdbcTemplate.queryForObject("select id from User where "
+					+ "username=? and password=?", new Object[] { username, password }, Integer.class);
+			System.out.println(id);
+			int leftLimit = 97; // letter 'a'
+		    int rightLimit = 122; // letter 'z'
+		    int targetStringLength = 10;
+		    Random random = new Random();
+		    StringBuilder buffer = new StringBuilder(targetStringLength);
+		    for (int i = 0; i < targetStringLength; i++) {
+		        int randomLimitedInt = leftLimit + (int) 
+		          (random.nextFloat() * (rightLimit - leftLimit + 1));
+		        buffer.append((char) randomLimitedInt);
+		    }
+		    token = buffer.toString();
+		    System.out.println(token);
+			jdbcTemplate.update("update User set token=? where id=?", new Object[] {token, id});
+		}
+		else {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Wrong username or password");
+		}
+		return token;
+	}
+	
+	public Message tokenIsValid(String auth) {
+		/*
+		 * Check if token exists
+		 */
+		int count = jdbcTemplate.queryForObject("select count(*) from User where "
+				+ "token=?", new Object[] { auth }, Integer.class);
+		if (count == 0) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "User not found");
+		}
+		else {
+			int id = jdbcTemplate.queryForObject("select id from User where "
+					+ "token=?", new Object[] { auth }, Integer.class);
+			/*
+			 * Disable token.
+			 */
+			jdbcTemplate.update("update User set token=? where id=?", new Object[] {-1, id});
+		}
+		return new Message("OK");
+	}
+
+	
+	
 }

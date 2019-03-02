@@ -20,12 +20,12 @@ public class ShopRowMapper implements RowMapper {
         double lng		   = rs.getDouble("lng");
         double lat		   = rs.getDouble("lat");
         boolean withdrawn  = rs.getBoolean("withdrawn");
-        
+        String image	   = rs.getString("image");
         /*
 		 * Convert tags to a list of tags (tags are separated by comma).
 		 */
 		List<String> tags = dataAccess.getShopTagsById(id);
-        return new Shop(id, name, address, lng, lat, tags, withdrawn);
+        return new Shop(id, name, address, lng, lat, tags, withdrawn, image);
     }
 
 }
