@@ -45,7 +45,7 @@ class Shops extends Component {
 
     const shops = this.state.data.map(shop =>
         <div className='shop'>
-            //<img src={shop.image} class='product-image' />
+            <img src={shop.image} class='product-image' />
             <h2>{shop.name}</h2>
             <h4>{shop.address}</h4>
         </div>
