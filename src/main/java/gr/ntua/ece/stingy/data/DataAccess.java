@@ -968,4 +968,27 @@ public class DataAccess {
 		}
 		return token;
 	}
+	
+	public Message tokenIsValid(String auth) {
+		/*
+		 * Check if token exists
+		 */
+		int count = jdbcTemplate.queryForObject("select count(*) from User where "
+				+ "token=?", new Object[] { auth }, Integer.class);
+		if (count == 0) {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "User not found");
+		}
+		else {
+			int id = jdbcTemplate.queryForObject("select id from User where "
+					+ "token=?", new Object[] { auth }, Integer.class);
+			/*
+			 * Disable token.
+			 */
+			jdbcTemplate.update("update User set token=? where id=?", new Object[] {-1, id});
+		}
+		return new Message("OK");
+	}
+
+	
+	
 }
