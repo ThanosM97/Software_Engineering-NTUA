@@ -591,7 +591,7 @@ public class DataAccess {
 		return jdbcTemplate.query("select * from Shop where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn,sort_type, limits.getStart(), limits.getCount() }, new ShopRowMapper());
 	}
 
-	public Shop addShop(String name, String address,double lng, double lat, List<String> tags, boolean withdrawn ) {
+	public Shop addShop(String name, String address,double lng, double lat, List<String> tags, boolean withdrawn, String image) {
 		/*
 		 * Insert the new shop in the Product table
 		 */
@@ -600,13 +600,14 @@ public class DataAccess {
 				new PreparedStatementCreator() {
 					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 						PreparedStatement ps =
-								connection.prepareStatement("insert into Shop(name, address, lng, lat, withdrawn) "
-										+ "values(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+								connection.prepareStatement("insert into Shop(name, address, lng, lat, withdrawn, image) "
+										+ "values(?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 						ps.setString(1, name);
 						ps.setString(2, address);
 						ps.setDouble(3,  lng);
 						ps.setDouble(4, lat);
 						ps.setBoolean(5, withdrawn);
+						ps.setString(6, image);
 						return ps;
 					}
 				},
@@ -650,7 +651,8 @@ public class DataAccess {
 					lng,
 					lat,
 					tags,
-					withdrawn
+					withdrawn,
+					image
 					);
 			return shop;
 	}
@@ -677,11 +679,11 @@ public class DataAccess {
 		}
 	}
 
-	public Optional<Shop> updateShop(long id, String name, String address, double lng, double lat, List<String> tags, boolean withdrawn ) {
+	public Optional<Shop> updateShop(long id, String name, String address, double lng, double lat, List<String> tags, boolean withdrawn, String image) {
 		/*
 		 *  Updates the new shop record
 		 */
-		int rows = jdbcTemplate.update("update Shop set name=?, address=?, lng=?, lat=?,  withdrawn=? where id =?", new Object[] {name, address, lng, lat, withdrawn, id});
+		int rows = jdbcTemplate.update("update Shop set name=?, address=?, lng=?, lat=?,  withdrawn=?, image=? where id =?", new Object[] {name, address, lng, lat, withdrawn, image, id});
 		/*
 		 *  Check if the product exists
 		 */

@@ -113,6 +113,7 @@ public class ShopResource extends ServerResource {
         Double lat = Double.valueOf(form.getFirstValue("lat"));
         String tagsString = form.getFirstValue("tags");
         boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
+        String image = form.getFirstValue("image");
         /*
          *  Validate the values (in the general case)
      	*/
@@ -137,7 +138,7 @@ public class ShopResource extends ServerResource {
         /*
          * Update the certain shop
          */
-        Optional<Shop> optional = dataAccess.updateShop(id, name, address, lng, lat, tags, withdrawn);
+        Optional<Shop> optional = dataAccess.updateShop(id, name, address, lng, lat, tags, withdrawn, image);
         Shop shop = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
         return new JsonShopRepresentation(shop);
     }
@@ -175,6 +176,7 @@ public class ShopResource extends ServerResource {
         String lat = form.getFirstValue("lat");
         String tagsString = form.getFirstValue("tags");
         String withdrawn = form.getFirstValue("withdrawn");
+        String image = form.getFirstValue("image");
         /*
          * patch the certain shop based on the non null value.
          * If more than two values are given only the first is updated.
@@ -199,6 +201,9 @@ public class ShopResource extends ServerResource {
     	}
     	else if (withdrawn != null) {
             optional = dataAccess.patchShop(id, withdrawn, "withdrawn");
+    	}
+    	else if (image != null) {
+            optional = dataAccess.patchShop(id, image, "image");
     	}
     	else {
     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "None field changed");
