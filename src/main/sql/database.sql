@@ -31,7 +31,7 @@ CREATE TABLE `User` (
 	`email` varchar(45) NOT NULL,
 	`phoneNumber` varchar(45) NOT NULL,
 	`points`  int(11),
-	`profilePic` varchar(300),
+	`profilePic` varchar(600),
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -107,7 +107,6 @@ CREATE TABLE `User_Like` (
 
 
 
-
 --
 -- Table structure for table `Company`
 --
@@ -121,7 +120,7 @@ CREATE TABLE `Company` (
 	`key` varchar(45) NOT NULL,
 	`email` varchar(45) NOT NULL,
 	`phoneNumber` varchar(45) NOT NULL,
-	`profilePic` varchar(300),
+	`profilePic` varchar(600) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -157,7 +156,7 @@ CREATE TABLE `Product` (
 	`description` mediumtext,
 	`category` varchar(128) NOT NULL,
 	`withdrawn` bit(1) NOT NULL DEFAULT b'0',
-	`image` varchar(300) NULL,
+	`image` varchar(450) NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -220,7 +219,7 @@ CREATE TABLE `Shop` (
 	`address` mediumtext,
 	`lng` FLOAT(13,10) NOT NULL,
 	`lat` FLOAT(13,10) NOT NULL,
-	`image` varchar(45),
+	`image` varchar(450),
 	`withdrawn` bit(1) NOT NULL DEFAULT b'0',
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -249,14 +248,13 @@ DROP TABLE IF EXISTS `Record`;
 CREATE TABLE `Record` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`price` FLOAT(8,3) NOT NULL,
-	`dateFrom` DATE NOT NULL,
-	`dateTo` DATE NOT NULL,
+	`date` DATE NOT NULL,
 	`validity` int(11),
 	`productId` int(11) NOT NULL,
 	`shopId` int(11) NOT NULL,
 	`userId` int(11) NOT NULL,
 	CONSTRAINT fk_record1 FOREIGN KEY (productId) REFERENCES Product(id) ON DELETE CASCADE ON UPDATE CASCADE, 
-	CONSTRAINT fk_record2 FOREIGN KEY (shopId) REFERENCES Shop(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT fk_record2 FOREIGN KEY (shopId) REFERENCES Phop(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT fk_record3 FOREIGN KEY (userId) REFERENCES User(id) ON DELETE CASCADE ON UPDATE CASCADE,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -271,28 +269,28 @@ DROP TABLE IF EXISTS `Record_Validation`;
 CREATE TABLE `Record_Validation` (
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`recordId` int(11) NOT NULL,
-	`userId` int(11) NOT NULL,
+	`UserId` int(11) NOT NULL,
   	CONSTRAINT fk_recordVal1 FOREIGN KEY (UserId) REFERENCES User(id) ON DELETE CASCADE ON UPDATE CASCADE,  
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 --
 -- Dumping data for table `User`
 --
 LOCK TABLES `User` WRITE;
 /*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES (1,'junkietech','GngN4+tJ#1VX', 'Nikolaos','Papantoniou', 'nEpwYsBHGBLHNaJ9', 'eDoCmblwHzkY7SmT','junkiepapa@gmail.com','+30 69 63064771',50,'localhost:3000/static/profiles/profile1.png'),
-						  (2,'bulletproofmaniactech','S6~xE*l&t[|-', 'Dimitrios','Anagnostou', 'o$NlUy1Ef|@5S;I-', 'Hug#G$h/:|`ymu./','bulletanagnostou@gmail.com','+30 69 32161887',61,'localhost:3000/static/profiles/profile2.png'),
-                          (3,'responsibleapple','z},/gG|Jsak+', 'Antonios','Koutsouris', 'Aa@cl1b41XXR$d5`','xyT{<@^[2y:%b>5!' ,'responsiblekoutsouris@gmail.com','+30 69 14612977',18,'localhost:3000/static/profiles/profile3.png'),
-                          (4,'nightowlcybernetics','Bn,!1jg">EL7', 'Marios','Pagourtzis', '9&z@ivo-LKBQX3/2', 'G^I:EU*3Hajwi)Mq','cyberneticspagourtzis@yahoo.com',' +30 696 9578413',75,'localhost:3000/static/profiles/profile4.png'),
-                          (5,'biomedicalmonitor','qQX{"_|jI[U]', 'Nikolados','Tsanakas', 'MvH._:6!m)UgHIPN','2^bk8=.u%kG!EedH' ,'biomedicaltsanakas@yahoo.com','+30 69 47029338',0,'localhost:3000/static/profiles/profile5.png'),
-                          (6,'skilledelectro','8ht)Ed=lT;^c', 'Anastasios','Xanthakis','u;8Uda71mk?cBA!.' , 'u3UHVg(Fbqx~lea(','skilledxanthakis@gmail.com','+30 69 20216577',34,'localhost:3000/static/profiles/profile6.png'),
-                          (7,'anonymousneural','8(fi~f#1Ps2?', 'Fotis','Sykas','t:Xbb!<W 4%VUo|>' ,'yJ1*Ih$CYK~%Bn Z' ,'neuralsykas@gmail.com','+30 69 80608764',45,'localhost:3000/static/profiles/profile7.png'),
-                          (8,'investingcs','o,_{qUVPT5Iq', 'Kostantinos','Theodorou','BL{!*<I|w)a1L/A.' , 'p<=8fKUIT^VLlUS9','investingtheodorou@gmail.com','+30 69 06029084',39,'localhost:3000/static/profiles/profile8.png'),
-                          (9,'bluewavequantum','tIpdknWw/+F>', 'Maria','Papaspirou', 'X?D75oKaMM.Y["k^', 'aS(Y=]!l4b9 >yUB','bluewavepapaspirou@yahoo.com','+30 69 89677280',27,'localhost:3000/static/profiles/profile9.png'),
-                          (10,'balancedcryptology','8(fi~f#1Ps2?', 'Eleni','Nikita', 'ay[yt~@P"sT_s&1:','3%]B*{yY5W6XuWn2' ,'cryptologynikita@yahoo.com',' +30 69 17568463',33,'localhost:3000/static/profiles/profile10.png');
+INSERT INTO `User` VALUES
+						  (1,'junkietech','GngN4ftJ#1VX', 'Nikolaos','Papantoniou', 'nEpwYsBHGBLHNaJ9', 'eDoCmblwHzkY7SmT','junkiepapa@gmail.com','+30 69 63064771',50,'static/profiles/profile1.png'),
+						  (2,'bulletproofmaniactech','S6~xE*l&t[|-', 'Dimitrios','Anagnostou', 'o$NlUy1Ef|@5S;I-', 'Hug#G$h/:|`ymu./','bulletanagnostou@gmail.com','+30 69 32161887',61,'static/profiles/profile2.png'),
+                          (3,'responsibleapple','z},/gG|Jsak+', 'Antonios','Koutsouris', 'Aa@cl1b41XXR$d5`','xyT{<@^[2y:%b>5!' ,'responsiblekoutsouris@gmail.com','+30 69 14612977',18,'static/profiles/profile3.png'),
+                          (4,'nightowlcybernetics','Bn,!1jg">EL7', 'Marios','Pagourtzis', '9&z@ivo-LKBQX3/2', 'G^I:EU*3Hajwi)Mq','cyberneticspagourtzis@yahoo.com',' +30 696 9578413',75,'static/profiles/profile4.png'),
+                          (5,'biomedicalmonitor','qQX{"_|jI[U]', 'Nikolados','Tsanakas', 'MvH._:6!m)UgHIPN','2^bk8=.u%kG!EedH' ,'biomedicaltsanakas@yahoo.com','+30 69 47029338',0,'static/profiles/profile5.png'),
+                          (6,'skilledelectro','8ht)Ed=lT;^c', 'Anastasios','Xanthakis','u;8Uda71mk?cBA!.' , 'u3UHVg(Fbqx~lea(','skilledxanthakis@gmail.com','+30 69 20216577',34,'static/profiles/profile6.png'),
+                          (7,'anonymousneural','8(fi~f#1Ps2?', 'Fotis','Sykas','t:Xbb!<W 4%VUo|>' ,'yJ1*Ih$CYK~%Bn Z' ,'neuralsykas@gmail.com','+30 69 80608764',45,'static/profiles/profile7.png'),
+                          (8,'investingcs','o,_{qUVPT5Iq', 'Kostantinos','Theodorou','BL{!*<I|w)a1L/A.' , 'p<=8fKUIT^VLlUS9','investingtheodorou@gmail.com','+30 69 06029084',39,'static/profiles/profile8.png'),
+                          (9,'bluewavequantum','tIpdknWw/+F>', 'Maria','Papaspirou', 'X?D75oKaMM.Y["k^', 'aS(Y=]!l4b9 >yUB','bluewavepapaspirou@yahoo.com','+30 69 89677280',27,'static/profiles/profile9.png'),
+                          (10,'balancedcryptology','8(fi~f#1Ps2?', 'Eleni','Nikita', 'ay[yt~@P"sT_s&1:','3%]B*{yY5W6XuWn2' ,'cryptologynikita@yahoo.com',' +30 69 17568463',33,'static/profiles/profile10.png');
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -303,7 +301,8 @@ UNLOCK TABLES;
 --
 LOCK TABLES `Administrator` WRITE;
 /*!40000 ALTER TABLE `Administrator` DISABLE KEYS */;
-INSERT INTO `Administrator` VALUES (1,'admin1','RFjknN^+FWFw)<', 'Panagiotis','Antoniou', 'admin1@stingy.com'),
+INSERT INTO Administrator(id,username,password,firstName, lastName,email) VALUES 
+								   (1,'admin1','RFjknN^+FWFw)<', 'Panagiotis','Antoniou', 'admin1@stingy.com'),
 								   (2,'admin2','1Ps2^+FWFw)<(e', 'Pantelis','Eustathiou', 'admin2@stingy.com');
 /*!40000 ALTER TABLE `Administrator` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -315,10 +314,10 @@ UNLOCK TABLES;
 --
 LOCK TABLES `Company` WRITE;
 /*!40000 ALTER TABLE `Company` DISABLE KEYS */;
-
-INSERT INTO `Company` VALUES (1,'plaisio','GngN4+tJ#1VX', 'Plaisio', '324dsfqwf4qf)erw', '245wrfwcdwetqef<23','plaisio@info.gr','2102895000','localhost:3000/static/company_profiles/plaisio.png'),
-						  (2,'kotsovolos','S6~xE*l&t[|-', 'Kotsovolos', 'o$NlUy1Ef|@5S;I-', 'Hug#G$h/:|`ymu./','kotsovolos@info.gr','2102899999','localhost:3000/static/company_profiles/kotsovolos.png'),
-                          (3,'Public','z},/gG|Jsak+', 'Public', 'Aa@cl1b41XXR$d5`','xyT{<@^[2y:%b>5!' ,'public@info.gr','2108181333','localhost:3000/static/company_profiles/public.png');
+INSERT INTO `Company` VALUES
+						  (1,'plaisio','GngN4+tJ#1VX', 'Plaisio', '324dsfqwf4qf)erw', '245wrfwcdwetqef<23','plaisio@info.gr','2102895000','static/company_profiles/plaisio.png'),
+						  (2,'kotsovolos','S6~xE*l&t[|-', 'Kotsovolos', 'o$NlUy1Ef|@5S;I-', 'Hug#G$h/:|`ymu./','kotsovolos@info.gr','2102899999','static/company_profiles/kotsovolos.png'),
+                          (3,'Public','z},/gG|Jsak+', 'Public', 'Aa@cl1b41XXR$d5`','xyT{<@^[2y:%b>5!' ,'public@info.gr','2108181333','static/company_profiles/public.png');
 /*!40000 ALTER TABLE `Company` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -329,7 +328,8 @@ UNLOCK TABLES;
 --
 LOCK TABLES `User_Favourites` WRITE;
 /*!40000 ALTER TABLE `User_Favourites` DISABLE KEYS */;
-INSERT INTO `User_Favourites` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,5),(5,1,9),(6,1,15),(7,1,13),
+INSERT INTO User_Favourites(id,UserId,ProductId) VALUES 
+									 (1,1,1),(2,1,2),(3,1,3),(4,1,5),(5,1,9),(6,1,15),(7,1,13),
 									 (8,2,5), (9,2,6),(10,2,9),(11,2,4),
 									 (12,3,4),(13,3,7),
 									 (14,4,4),(15,4,7), (16,4,10),(17,4,12), (18,4,6),
@@ -349,7 +349,8 @@ UNLOCK TABLES;
 --
 LOCK TABLES `User_Rating` WRITE;
 /*!40000 ALTER TABLE `User_Rating` DISABLE KEYS */;
-INSERT INTO `User_Rating` VALUES (1,1,1,8),(2,1,2,9),(3,1,3,8),(4,1,5,7),(5,1,9,10),(6,1,15,4),(7,1,14,3),
+INSERT INTO User_Rating(id,UserId,ProductId,Stars) VALUES 
+								 (1,1,1,8),(2,1,2,9),(3,1,3,8),(4,1,5,7),(5,1,9,10),(6,1,15,4),(7,1,14,3),
 								 (8,2,5,8), (9,2,6,8),(10,2,9,8),(11,2,4,9),(12,2,5,4),(13,2,7,5), (14,2,8,1),
 								 (15,3,4,10),(16,3,7,9), (17,3,8,2),(18,3,11,4),
 								 (19,4,4,8),(20,4,7,8), (21,4,10,8),(22,4,12,8), (23,4,6,4), (24,4,14,4),
@@ -369,7 +370,8 @@ UNLOCK TABLES;
 --
 LOCK TABLES `User_Comment` WRITE;
 /*!40000 ALTER TABLE `User_Comment` DISABLE KEYS */;
-INSERT INTO `User_Comment` VALUES (1,1,1,'Εξαιρετική τηλεόραση. Η εικόνα είναι πεντακάθαρη και πολύ ζωηρή. Με τις κατάλληλες ρυθμίσεις το αποτέλεσμα είναι εκπληκτικό. '),
+INSERT INTO User_Comment(id,UserId,ProductId,Comment) VALUES 
+								 (1,1,1,'Εξαιρετική τηλεόραση. Η εικόνα είναι πεντακάθαρη και πολύ ζωηρή. Με τις κατάλληλες ρυθμίσεις το αποτέλεσμα είναι εκπληκτικό. '),
 								 (2,1,2,'Περίμενα κάτι καλό για τα λεφτά της, τελικά έκανα λάθος. Η τηλεόραση είναι εξαιρετική. Δεν της λείπει τίποτα σε σχέση με άλλες που έχουν την διπλάσια τιμή. Έχει γρήγορη απόκριση στις εναλλαγές καναλιών.'),
 								 (4,1,5,'Με προβληματίζουν κάποια θέματα που αφορούν την κάμερα, την εμπρόσθια συγκεκριμένα. Μια φορά μόνο, λειτουργούσε με χρονοκαθυστέρηση 1 δευτερολέπτου τουλάχιστον. Θα επανέλθω αν το ξανακάνει.'),
 								 (5,1,9,'Απλά υπέροχο κινητό και πολύ όμορφο "Ο βασιλιάς των android"..όχι δε μιλάω υπερβολικά..πιστέψτε με.....φοβερά γρήγορο και "πανέξυπνο" ...μεγάλη oled οθόνη με σούπερ ανάλυση,ζωντανά χρώματα, φοβερή απόκριση και με σούπερ αναλογία, έχω BOE οθόνη και κανένα πρόβλημα μέχρι τώρα'),
@@ -414,7 +416,7 @@ UNLOCK TABLES;
 --
 LOCK TABLES `User_Like` WRITE;
 /*!40000 ALTER TABLE `User_Like` DISABLE KEYS */;
-INSERT INTO `User_Like` VALUES (1,1,1), (2,1,4), (3,1,7), (4,1, 28),
+INSERT INTO User_Like(id,UserId,CommentId) VALUES (1,1,1), (2,1,4), (3,1,7), (4,1, 28),
 							   (5,2,1), (6,2,4), (7,2,7), (8,2, 28), (9,2,20), (10,2,36), (11,2,25),
 							   (12,3,5), (13,3,13), (14,3,19), (15,3,23),
 							   (16,4,10), (17,4,12), (18,4,5), (19,4,9), (20,4,3),
@@ -444,21 +446,22 @@ Smartphones have the following extra data: CPU cores, cpu freq, RAM, capacity, s
 */
 LOCK TABLES `Product` WRITE;
 /*!40000 ALTER TABLE `Product` DISABLE KEYS */;
-INSERT INTO `Product` VALUES (1,'Samsung TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV','localhost:3000/static/images1/image1.png','\0'),
-							 (2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV','localhost:3000/static/images1/image2.png','\0'),
-							 (3,'Dell Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop','localhost:3000/static/images1/image3.png','\0'),
-							 (4,'Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop','localhost:3000/static/images1/image4.png', '\0'),
-							 (5,'Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', 'localhost:3000/static/images1/image5.png','\0'),
-							 (6,'Samsung Galaxy J4 PLUS DUAL SIM GOLD','Με True HD+ Infinity Display, Dual-SIM και Emotify για ξεχωριστή επικοινωνία, Snapdragon SoC και Android Oreο απολαμβάνεις μια ανώτερη εμπειρία χρήσης','Smartphone','localhost:3000/static/images1/image6.png','\0'),
-							 (7,'Apple iPhone XS','Με τη μεγαλύτερη οθόνη σε iPhone, Super Retina 6,5" τεχνολογίας OLED, το πιο έξυπνο & ισχυρό επεξεργαστή σε smartphone, ταχύτερη αναγνώριση προσώπου Face ID και διπλή πίσω κάμερα για μοναδικές λήψεις','Smartphone','localhost:3000/static/images1/image7.png','\0'),
-							 (8,'Honor 10 Lite Smartphone Blue', 'Dewdrop οθόνη 6,21" με FHD+ ανάλυση, Dual AI και 24MP Selfie κάμερες, 8πύρηνο SoC Kirin 710 με GPU Turbo και EMUI 9.0 out-of-the-box!', 'Smartphone','localhost:3000/static/images1/image8.png','\0'),
-							 (9,'Huawei Mate 20 Pro Smartphone Μαύρο', 'Μεγάλη FullView 2K+ οθόνη 6,39 ιντσών, 8πύρηνος Kirin 980 με διπλό NPU, 6GB μνήμης RAM, μπαταρία 4.200mAh, σύστημα τριπλής AI κάμερας και αντοχή σε νερό και σκόνη', 'Smartphone', 'localhost:3000/static/images1/image9.png','\0'),
-							 (10,'Apple MacBook Air 13\'\' MQD42GR/A', 'Απίστευτα ελαφρύ και απίστευτα λεπτό MacBook Air, με μπαταρία που κρατάει 12 συνεχόμενες ώρες, φωτιζόμενο keyboard και μεγάλες ταχύτητες μεταφοράς δεδομένων', 'Laptop','localhost:3000/static/images1/image10.png','\0'),
-							 (11,'Dell Alienware 17 R5 Laptop','Με Intel Core i7-7700HQ επεξεργαστή, αυτόνομη κάρτα γραφικών 4GB, 12GB RAM και 17’’ οθόνη Full HD IPS το extreme gaming πάει παντού!','Laptop','localhost:3000/static/images1/image11.png', '\0'),
-							 (12,'Toshiba Tecra X40-D-10H Laptop','Ένας δυνατός φορητός με βάρος μόλις 1,25 Kg επεξεργαστή Intel Core i7-7500U, 16GB RAM DDR4, Intel HD Graphics 620 και SSD με χωρητικότητα 512GB','Laptop','localhost:3000/static/images1/image12.png','\0'),
-							 (13,'Apple iPad mini 4 Tablet 7.9\'\'Gold','Είναι πολύ λεπτό, απίστευτα ελαφρύ και ασυμβίβαστα ισχυρό! Έχει κάμερα στα 8MP, Retina οθόνη και iOS9.','Tablet','localhost:3000/static/images1/image13.png','\0'),
-							 (14,'Samsung Galaxy Tab S4 T835 Tablet 10.5\'\'  Γκρι','Με εντυπωσιακή οθόνη Super AMOLED 10,5", 8πυρηνο Snapdragon 835 και 4GB μνήμης RAM, σύνδεση σε 4G δίκτυα, αποθηκευτικό χώρο 64GB, νέο S-Pen, 4 ηχεία AKG και μεγάλη μπαταρία 7.300mAh','Tablet','localhost:3000/static/images1/image14.png','\0'),
-							 (15,'LG OLED TV OLED77C8 77\'\'', 'Υψηλή αισθητική και UHD ευκρίνεια, με τεχνολογίες OLED και Cinema HDR, επεξεργαστή α9, ήχο Dolby Atmos και webOS 4.0 για πρόσβαση σε multimedia περιεχόμενο','TV','localhost:3000/static/images1/image15.png','\0');
+INSERT INTO Product(id,name,description,category,image,withdrawn) VALUES 
+							 (1,'Samsung TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV','static/images1/image1.png',0),
+							 (2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV','static/images1/image2.png',0),
+							 (3,'Dell Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop','static/images1/image3.png',0),
+							 (4,'Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop','static/images1/image4.png',0),
+							 (5,'Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', 'static/images1/image5.png',0),
+							 (6,'Samsung Galaxy J4 PLUS DUAL SIM GOLD','Με True HD+ Infinity Display, Dual-SIM και Emotify για ξεχωριστή επικοινωνία, Snapdragon SoC και Android Oreο απολαμβάνεις μια ανώτερη εμπειρία χρήσης','Smartphone','static/images1/image6.png',0),
+							 (7,'Apple iPhone XS','Με τη μεγαλύτερη οθόνη σε iPhone, Super Retina 6,5" τεχνολογίας OLED, το πιο έξυπνο & ισχυρό επεξεργαστή σε smartphone, ταχύτερη αναγνώριση προσώπου Face ID και διπλή πίσω κάμερα για μοναδικές λήψεις','Smartphone','static/images1/image7.png',0),
+							 (8,'Honor 10 Lite Smartphone Blue', 'Dewdrop οθόνη 6,21" με FHD+ ανάλυση, Dual AI και 24MP Selfie κάμερες, 8πύρηνο SoC Kirin 710 με GPU Turbo και EMUI 9.0 out-of-the-box!', 'Smartphone','static/images1/image8.png',0),
+							 (9,'Huawei Mate 20 Pro Smartphone Μαύρο', 'Μεγάλη FullView 2K+ οθόνη 6,39 ιντσών, 8πύρηνος Kirin 980 με διπλό NPU, 6GB μνήμης RAM, μπαταρία 4.200mAh, σύστημα τριπλής AI κάμερας και αντοχή σε νερό και σκόνη', 'Smartphone', 'static/images1/image9.png',0),
+							 (10,'Apple MacBook Air 13\'\' MQD42GR/A', 'Απίστευτα ελαφρύ και απίστευτα λεπτό MacBook Air, με μπαταρία που κρατάει 12 συνεχόμενες ώρες, φωτιζόμενο keyboard και μεγάλες ταχύτητες μεταφοράς δεδομένων', 'Laptop','static/images1/image10.png',0),
+							 (11,'Dell Alienware 17 R5 Laptop','Με Intel Core i7-7700HQ επεξεργαστή, αυτόνομη κάρτα γραφικών 4GB, 12GB RAM και 17’’ οθόνη Full HD IPS το extreme gaming πάει παντού!','Laptop','static/images1/image11.png',0),
+							 (12,'Toshiba Tecra X40-D-10H Laptop','Ένας δυνατός φορητός με βάρος μόλις 1,25 Kg επεξεργαστή Intel Core i7-7500U, 16GB RAM DDR4, Intel HD Graphics 620 και SSD με χωρητικότητα 512GB','Laptop','static/images1/image12.png',0),
+							 (13,'Apple iPad mini 4 Tablet 7.9\'\'Gold','Είναι πολύ λεπτό, απίστευτα ελαφρύ και ασυμβίβαστα ισχυρό! Έχει κάμερα στα 8MP, Retina οθόνη και iOS9.','Tablet','static/images1/image13.png',0),
+							 (14,'Samsung Galaxy Tab S4 T835 Tablet 10.5\'\'  Γκρι','Με εντυπωσιακή οθόνη Super AMOLED 10,5", 8πυρηνο Snapdragon 835 και 4GB μνήμης RAM, σύνδεση σε 4G δίκτυα, αποθηκευτικό χώρο 64GB, νέο S-Pen, 4 ηχεία AKG και μεγάλη μπαταρία 7.300mAh','Tablet','static/images1/image14.png',0),
+							 (15,'LG OLED TV OLED77C8 77\'\'', 'Υψηλή αισθητική και UHD ευκρίνεια, με τεχνολογίες OLED και Cinema HDR, επεξεργαστή α9, ήχο Dolby Atmos και webOS 4.0 για πρόσβαση σε multimedia περιεχόμενο','TV','static/images1/image15.png',0);
 /*!40000 ALTER TABLE `Product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -470,7 +473,8 @@ UNLOCK TABLES;
 --
 LOCK TABLES `extraData` WRITE;
 /*!40000 ALTER TABLE `extraData` DISABLE KEYS */;
-INSERT INTO `extraData` VALUES (1, 'Resolution', '4K', 1), (2, 'Smart', 'Yes', 1), (3, 'Frequency', '1300 PQI', 1), 
+INSERT INTO extraData(id,characteristic,value,ProductId) VALUES 
+							   (1, 'Resolution', '4K', 1), (2, 'Smart', 'Yes', 1), (3, 'Frequency', '1300 PQI', 1), 
 							   (4, 'Resolution', '4K', 2), (5, 'Smart', 'Yes', 2), (6, 'Frequency', '1500 PMI', 2), 
 							   (7, 'CPU', 'Intel Celeron N4000', 3), (8, 'RAM', '4GB', 3), (9, 'Hard Drive', '500GB', 3), (10, 'OS', 'Windows 10', 3), (11, 'Graphics Card', 'Intel HD Graphics 600', 3), 
 							   (12, 'CPU', 'AMD A-Series', 4), (13, 'RAM', '4GB', 4), (14, 'Hard Drive', '128GB', 4), (15, 'OS', 'Windows 10', 4), (16, 'Graphics Card', 'Radeon R5', 4), 
@@ -493,7 +497,8 @@ UNLOCK TABLES;
 --
 LOCK TABLES `Tag` WRITE;
 /*!40000 ALTER TABLE `Tag` DISABLE KEYS */;
-INSERT INTO `Tag` VALUES (1, 'TV'),  (2, 'Smart TV'), (3, 'laptop'), (4,'desktop'),(5,'tablet'),(6,'smartphone'),
+INSERT INTO Tag(id,name) VALUES 
+						 (1, 'TV'),  (2, 'Smart TV'), (3, 'laptop'), (4,'desktop'),(5,'tablet'),(6,'smartphone'),
 		/*Γενικά*/		 (7, 'Windows 10'),  (8, 'Android'), (9,'Apple iOS'), (10,'macOS'),(11,'Linux'),
 						 (12, 'black'),  (13,'white'), (14,'gold'), (15,'silver'),
 						 (16,'Samsung'),(17,'Xiaomi'),(18,'Apple'),(19,'Huawei'),(20,'Honor'),(21,'LG'),(22,'Nokia'),(23,'Sony'), (24,'Asus'), (25,'Dell'), (26,'Toshiba'), (27,'Thomson'), (28,'Lenovo'), (29,'Philips'), (30,'Panasonic'),
@@ -524,7 +529,8 @@ UNLOCK TABLES;
 --
 LOCK TABLES `Product_Tag` WRITE;
 /*!40000 ALTER TABLE `Product_Tag` DISABLE KEYS */;
-INSERT INTO `Product_Tag` VALUES (1, 1, 1), (2, 1, 2), (3,1, 16), (4,1, 63), (5,1, 72), (6,1,74), (7,1,92), (8,1,109), (9,1,110), (10,1,111), (11,1,112), (12,1,113), (13,1,106),
+INSERT INTO Product_Tag(id,ProductId,TagId) VALUES 
+								 (1, 1, 1), (2, 1, 2), (3,1, 16), (4,1, 63), (5,1, 72), (6,1,74), (7,1,92), (8,1,109), (9,1,110), (10,1,111), (11,1,112), (12,1,113), (13,1,106),
 								 (14,2, 1), (15,2, 2), (16,2,21), (17,2,63), (18,2,72), (19,2,74), (20,2,93), (21,2,106), (22,2,108), (23,2,110), (24,2,111),(25,2,112), (26,3,114),
 								 (27,3, 3), (28,3,12), (29,3,25), (30,3,44), (31,3,52),(32,3,55),(33,3,74),(34,3,86),(35,3,97),
 								 (36,4,3), (37,4,12), (38,4, 28), (39,4,44), (40,4,51), (41,4,74), (42,4,78), (43,4,85),
@@ -548,11 +554,12 @@ UNLOCK TABLES;
 --
 LOCK TABLES `Shop` WRITE;
 /*!40000 ALTER TABLE `Shop` DISABLE KEYS */;
-INSERT INTO `Shop` VALUES (1, 'Πλαίσιο Αθήνα', 'Βουλής 3,10562,Αθήνα', 23.732913, 37.977344, NULL, '\0'),
-						  (2, 'Κωτσόβολος Αθήνα','Σταδίου 34 & Κοραή,10564,Αθήνα', 23.732025,37.979795, NULL, '\0'),
-						  (3, 'Public Αθήνα', 'Καραγεώργη Σερβίας 1,10563,Αθήνα', 23.733666 ,37.976454, NULL, '\0'),
-						  (4, 'Media Markt Αθήνα', 'Λ.Χαλανδρίου 15Β,15343, Αγ. Παρασκευή', 23.818244,38.014187, NULL, '\0'),
-						  (5, 'ΓΕΡΜΑΝΟΣ Αθήνα', 'Λεωφ. Μεσογείων 218, Χολαργός, 15561, Χολαργός', 23.792003,38.002558, NULL, '\0');
+INSERT INTO Shop(id,name,address,lng,lat,image,withdrawn) VALUES 
+						  (1, 'Πλαίσιο Αθήνα', 'Βουλής 3,10562,Αθήνα', 23.732913, 37.977344, 'static/company_profiles/plaisio.png', 0),
+						  (2, 'Κωτσόβολος Αθήνα','Σταδίου 34 & Κοραή,10564,Αθήνα', 23.732025,37.979795, 'static/company_profiles/kotsovolos.png', 0),
+						  (3, 'Public Αθήνα', 'Καραγεώργη Σερβίας 1,10563,Αθήνα', 23.733666 ,37.976454, 'static/company_profiles/public.png', 0),
+						  (4, 'Media Markt Αθήνα', 'Λ.Χαλανδρίου 15Β,15343, Αγ. Παρασκευή', 23.818244,38.014187,  'static/company_profiles/media_markt.png',0),
+						  (5, 'ΓΕΡΜΑΝΟΣ Αθήνα', 'Λεωφ. Μεσογείων 218, Χολαργός, 15561, Χολαργός', 23.792003,38.002558,  'static/company_profiles/germanos.png', 0);
 /*!40000 ALTER TABLE `Shop` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -562,7 +569,8 @@ UNLOCK TABLES;
 --
 LOCK TABLES `Shop_Tag` WRITE;
 /*!40000 ALTER TABLE `Shop_Tag` DISABLE KEYS */;
-INSERT INTO `Shop_Tag` VALUES (1, 1, 9), (2, 1, 4), (3, 1, 1), 
+INSERT INTO Shop_Tag(id,ShopId,TagId) VALUES 
+							  (1, 1, 9), (2, 1, 4), (3, 1, 1), 
 							  (4, 2, 1), (5, 2, 4), (6, 2, 10), 
 							  (7, 3, 1), (8, 3, 4);
 /*!40000 ALTER TABLE `Shop_Tag` ENABLE KEYS */;
@@ -576,21 +584,22 @@ UNLOCK TABLES;
 --
 LOCK TABLES `Record` WRITE;
 /*!40000 ALTER TABLE `Record` DISABLE KEYS */;
-INSERT INTO `Record` VALUES (1, 300, '2017-12-12', '2018-12-12', NULL, 1, 1, 1),  (2, 250, '2018-02-20','2018-12-20', NULL, 1, 2, 1),  
-							(3, 280, '2017-11-15', '2018-11-15', NULL, 2, 1, 1),  (4, 220,'2018-10-29', '2018-11-29', NULL, 2, 3, 1), 
-							(5, 100, '2018-01-10', '2018-10-10', NULL, 3,2, 1), (6,250,'2018-02-11', '2018-10-11', NULL, 3,3, 1),
-							(7,449,'2017-12-12', '2018-12-12', NULL,4,2,4), (8,399,'2018-01-12', '2019-01-12',NULL,4,2,3),
-							(9,229,'2018-01-10', '2019-01-10',NULL,5,3,1), (10,259,'2017-12-03', '2018-12-03',NULL,5,5,2), (11,229,'2018-01-10', '2019-01-10',NULL,5,5,2), (12,259,'2017-12-03', '2018-12-03',NULL,5,2,4), (13,229,'2018-02-02', '2019-02-02', NULL,5,2,6),
-							(14,189,'2018-10-14', '2017-10-14', NULL,6,4,2), (15,169,'2018-01-14', '2019-01-14', NULL,6,4,6), (16,169,'2017-11-03', '2018-11-03', NULL,6,2,10),
-							(17,1539,'2018-10-04', '2018-11-04',NULL,7,1,8), (18,1539,'2017-11-08', '2018-11-08', NULL,7,2,9), (19,1539,'2017-11-08', '2018-11-08', NULL,7,3,3), (20,1539,'2017-11-15', '2018-11-15',NULL,7,4,4), (21,1539,'2017-11-15', '2018-11-15', NULL,7,5,4),
-							(22,239,'2018-01-05', '2018-11-05',NULL,8,1,9),(23,199, '2018-01-13', '2019-01-13',NULL,8,1,10),(24,239,'2018-10-06', '2018-11-06',NULL,8,2,9),(25,199, '2018-01-14','2019-01-14',NULL,8,2,10),(26,239,'2017-11-07', '2018-11-07', NULL,8,5,6),(27,199, '2019-01-15', '2019-01-15',NULL,8,5,10),(28,239, '2017-11-08', '2018-11-08',NULL,8,4,6),(29,199.77, '2018-01-16','2019-01-16',NULL,8,4,7),(30,199, '2018-01-17', '2019-01-17',NULL,8,2,2),
-							(31,1049,'2018-10-25', '2018-12-25', NULL,9,1,1),(32,899, '2018-02-15', '2019-02-15',NULL,9,1,1),(33,1049,'2017-12-25', '2018-12-25',NULL,9,3,1),(34,899,'2019-01-17', '2019-02-17', NULL,9,3,1),(35,1049,'2018-12-26', '2018-12-29', NULL,9,5,2),(36,899, '2018-02-01', '2019-02-01',NULL,9,5,2), (37,1049,'2018-12-26', '2019-12-26', NULL,9,4,1),(38,899,'2018-02-15', '2019-02-15', NULL,9,5,2),
-							(39,1099,'2018-01-01', '2018-10-01',NULL,10,1,4),(40,1099,'2018-10-01', '2019-10-01', NULL,10,2,4),(41,1099,'2018-10-02', '2019-10-02', NULL,10,3,4),(42,1099,'2018-10-02', '2019-10-02', NULL,10,4,4),
-							(43,3199,'2018-01-27', '2019-01-27',NULL,11,1,9),
-							(44,2199,'2018-01-15', '2019-01-15',NULL,12,1,7),(45,2199,'2018-01-15', '2019-01-15', NULL,12,3,7),
-							(46,629,'2017-12-20', '2018-12-20',NULL,13,1,10),(47,699,'2018-10-15', '2018-12-15', NULL,13,3,8),(48,629,'2019-01-05', '2019-05-05', NULL,13,3,8),
-							(49,799,'2017-12-15', '2018-12-15',NULL,14,1,4),(50,749, '2018-01-25', '2019-01-25',NULL,14,1,8),(51,749, '2018-01-09', '2019-01-09',NULL,14,3,8),(52,749.99, '2018-01-08', '2019-01-08',NULL,14,5,7),(53,749.77, '2018-01-09', '2019-01-09',NULL,14,4,7),
-							(54,8999,'2017-10-01', '2018-10-01',NULL,15,1,1), (55,8999,'2018-10-01', '2019-10-01', NULL,15,2,1),(56,8999,'2018-10-01', '2019-10-01', NULL,15,4,1);
+INSERT INTO Record(id,price,date,validity,productId,shopId,userId) VALUES 
+							(1, 300, '2018-12-12', NULL, 1, 1, 1),  (2, 250, '2018-12-20', NULL, 1, 2, 1),  
+							(3, 280, '2018-11-15', NULL, 2, 1, 1),  (4, 220,'2018-11-29', NULL, 2, 3, 1), 
+							(5, 100, '2018-10-10', NULL, 3,2, 1), (6,250,'2018-10-11', NULL, 3,3, 1),
+							(7,449,'2018-12-12',NULL,4,2,4), (8,399,'2019-01-12',NULL,4,2,3),
+							(9,229,'2019-01-10',NULL,5,3,1), (10,259,'2018-12-03',NULL,5,5,2), (11,229,'2019-01-10',NULL,5,5,2), (12,259,'2018-12-03',NULL,5,2,4), (13,229,'2019-02-02',NULL,5,2,6),
+							(14,189,'2018-10-14',NULL,6,4,2), (15,169,'2019-01-14',NULL,6,4,6), (16,169,'2018-11-03',NULL,6,2,10),
+							(17,1539,'2018-11-04',NULL,7,1,8), (18,1539,'2018-11-08',NULL,7,2,9), (19,1539,'2018-11-08',NULL,7,3,3), (20,1539,'2018-11-15',NULL,7,4,4), (21,1539,'2018-11-15',NULL,7,5,4),
+							(22,239,'2018-11-05',NULL,8,1,9),(23,199,'2019-01-13',NULL,8,1,10),(24,239,'2018-11-06',NULL,8,2,9),(25,199,'2019-01-14',NULL,8,2,10),(26,239,'2018-11-07',NULL,8,5,6),(27,199,'2019-01-15',NULL,8,5,10),(28,239,'2018-11-08',NULL,8,4,6),(29,199.77,'2019-01-16',NULL,8,4,7),(30,199,'2019-01-17',NULL,8,2,2),
+							(31,1049,'2018-12-25',NULL,9,1,1),(32,899,'2019-02-15',NULL,9,1,1),(33,1049,'2018-12-25',NULL,9,3,1),(34,899,'2019-02-17',NULL,9,3,1),(35,1049,'2018-12-26',NULL,9,5,2),(36,899,'2019-02-01',NULL,9,5,2), (37,1049,'2018-12-26',NULL,9,4,1),(38,899,'2019-02-15',NULL,9,5,2),
+							(39,1099,'2018-10-01',NULL,10,1,4),(40,1099,'2018-10-01',NULL,10,2,4),(41,1099,'2018-10-02',NULL,10,3,4),(42,1099,'2018-10-02',NULL,10,4,4),
+							(43,3199,'2019-01-27',NULL,11,1,9),
+							(44,2199,'2019-01-15',NULL,12,1,7),(45,2199,'2019-01-15',NULL,12,3,7),
+							(46,629,'2018-12-20',NULL,13,1,10),(47,699,'2018-10-15',NULL,13,3,8),(48,629,'2019-01-05',NULL,13,3,8),
+							(49,799,'2018-12-15',NULL,14,1,4),(50,749,'2019-01-25',NULL,14,1,8),(51,749,'2019-01-09',NULL,14,3,8),(52,749.99,'2019-01-08',NULL,14,5,7),(53,749.77,'2019-01-09',NULL,14,4,7),
+							(54,8999,'2018-10-01',NULL,15,1,1), (55,8999,'2018-10-01',NULL,15,2,1),(56,8999,'2018-10-01',NULL,15,4,1);
 /*!40000 ALTER TABLE `Record` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -600,7 +609,8 @@ UNLOCK TABLES;
 --
 LOCK TABLES `Record_Validation` WRITE;
 /*!40000 ALTER TABLE `Record_Validation` DISABLE KEYS */;
-INSERT INTO `Record_Validation` VALUES (1,1,2), (2,1,3),
+INSERT INTO Record_Validation(id,recordId,userId) VALUES 
+									   (1,1,2), (2,1,3),
 									   (3,2,2), (4,2,3),
 									   (5,3,3), (6,3,4),
 									   (7,4,5), (8,4,6),
@@ -700,7 +710,52 @@ DESC LIMIT 5;
      
 
 
+/*-------------------------
+-----------TRIGGERS---------
+---------------------------*/
 
+/*Email Constraint, ensure that the given value is in the right format*/
+-- DELIMITER $$
+-- CREATE TRIGGER `user_validate_email_insert` BEFORE INSERT  ON `User`
+-- FOR EACH ROW
+-- 	BEGIN
+-- 		IF NOT (SELECT NEW.email REGEXP '$[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$') THEN
+-- 			SIGNAL SQLSTATE VALUE '45000';
+-- 		END IF;
+-- 	END$$
+
+-- CREATE TRIGGER `user_validate_email_update` BEFORE UPDATE  ON `User`
+-- FOR EACH ROW
+-- 	BEGIN
+-- 		IF NOT (SELECT NEW.email REGEXP '$[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$') THEN
+-- 			SIGNAL SQLSTATE VALUE '45000';
+-- 		END IF;
+-- 	END$$
+
+-- DELIMITER ;
+
+
+
+-- /*First Name and Last Name before insert or update*/
+
+-- DELIMITER $$
+-- CREATE TRIGGER `user_validate_name_insert` BEFORE INSERT  ON `User`
+-- FOR EACH ROW
+-- 	BEGIN
+-- 		IF NOT(NEW.`firstName` REGEXP '^[A-Za-z]+$') THEN
+-- 			SIGNAL SQLSTATE VALUE '45000';
+-- 		END IF;
+-- 	END$$
+
+-- CREATE TRIGGER `user_validate_name_update` BEFORE UPDATE  ON `User`
+-- FOR EACH ROW
+-- 	BEGIN
+-- 		IF NOT(NEW.`firstName` REGEXP '^[A-Za-z]+$') THEN
+-- 			SIGNAL SQLSTATE VALUE '45000';
+-- 		END IF;
+-- 	END$$
+
+-- DELIMITER ;
 
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -713,3 +768,4 @@ DESC LIMIT 5;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2019-02-29 14:47:43
+
