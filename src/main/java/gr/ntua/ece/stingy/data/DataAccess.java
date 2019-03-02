@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 
 public class DataAccess {
 
@@ -819,7 +820,7 @@ public class DataAccess {
 		parameters.addValue("sort", sort_type);
 		parameters.addValue("start", limits.getStart());
 		parameters.addValue("count", limits.getCount());
-
+		/*
 		System.out.println(geoLngString);
 		System.out.println(geoLatString);
 		System.out.println(geoDistString);
@@ -829,6 +830,7 @@ public class DataAccess {
 		System.out.println(products);
 		System.out.println(tags);
 		System.out.println(sort_type);
+		*/
 		String sqlStm;
 
 		if (geoDistString != null) {
@@ -936,5 +938,34 @@ public class DataAccess {
 					dateTo
 					);
 			return record;
+	}
+	
+	
+	public String getToken( String username, String password) {
+		int count = jdbcTemplate.queryForObject("select count(*) from User where "
+				+ "username=? and password=?", new Object[] { username, password }, Integer.class);
+		String token;
+		if (count > 0) {
+			int id = jdbcTemplate.queryForObject("select id from User where "
+					+ "username=? and password=?", new Object[] { username, password }, Integer.class);
+			System.out.println(id);
+			int leftLimit = 97; // letter 'a'
+		    int rightLimit = 122; // letter 'z'
+		    int targetStringLength = 10;
+		    Random random = new Random();
+		    StringBuilder buffer = new StringBuilder(targetStringLength);
+		    for (int i = 0; i < targetStringLength; i++) {
+		        int randomLimitedInt = leftLimit + (int) 
+		          (random.nextFloat() * (rightLimit - leftLimit + 1));
+		        buffer.append((char) randomLimitedInt);
+		    }
+		    token = buffer.toString();
+		    System.out.println(token);
+			jdbcTemplate.update("update User set token=? where id=?", new Object[] {token, id});
+		}
+		else {
+			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Wrong username or password");
+		}
+		return token;
 	}
 }
