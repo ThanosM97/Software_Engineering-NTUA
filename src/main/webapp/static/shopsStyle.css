@@ -1,0 +1,61 @@
+#horizontalLine {
+  position:relative;
+  height:1px;
+  width:15%;
+  background-image:radial-gradient(black,white);
+  margin-top:5px;
+}
+
+.shop {
+  position:relative;
+  float:left;
+  width:23%;
+  height:350px;
+  margin: 2% 1%;
+  background-color:white;
+  text-align:center;
+}
+
+.filter {
+  float:right;
+  padding:1% 2%;
+  font-size: 0.8vw;
+  margin: -2% 12% 0 0px;
+  display: inline block;
+  background-color: #5d5f63;
+  color:white;
+  border:none;
+  outline:none;
+}
+
+.filter:hover {
+  background-color: #73757a;
+  cursor:pointer;
+}
+
+.pages {
+  width:5%;
+  padding: 0.8% 0%;
+  margin: 2% 0 2% 0;
+  background-color:Floralwhite;
+  border: 1px solid Dodgerblue;
+  outline:none;
+  color: Dodgerblue;
+  font-size: 1vw;
+  text-decoration: underline;
+  vertical-align: bottom;
+}
+
+.pages:hover {
+  cursor:pointer;
+  background-color: Beige;
+}
+
+.active {
+  background-color: Dodgerblue;
+  color: White;
+}
+.active:hover {
+  cursor:pointer;
+  background-color: Dodgerblue;
+}
