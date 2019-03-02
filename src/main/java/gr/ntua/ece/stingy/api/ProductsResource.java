@@ -4,20 +4,18 @@ import gr.ntua.ece.stingy.conf.Configuration;
 import gr.ntua.ece.stingy.data.DataAccess;
 import gr.ntua.ece.stingy.data.Limits;
 import gr.ntua.ece.stingy.data.model.Product;
-import gr.ntua.ece.stingy.data.model.ProductsMap;
 
 import org.restlet.data.Form;
+import org.restlet.data.Header;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
-import java.lang.reflect.Type;
-import com.google.gson.reflect.TypeToken;
+import org.restlet.util.Series;
 
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,11 +39,10 @@ public class ProductsResource extends ServerResource {
 		String status = queryParams.getFirstValue("status");
 		String sort = queryParams.getFirstValue("sort");
 		String format = queryParams.getFirstValue("format");
-		
+
 		Map<String, Object> map = new HashMap<>();
-		ProductsMap map2 = new ProductsMap();
 		Limits limits = new Limits();
-		
+
 		/**
 		 * If a parameter exists and is valid put it in the map. Otherwise, use default value.
 		 */
@@ -77,7 +74,7 @@ public class ProductsResource extends ServerResource {
 		else {
 			map.put("count", 20);
 		}
-		
+
 		/*
 		 * Set default values for status and sort
 		 */
@@ -108,17 +105,30 @@ public class ProductsResource extends ServerResource {
 		 */
 		map.put("total", limits.getTotal());
 		map.put("products", products);
-		map2.setProductdsMap(map);
 		if (format == "json") {
 			return new JsonMapRepresentation(map);
 		}
+
 		else {
-			return new XmlMapRepresentation(map2);
+			/*
+			return new XmlMapRepresentation(map);
+			 */
+			return null;
 		}
 	}
 
 	@Override
 	protected Representation post(Representation entity) throws ResourceException {
+		/*
+    	 * Get  token from headers
+    	 */
+    	@SuppressWarnings("unchecked")
+		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
+    	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
+    	
+    	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can create new products");
+    	}
 		/*
 		 * Create a new restlet form
 		 */	
@@ -132,12 +142,12 @@ public class ProductsResource extends ServerResource {
 		String withdrawnString = form.getFirstValue("withdrawn");
 		String tagsString = form.getFirstValue("tags");
 		String extraDataString = form.getFirstValue("extraData");
-		
+
 		/*
 		 * Convert tagString that represents a list of tags to a list.
 		 */
 		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
-		
+
 		/*
 		 *  Validate the values (in the general case)
 		 */
@@ -153,7 +163,7 @@ public class ProductsResource extends ServerResource {
 		if (tagsString == null || tagsString.isEmpty()) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
 		}
-		
+
 		/*
 		 * If withdrawn is not set, use default value.
 		 */

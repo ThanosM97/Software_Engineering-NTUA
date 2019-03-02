@@ -51,7 +51,9 @@ public class DataAccess {
 
 	public void setup(String driverClass, String url, String user, String pass) throws SQLException {
 
-		// Initialize the data source
+		/*
+		 *  Initialize the data source
+		 */
 		BasicDataSource bds = new BasicDataSource();
 		bds.setDriverClassName(driverClass);
 		bds.setUrl(url);
@@ -63,14 +65,19 @@ public class DataAccess {
 		bds.setTestOnBorrow(true);
 		bds.setDefaultAutoCommit(true);
 
-		// Check that everything works OK
+		/*
+		 *  Check that everything works OK
+		 */
 		bds.getConnection().close();
 
-		// Initialize the jdbc template utility
+		/*
+		 *  Initialize the jdbc template utility
+		 */
 		jdbcTemplate = new JdbcTemplate(bds);
 		namedJdbcTemplate = new NamedParameterJdbcTemplate(bds);
 	}
 
+	
 	public List<Product> getProducts(Limits limits, String status, String sort) {
 		String sort_type = sort.replaceAll("\\|", " ");   
 		/*
@@ -90,14 +97,13 @@ public class DataAccess {
 		/*
 		 * Get number of all products
 		 */
-		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
+		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  /* not reusable */
 		jdbcTemplate.query("select * from Product order by id", countCallback);
 		int rowCount = countCallback.getRowCount();
 		limits.setTotal(rowCount);
 		/*
 		 * Return products based on the limits.
 		 */
-		//TODO: fix error in descending order 
 		return jdbcTemplate.query("select * from Product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
 	}
 
@@ -125,6 +131,28 @@ public class DataAccess {
 		});
 	}
 
+	public boolean isUser(String token) {
+		int count = jdbcTemplate.queryForObject("select count(*) from User where "
+				+ "token=?", new Object[] { token }, Integer.class);
+		if (count > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public boolean isAdmin(String token) {
+		int count = jdbcTemplate.queryForObject("select count(*) from Administrator where "
+				+ "token=?", new Object[] { token }, Integer.class);
+		if (count > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	public Product addProduct(String name, String description, String category, boolean withdrawn, ArrayList<String> tags, String extraDataString ) {
 		/*
 		 * Insert the new product in the Product table
