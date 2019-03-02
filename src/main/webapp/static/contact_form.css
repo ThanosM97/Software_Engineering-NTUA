@@ -35,25 +35,24 @@ header{
   align-content: center;
   text-align: center
 }
-body {
+.bodyArea {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
   font-weight: 100;
   font-size: 12px;
   line-height: 30px;
   color: #910f2d;
-  background: #f1f1f1;
-  background-image:url(./cable-call-communication-33999.jpg);
+  background-image: url("./contact_form_images/cable-call-communication-33999.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  
+
 }
 .container {
   max-width: 400px;
   width: 100%;
   margin: 0 auto 0 auto;
   position: relative;
-  
+
 }
 
 #contact input[type="text"],
@@ -172,4 +171,3 @@ fieldset {
 :-ms-input-placeholder {
   color: #888;
 }
-
