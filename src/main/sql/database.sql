@@ -443,21 +443,21 @@ Smartphones have the following extra data: CPU cores, cpu freq, RAM, capacity, s
 */
 LOCK TABLES `Product` WRITE;
 /*!40000 ALTER TABLE `Product` DISABLE KEYS */;
-INSERT INTO `Product` VALUES (1,'Samsung TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV','localhost:3000/static/images1/image1.png','\0'),
-							 (2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV','localhost:3000/static/images1/image2.png','\0'),
-							 (3,'Dell Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop','localhost:3000/static/images1/image3.png','\0'),
-							 (4,'Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop','localhost:3000/static/images1/image4.png', '\0'),
-							 (5,'Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', 'localhost:3000/static/images1/image5.png','\0'),
-							 (6,'Samsung Galaxy J4 PLUS DUAL SIM GOLD','Με True HD+ Infinity Display, Dual-SIM και Emotify για ξεχωριστή επικοινωνία, Snapdragon SoC και Android Oreο απολαμβάνεις μια ανώτερη εμπειρία χρήσης','Smartphone','localhost:3000/static/images1/image6.png','\0'),
-							 (7,'Apple iPhone XS','Με τη μεγαλύτερη οθόνη σε iPhone, Super Retina 6,5" τεχνολογίας OLED, το πιο έξυπνο & ισχυρό επεξεργαστή σε smartphone, ταχύτερη αναγνώριση προσώπου Face ID και διπλή πίσω κάμερα για μοναδικές λήψεις','Smartphone','localhost:3000/static/images1/image7.png','\0'),
-							 (8,'Honor 10 Lite Smartphone Blue', 'Dewdrop οθόνη 6,21" με FHD+ ανάλυση, Dual AI και 24MP Selfie κάμερες, 8πύρηνο SoC Kirin 710 με GPU Turbo και EMUI 9.0 out-of-the-box!', 'Smartphone','localhost:3000/static/images1/image8.png','\0'),
-							 (9,'Huawei Mate 20 Pro Smartphone Μαύρο', 'Μεγάλη FullView 2K+ οθόνη 6,39 ιντσών, 8πύρηνος Kirin 980 με διπλό NPU, 6GB μνήμης RAM, μπαταρία 4.200mAh, σύστημα τριπλής AI κάμερας και αντοχή σε νερό και σκόνη', 'Smartphone', 'localhost:3000/static/images1/image9.png','\0'),
-							 (10,'Apple MacBook Air 13\'\' MQD42GR/A', 'Απίστευτα ελαφρύ και απίστευτα λεπτό MacBook Air, με μπαταρία που κρατάει 12 συνεχόμενες ώρες, φωτιζόμενο keyboard και μεγάλες ταχύτητες μεταφοράς δεδομένων', 'Laptop','localhost:3000/static/images1/image10.png','\0'),
-							 (11,'Dell Alienware 17 R5 Laptop','Με Intel Core i7-7700HQ επεξεργαστή, αυτόνομη κάρτα γραφικών 4GB, 12GB RAM και 17’’ οθόνη Full HD IPS το extreme gaming πάει παντού!','Laptop','localhost:3000/static/images1/image11.png', '\0'),
-							 (12,'Toshiba Tecra X40-D-10H Laptop','Ένας δυνατός φορητός με βάρος μόλις 1,25 Kg επεξεργαστή Intel Core i7-7500U, 16GB RAM DDR4, Intel HD Graphics 620 και SSD με χωρητικότητα 512GB','Laptop','localhost:3000/static/images1/image12.png','\0'),
-							 (13,'Apple iPad mini 4 Tablet 7.9\'\'Gold','Είναι πολύ λεπτό, απίστευτα ελαφρύ και ασυμβίβαστα ισχυρό! Έχει κάμερα στα 8MP, Retina οθόνη και iOS9.','Tablet','localhost:3000/static/images1/image13.png','\0'),
-							 (14,'Samsung Galaxy Tab S4 T835 Tablet 10.5\'\'  Γκρι','Με εντυπωσιακή οθόνη Super AMOLED 10,5", 8πυρηνο Snapdragon 835 και 4GB μνήμης RAM, σύνδεση σε 4G δίκτυα, αποθηκευτικό χώρο 64GB, νέο S-Pen, 4 ηχεία AKG και μεγάλη μπαταρία 7.300mAh','Tablet','localhost:3000/static/images1/image14.png','\0'),
-							 (15,'LG OLED TV OLED77C8 77\'\'', 'Υψηλή αισθητική και UHD ευκρίνεια, με τεχνολογίες OLED και Cinema HDR, επεξεργαστή α9, ήχο Dolby Atmos και webOS 4.0 για πρόσβαση σε multimedia περιεχόμενο','TV','localhost:3000/static/images1/image15.png','\0');
+INSERT INTO `Product` VALUES (1,'Samsung TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV',0,'localhost:3000/static/images1/image1.png'),
+							 (2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV',0,'localhost:3000/static/images1/image2.png'),
+							 (3,'Dell Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop',0,'localhost:3000/static/images1/image3.png'),
+							 (4,'Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop',0,'localhost:3000/static/images1/image4.png'),
+							 (5,'Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', 0,'localhost:3000/static/images1/image5.png'),
+							 (6,'Samsung Galaxy J4 PLUS DUAL SIM GOLD','Με True HD+ Infinity Display, Dual-SIM και Emotify για ξεχωριστή επικοινωνία, Snapdragon SoC και Android Oreο απολαμβάνεις μια ανώτερη εμπειρία χρήσης','Smartphone',0,'localhost:3000/static/images1/image6.png'),
+							 (7,'Apple iPhone XS','Με τη μεγαλύτερη οθόνη σε iPhone, Super Retina 6,5" τεχνολογίας OLED, το πιο έξυπνο & ισχυρό επεξεργαστή σε smartphone, ταχύτερη αναγνώριση προσώπου Face ID και διπλή πίσω κάμερα για μοναδικές λήψεις','Smartphone',0,'localhost:3000/static/images1/image7.png'),
+							 (8,'Honor 10 Lite Smartphone Blue', 'Dewdrop οθόνη 6,21" με FHD+ ανάλυση, Dual AI και 24MP Selfie κάμερες, 8πύρηνο SoC Kirin 710 με GPU Turbo και EMUI 9.0 out-of-the-box!', 'Smartphone',0,'localhost:3000/static/images1/image8.png'),
+							 (9,'Huawei Mate 20 Pro Smartphone Μαύρο', 'Μεγάλη FullView 2K+ οθόνη 6,39 ιντσών, 8πύρηνος Kirin 980 με διπλό NPU, 6GB μνήμης RAM, μπαταρία 4.200mAh, σύστημα τριπλής AI κάμερας και αντοχή σε νερό και σκόνη', 'Smartphone', 0,'localhost:3000/static/images1/image9.png'),
+							 (10,'Apple MacBook Air 13\'\' MQD42GR/A', 'Απίστευτα ελαφρύ και απίστευτα λεπτό MacBook Air, με μπαταρία που κρατάει 12 συνεχόμενες ώρες, φωτιζόμενο keyboard και μεγάλες ταχύτητες μεταφοράς δεδομένων', 'Laptop',0,'localhost:3000/static/images1/image10.png'),
+							 (11,'Dell Alienware 17 R5 Laptop','Με Intel Core i7-7700HQ επεξεργαστή, αυτόνομη κάρτα γραφικών 4GB, 12GB RAM και 17’’ οθόνη Full HD IPS το extreme gaming πάει παντού!','Laptop',0,'localhost:3000/static/images1/image11.png'),
+							 (12,'Toshiba Tecra X40-D-10H Laptop','Ένας δυνατός φορητός με βάρος μόλις 1,25 Kg επεξεργαστή Intel Core i7-7500U, 16GB RAM DDR4, Intel HD Graphics 620 και SSD με χωρητικότητα 512GB','Laptop',0,'localhost:3000/static/images1/image12.png'),
+							 (13,'Apple iPad mini 4 Tablet 7.9\'\'Gold','Είναι πολύ λεπτό, απίστευτα ελαφρύ και ασυμβίβαστα ισχυρό! Έχει κάμερα στα 8MP, Retina οθόνη και iOS9.','Tablet',0,'localhost:3000/static/images1/image13.png'),
+							 (14,'Samsung Galaxy Tab S4 T835 Tablet 10.5\'\'  Γκρι','Με εντυπωσιακή οθόνη Super AMOLED 10,5", 8πυρηνο Snapdragon 835 και 4GB μνήμης RAM, σύνδεση σε 4G δίκτυα, αποθηκευτικό χώρο 64GB, νέο S-Pen, 4 ηχεία AKG και μεγάλη μπαταρία 7.300mAh','Tablet',0,'localhost:3000/static/images1/image14.png'),
+							 (15,'LG OLED TV OLED77C8 77\'\'', 'Υψηλή αισθητική και UHD ευκρίνεια, με τεχνολογίες OLED και Cinema HDR, επεξεργαστή α9, ήχο Dolby Atmos και webOS 4.0 για πρόσβαση σε multimedia περιεχόμενο','TV',0,'localhost:3000/static/images1/image15.png');
 /*!40000 ALTER TABLE `Product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -547,11 +547,11 @@ UNLOCK TABLES;
 --
 LOCK TABLES `Shop` WRITE;
 /*!40000 ALTER TABLE `Shop` DISABLE KEYS */;
-INSERT INTO `Shop` VALUES (1, 'Πλαίσιο Αθήνα', 'Βουλής 3,10562,Αθήνα', 23.732913, 37.977344, NULL, '\0'),
-						  (2, 'Κωτσόβολος Αθήνα','Σταδίου 34 & Κοραή,10564,Αθήνα', 23.732025,37.979795, NULL, '\0'),
-						  (3, 'Public Αθήνα', 'Καραγεώργη Σερβίας 1,10563,Αθήνα', 23.733666 ,37.976454, NULL, '\0'),
-						  (4, 'Media Markt Αθήνα', 'Λ.Χαλανδρίου 15Β,15343, Αγ. Παρασκευή', 23.818244,38.014187, NULL, '\0'),
-						  (5, 'ΓΕΡΜΑΝΟΣ Αθήνα', 'Λεωφ. Μεσογείων 218, Χολαργός, 15561, Χολαργός', 23.792003,38.002558, NULL, '\0');
+INSERT INTO `Shop` VALUES (1, 'Πλαίσιο Αθήνα', 'Βουλής 3,10562,Αθήνα', 23.732913, 37.977344, 0,'localhost:3000/static/company_profiles/plaisio.png'),
+						  (2, 'Κωτσόβολος Αθήνα','Σταδίου 34 & Κοραή,10564,Αθήνα', 23.732025,37.979795, 0, 'localhost:3000/static/company_profiles/kotsovolos.png'),
+						  (3, 'Public Αθήνα', 'Καραγεώργη Σερβίας 1,10563,Αθήνα', 23.733666 ,37.976454, 0, 'localhost:3000/static/company_profiles/public.png'),
+						  (4, 'Media Markt Αθήνα', 'Λ.Χαλανδρίου 15Β,15343, Αγ. Παρασκευή', 23.818244,38.014187, 0, 'localhost:3000/static/company_profiles/media_markt.png'),
+						  (5, 'ΓΕΡΜΑΝΟΣ Αθήνα', 'Λεωφ. Μεσογείων 218, Χολαργός, 15561, Χολαργός', 23.792003,38.002558, 0, 'localhost:3000/static/company_profiles/germanos.png');
 /*!40000 ALTER TABLE `Shop` ENABLE KEYS */;
 UNLOCK TABLES;
 
