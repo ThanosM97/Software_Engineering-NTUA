@@ -4,6 +4,8 @@ import gr.ntua.ece.stingy.conf.Configuration;
 import gr.ntua.ece.stingy.data.DataAccess;
 import gr.ntua.ece.stingy.data.Limits;
 import gr.ntua.ece.stingy.data.model.Product;
+import gr.ntua.ece.stingy.data.model.ProductsMap;
+
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -41,6 +43,7 @@ public class ProductsResource extends ServerResource {
 		String format = queryParams.getFirstValue("format");
 		
 		Map<String, Object> map = new HashMap<>();
+		ProductsMap map2 = new ProductsMap();
 		Limits limits = new Limits();
 		
 		/**
@@ -105,11 +108,12 @@ public class ProductsResource extends ServerResource {
 		 */
 		map.put("total", limits.getTotal());
 		map.put("products", products);
+		map2.setProductdsMap(map);
 		if (format == "json") {
 			return new JsonMapRepresentation(map);
 		}
 		else {
-			return new XmlMapRepresentation(map);
+			return new XmlMapRepresentation(map2);
 		}
 	}
 

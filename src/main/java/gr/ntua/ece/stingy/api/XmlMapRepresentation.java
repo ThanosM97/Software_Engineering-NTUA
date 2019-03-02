@@ -1,5 +1,5 @@
 /*
- * This class converts a Product in a xml format.
+ * This class converts a Map in a xml format.
  */
 package gr.ntua.ece.stingy.api;
 
@@ -8,23 +8,23 @@ import java.io.Writer;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
 
 import org.restlet.data.MediaType;
 import org.restlet.representation.WriterRepresentation;
 
 import gr.ntua.ece.stingy.data.model.Product;
+import gr.ntua.ece.stingy.data.model.ProductsMap;
 
-public class XmlProductRepresentation extends WriterRepresentation {
 
-    private final Product product;
+public class XmlMapRepresentation extends WriterRepresentation {
 
-    public XmlProductRepresentation(Product product) {
+    private final ProductsMap map;
+
+    public XmlMapRepresentation(ProductsMap map) {
         super(MediaType.APPLICATION_XML);
-        this.product = product;
+        this.map = map;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class XmlProductRepresentation extends WriterRepresentation {
     		/*
     		 * Create JAXB Context
     		 */
-            JAXBContext jaxbContext = JAXBContext.newInstance(Product.class);
+            JAXBContext jaxbContext = JAXBContext.newInstance(ProductsMap.class);
              
             /*
              * Create Marshaller
@@ -45,10 +45,11 @@ public class XmlProductRepresentation extends WriterRepresentation {
             /*
              * Write XML to Writer
              */
-            jaxbMarshaller.marshal(product, writer);	    	
+            jaxbMarshaller.marshal(map, writer);	    	
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
 }
+
