@@ -138,6 +138,7 @@ CREATE TABLE `Administrator` (
 	`firstName` varchar(45) NOT NULL,
 	`lastName` varchar(45) NOT NULL,
 	`email` varchar(45) NOT NULL,
+	`token` varchar(45) NOT NULL,
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -301,9 +302,9 @@ UNLOCK TABLES;
 --
 LOCK TABLES `Administrator` WRITE;
 /*!40000 ALTER TABLE `Administrator` DISABLE KEYS */;
-INSERT INTO Administrator(id,username,password,firstName, lastName,email) VALUES 
-								   (1,'admin1','RFjknN^+FWFw)<', 'Panagiotis','Antoniou', 'admin1@stingy.com'),
-								   (2,'admin2','1Ps2^+FWFw)<(e', 'Pantelis','Eustathiou', 'admin2@stingy.com');
+INSERT INTO Administrator(id,username,password,firstName, lastName,email, token) VALUES 
+								   (1,'admin1','RFjknN^+FWFw)<', 'Panagiotis','Antoniou', 'admin1@stingy.com', 'qwerty1234'),
+								   (2,'admin2','1Ps2^+FWFw)<(e', 'Pantelis','Eustathiou', 'admin2@stingy.com', 'aekmono');
 /*!40000 ALTER TABLE `Administrator` ENABLE KEYS */;
 UNLOCK TABLES;
 

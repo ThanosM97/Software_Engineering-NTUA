@@ -45,10 +45,8 @@ dependencies {
 
 
 gretty {
-    //scanInterval = 0 //disable hot deployment
     httpEnabled = true
     httpsEnabled = false
     httpPort = 8765
-    contextPath = 'app'
-    //servletContainer = 'tomcat8' //use the default (jetty)
+    contextPath = ''
 }
