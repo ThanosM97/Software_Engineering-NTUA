@@ -10,7 +10,7 @@ class NavBar extends Component {
         </Head>
         <nav className="navbar">
           <div className="nav-left">
-            <a href="/"><img src="../static/logo/LogoFinal-small.png" alt="" width="30%" /></a>
+            <a href="/" ><img href="/" src="../static/logo/LogoFinal-small.png" alt="" width="30%"/> </a>
             <form className="form" action="/productlist" >
               <input placeholder="Αναζητήστε κάποιο προϊόν..." name="search"/>
               <input type="submit"/>

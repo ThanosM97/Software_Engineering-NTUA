@@ -27,24 +27,29 @@
 .nav-left img{
   float:left;
 }
-.form {
+
+.form  {
   position:relative;
+  width:68%;
+  margin-top: 1%;
+  float:left;
   height:100%;
 }
+
 .form input {
   position:relative;
   margin-top:4%;
   margin-left: 2%;
   padding-left:5px;
-  width:45%;
-  height: 38%;
-  border: 1px solid black;
+  width:70%;
+  height: 37%;
+
 }
 
 .form input[type="submit"] {
   margin-left: -0.2%;
-  width:15%;
-  height: 40%;
+  width:20%;
+  height: 42%;
   background-color:#808080;
   color: white;
 }
