@@ -940,46 +940,94 @@ public class DataAccess {
 			return record;
 	}
 	
+	public String getRandomString() {
+		int leftLimit = 97; /* letter 'a' */
+		int rightLimit = 122; /* letter 'z' */
+		int targetStringLength = 10;
+		Random random = new Random();
+		StringBuilder buffer = new StringBuilder(targetStringLength);
+		for (int i = 0; i < targetStringLength; i++) {
+			int randomLimitedInt = leftLimit + (int) 
+					(random.nextFloat() * (rightLimit - leftLimit + 1));
+			buffer.append((char) randomLimitedInt);
+		}
+		return buffer.toString();
+	}
 	
 	public String getToken( String username, String password) {
+		/*
+		 * Check if a user logged in.
+		 */
 		int count = jdbcTemplate.queryForObject("select count(*) from User where "
-				+ "username=? and password=?", new Object[] { username, password }, Integer.class);
+				+ "username=? and password=?", new Object[] { username, password}, Integer.class);
 		String token;
 		if (count > 0) {
-			int id = jdbcTemplate.queryForObject("select id from User where "
+			/*
+			 * A user logged in.
+			 */
+			int userId = jdbcTemplate.queryForObject("select id from User where "
 					+ "username=? and password=?", new Object[] { username, password }, Integer.class);
-			System.out.println(id);
-			int leftLimit = 97; // letter 'a'
-		    int rightLimit = 122; // letter 'z'
-		    int targetStringLength = 10;
-		    Random random = new Random();
-		    StringBuilder buffer = new StringBuilder(targetStringLength);
-		    for (int i = 0; i < targetStringLength; i++) {
-		        int randomLimitedInt = leftLimit + (int) 
-		          (random.nextFloat() * (rightLimit - leftLimit + 1));
-		        buffer.append((char) randomLimitedInt);
-		    }
-		    token = buffer.toString();
-		    System.out.println(token);
-			jdbcTemplate.update("update User set token=? where id=?", new Object[] {token, id});
+			token = getRandomString();
+			/*
+			 * Update newly created token.
+			 */
+			jdbcTemplate.update("update User set token=? where id=?", new Object[] {token, userId});
 		}
 		else {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Wrong username or password");
+			/*
+			 * Check if a administrator logged in.
+			 */
+			count = jdbcTemplate.queryForObject("select count(*) from Administrator where "
+					+ "username=? and password=?", new Object[] { username, password}, Integer.class);
+			if (count > 0) {
+				/*
+				 * An administrator logged in.
+				 */
+				int adminId = jdbcTemplate.queryForObject("select id from Administrator where "
+						+ "username=? and password=?", new Object[] { username, password }, Integer.class);
+				token = getRandomString();
+				/*
+				 * Update newly created token.
+				 */
+				jdbcTemplate.update("update Administrator set token=? where id=?", new Object[] {token, adminId});
+			}
+			else {
+				/*
+				 * Wrong username or password.
+				 */
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Wrong username or password");
+			}
 		}
 		return token;
 	}
 	
 	public Message tokenIsValid(String auth) {
 		/*
-		 * Check if token exists
+		 * Check if token exists in User
 		 */
+		int id;
 		int count = jdbcTemplate.queryForObject("select count(*) from User where "
 				+ "token=?", new Object[] { auth }, Integer.class);
 		if (count == 0) {
-			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "User not found");
+			/*
+			 * Check if token exists in Administrator
+			 */
+			count = jdbcTemplate.queryForObject("select count(*) from Administrator where "
+					+ "token=?", new Object[] { auth }, Integer.class);
+			if (count == 0) {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Token not found");
+			}
+			else {
+				id = jdbcTemplate.queryForObject("select id from Administrator where "
+						+ "token=?", new Object[] { auth }, Integer.class);
+				/*
+				 * Disable token.
+				 */
+				jdbcTemplate.update("update Administrator set token=? where id=?", new Object[] {-1, id});
+			}
 		}
 		else {
-			int id = jdbcTemplate.queryForObject("select id from User where "
+			id = jdbcTemplate.queryForObject("select id from User where "
 					+ "token=?", new Object[] { auth }, Integer.class);
 			/*
 			 * Disable token.
@@ -988,7 +1036,5 @@ public class DataAccess {
 		}
 		return new Message("OK");
 	}
-
-	
 	
 }

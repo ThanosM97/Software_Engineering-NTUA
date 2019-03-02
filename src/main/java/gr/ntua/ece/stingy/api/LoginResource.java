@@ -2,8 +2,6 @@ package gr.ntua.ece.stingy.api;
 
 import gr.ntua.ece.stingy.conf.Configuration;
 import gr.ntua.ece.stingy.data.DataAccess;
-import gr.ntua.ece.stingy.data.model.Product;
-import gr.ntua.ece.stingy.data.model.Message;
 
 import org.restlet.data.Form;
 import org.restlet.data.Status;
@@ -11,12 +9,8 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class LoginResource extends ServerResource {
 
@@ -45,11 +39,15 @@ public class LoginResource extends ServerResource {
 		}
 		
 		/*
-		 * Add requested product in the database.
+		 * Add requested product in the database if user exists.
 		 */
+		
 		String token = dataAccess.getToken(username, password);
 		Map<String, String> map = new HashMap<>();
 		map.put("token", token);
+		/*
+		 * Return token in json representation.
+		 */
 		return new JsonMapRepresentation(map);
     }
 }
