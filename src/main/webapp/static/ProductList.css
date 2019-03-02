@@ -1,6 +1,7 @@
 *{
     margin: 0;
     padding: 0;
+
 }
 
 h3 {
@@ -10,7 +11,7 @@ h3 {
 }
 
 .background{
-    background-color: beige;
+    background-color: #f1f1f1;
     margin-bottom: 7vw;
 }
 
@@ -56,20 +57,21 @@ h3 {
 }
 
 at {
-    font-size: 120%;
+    font-size: 1vw;
+    margin-bottom: 50px;
 }
 
 .filter-name{
-    font-size: 150%;
+    font-size: 1.5vw;
+    margin-bottom: 5%;
 }
 
 .filters{
-    padding-left: 3%;
+    margin-left: 10%;
+    margin-top: 3%;
     width: 20%;
     min-height: 1000px;
-    margin-bottom: 7vw;
-    background-color: rgb(173, 173, 146);
-    border: 1px solid black;
+
     float: left;
 }
 
@@ -79,4 +81,7 @@ at {
     max-width:20%;
     position: relative;
     left: 40%;
+}
+.filterGroups {
+  margin-top:3%;
 }
