@@ -24,11 +24,15 @@ public class ProductResource extends ServerResource {
     protected Representation get() throws ResourceException {
 
         String idAttr = getAttribute("id");
-        /*
+        Form queryParams = getQuery();
+		String format = queryParams.getFirstValue("format");        /*
          * Check if given id is not null.
          */
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing product id");
+        }
+        if (format == null) {
+        	format = "json";
         }
         /*
          * Convert given id tos long.
@@ -45,8 +49,12 @@ public class ProductResource extends ServerResource {
          */
         Optional<Product> optional = dataAccess.getProduct(id);
         Product product = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
-
-        return new JsonProductRepresentation(product);
+        if (format == "json") {
+        	return new JsonProductRepresentation(product);
+        }
+        else {
+        	return new XmlProductRepresentation(product);
+        }
     }
 
     @Override

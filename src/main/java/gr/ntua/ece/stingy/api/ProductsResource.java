@@ -38,7 +38,8 @@ public class ProductsResource extends ServerResource {
 		String countString = queryParams.getFirstValue("count");
 		String status = queryParams.getFirstValue("status");
 		String sort = queryParams.getFirstValue("sort");
-
+		String format = queryParams.getFirstValue("format");
+		
 		Map<String, Object> map = new HashMap<>();
 		Limits limits = new Limits();
 		
@@ -83,6 +84,9 @@ public class ProductsResource extends ServerResource {
 		if (sort == null) {
 			sort = "id|DESC";
 		}
+		if (format == null) {
+			format = "json";
+		}
 		/*
 		 * Check if status and sort are valid.
 		 */
@@ -101,7 +105,12 @@ public class ProductsResource extends ServerResource {
 		 */
 		map.put("total", limits.getTotal());
 		map.put("products", products);
-		return new JsonMapRepresentation(map);
+		if (format == "json") {
+			return new JsonMapRepresentation(map);
+		}
+		else {
+			return new XmlMapRepresentation(map);
+		}
 	}
 
 	@Override

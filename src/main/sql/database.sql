@@ -700,52 +700,7 @@ DESC LIMIT 5;
      
 
 
-/*-------------------------
------------TRIGGERS---------
----------------------------*/
 
-/*Email Constraint, ensure that the given value is in the right format*/
-DELIMITER $$
-CREATE TRIGGER `user_validate_email_insert` BEFORE INSERT  ON `User`
-FOR EACH ROW
-	BEGIN
-		IF NOT (SELECT NEW.email REGEXP '$[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$') THEN
-			SIGNAL SQLSTATE VALUE '45000';
-		END IF;
-	END$$
-
-CREATE TRIGGER `user_validate_email_update` BEFORE UPDATE  ON `User`
-FOR EACH ROW
-	BEGIN
-		IF NOT (SELECT NEW.email REGEXP '$[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$') THEN
-			SIGNAL SQLSTATE VALUE '45000';
-		END IF;
-	END$$
-
-DELIMITER ;
-
-
-
-/*First Name and Last Name before insert or update*/
-
-DELIMITER $$
-CREATE TRIGGER `user_validate_name_insert` BEFORE INSERT  ON `User` 
-FOR EACH ROW
-	BEGIN
-		IF NOT(NEW.`firstName` REGEXP '^[A-Za-z]+$') THEN
-			SIGNAL SQLSTATE VALUE '45000';
-		END IF;
-	END$$
-
-CREATE TRIGGER `user_validate_name_update` BEFORE UPDATE  ON `User`
-FOR EACH ROW
-	BEGIN
-		IF NOT(NEW.`firstName` REGEXP '^[A-Za-z]+$') THEN
-			SIGNAL SQLSTATE VALUE '45000';
-		END IF;
-	END$$
-
-DELIMITER ;
 
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
