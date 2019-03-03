@@ -1,14 +1,38 @@
 import React, { Component } from 'react';
 const square = 'static/images/Square_200x200.png';
+import Cookies from 'universal-cookie';
+
+
+var topBar;
+const cookies = new Cookies();
 
 class HomeHeader extends Component {
 
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state={
       trendsVis: 'hidden',
-      offersVis: 'hidden'
+      offersVis: 'hidden',
     }
+    topBar = this.props.loggedIn ? (<nav><a href="/" onClick={this.handleLogOut}> Αποσύνδεση </a>
+          <a href="/my_profile">Geia </a></nav>) : (<nav><p>
+      <a href="signup">Εγγραφή</a>
+      <a href="login">Σύνδεση</a></p>
+    </nav>);
+
+  }
+
+  handleLogOut(){
+    let token = cookies.get('auth');
+    fetch("https://localhost:8765/observatory/api/logout",{
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-OBSERVATORY-AUTH": token,
+      },
+      body: ""
+    }).then(response => console.log(response.json()))
+    cookies.remove('auth', {path: '/'})
   }
 
   toggleTrends(){
@@ -19,13 +43,9 @@ class HomeHeader extends Component {
   }
 
   render() {
-
     return (
       <div className="header">
-        <nav>
-          <a href="signup">Εγγραφή</a>
-          <a href="login">Σύνδεση</a>
-        </nav>
+        {topBar}
         <div className="toptrends" style={{visibility: this.state.trendsVis}}>
           <div className="items-container">
             <img src={square} />
