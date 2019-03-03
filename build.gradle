@@ -21,6 +21,11 @@ repositories {
     maven {
         url "http://maven.restlet.org/"
     }
+    
+    maven {
+        url "https://jitpack.io"
+    }
+    
 }
 
 dependencies {
@@ -45,8 +50,20 @@ dependencies {
 
 
 gretty {
-    httpEnabled = true
-    httpsEnabled = false
+    httpEnabled = false
+    httpsEnabled = true
     httpPort = 8765
+    httpsPort = 8765
     contextPath = ''
+    integrationTestTask = 'test'
 }
+
+test {
+
+    systemProperties(System.getProperties())
+
+    testLogging {
+        showStandardStreams = true
+    }
+}
+
