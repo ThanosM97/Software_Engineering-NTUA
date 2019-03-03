@@ -39,7 +39,13 @@ public class ProductsResource extends ServerResource {
 		String status = queryParams.getFirstValue("status");
 		String sort = queryParams.getFirstValue("sort");
 		String format = queryParams.getFirstValue("format");
+		String tagsString = queryParams.getFirstValue("tags");
 
+		/*
+		 * Convert tagString that represents a list of tags to a list.
+		 */
+		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
+		
 		Map<String, Object> map = new HashMap<>();
 		Limits limits = new Limits();
 
@@ -99,7 +105,7 @@ public class ProductsResource extends ServerResource {
 		/*
 		 * Get products based on the limits.
 		 */
-		List<Product> products = dataAccess.getProducts(limits, status, sort);
+		List<Product> products = dataAccess.getProducts(limits, status, sort, tags);
 		/*
 		 * Set current total products.
 		 */

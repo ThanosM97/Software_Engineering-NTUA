@@ -80,7 +80,7 @@ public class DataAccess {
 	}
 
 	
-	public List<Product> getProducts(Limits limits, String status, String sort) {
+	public List<Product> getProducts(Limits limits, String status, String sort, List<String> tags) {
 		String sort_type = sort.replaceAll("\\|", " ");   
 		/*
 		 * Initialize withdrawn based on the status value
@@ -103,11 +103,38 @@ public class DataAccess {
 		/*
 		 * Return products based on the limits.
 		 */
-		if (status.equals("ALL")) {
-			return jdbcTemplate.query("select * from Product order by ? limit ?,?", new Object[] { sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+		if (tags == null || tags.isEmpty()) {
+			if (status.equals("ALL")) {
+				return jdbcTemplate.query("select * from Product order by ? limit ?,?", new Object[] { sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+			}
+			else {
+				return jdbcTemplate.query("select * from Product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+			}
 		}
 		else {
-			return jdbcTemplate.query("select * from Product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+			MapSqlParameterSource parameters = new MapSqlParameterSource();
+			parameters.addValue("tags", tags);
+			parameters.addValue("sort", sort_type);
+			parameters.addValue("start", limits.getStart());
+			parameters.addValue("count", limits.getCount());
+			parameters.addValue("withdrawn", withdrawn);
+			String sqlStm;
+			if (status.equals("ALL")) {
+				sqlStm = "select Product.id as id, Product.name as name, category, description, withdrawn, image  from Product, Product_Tag, Tag\n" + 
+						"where Product.id = Product_Tag.ProductId\n" + 
+						"and Tag.id = Product_Tag.TagId\n" + 
+						"and Tag.name in (:tags) \n" + 
+						"order by :sort limit :start,:count";
+				return namedJdbcTemplate.query(sqlStm, parameters, new ProductRowMapper());
+			}
+			else {
+				sqlStm = "select Product.id as id, Product.name, category, description, withdrawn, image  from Product, Product_Tag, Tag\n" + 
+						"where Product.id = Product_Tag.ProductId\n" + 
+						"and Tag.id = Product_Tag.TagId\n" + 
+						"and Tag.name in (:tags) \n" + 
+						"and  withdrawn=:withdrawn order by :sort limit :start,:count";
+				return namedJdbcTemplate.query(sqlStm, parameters, new ProductRowMapper());
+			}
 		}
 	}
 
