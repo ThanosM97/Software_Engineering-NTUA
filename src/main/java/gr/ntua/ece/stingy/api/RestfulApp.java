@@ -61,6 +61,11 @@ public class RestfulApp extends Application {
 		 */
 		router.attach("/logout", LogoutResource.class);
 		
+		/*
+		 * POST method
+		 */
+		router.attach("/user", UserResource.class);
+		
 		return corsFilter;
 	}
 

@@ -7,6 +7,8 @@ import gr.ntua.ece.stingy.data.model.Product;
 import gr.ntua.ece.stingy.data.model.Message;
 import gr.ntua.ece.stingy.data.model.Record;
 import gr.ntua.ece.stingy.data.model.Shop;
+import gr.ntua.ece.stingy.data.model.User;
+
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
@@ -1064,5 +1066,16 @@ public class DataAccess {
 		}
 		return new Message("OK");
 	}
+	
+    public Optional<User> getUserByToken(String token){
+    	List<User> users = jdbcTemplate.query("select * from User where token = ?", new Object[] {token}, new UserRowMapper());
+		if (users.size() == 1)  {
+			return Optional.of(users.get(0));
+		}
+		else {
+			return Optional.empty();
+		}
+    }
+
 	
 }
