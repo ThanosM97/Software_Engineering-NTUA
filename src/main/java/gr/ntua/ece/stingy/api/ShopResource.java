@@ -7,10 +7,12 @@ import gr.ntua.ece.stingy.data.model.Message;
 import gr.ntua.ece.stingy.data.model.Product;
 
 import org.restlet.data.Form;
+import org.restlet.data.Header;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
+import org.restlet.util.Series;
 
 import com.google.gson.Gson;
 
@@ -55,6 +57,16 @@ public class ShopResource extends ServerResource {
     @Override
     protected Representation delete() throws ResourceException {
     	/*
+    	 * Get  token from headers
+    	 */
+    	@SuppressWarnings("unchecked")
+		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
+    	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
+    	
+    	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can delete shops");
+    	}
+    	/*
     	 * Get given id and check its validity.
     	 */
     	String idAttr = getAttribute("id");
@@ -72,16 +84,39 @@ public class ShopResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
         }
-        /*
-         * Delete shop based on the given id and return 'OK' message.
-         */
-        Optional<Message> optional = dataAccess.deleteShop(id);
-        Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
-        return new JsonMessageRepresentation(message);
+        if (dataAccess.isAdmin(auth)) {
+        	/*
+             * Delete shop based on the given id and return 'OK' message.
+             */
+            Optional<Message> optional = dataAccess.deleteShop(id);
+            Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
+            return new JsonMessageRepresentation(message);
+        }
+	    else {
+	    	/*
+	         * Change withdrawn shop based on the id.
+	         */
+	        Optional<Message> optional = dataAccess.withdrawnShop(id);
+	        Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
+	        /*
+	         * Return message.
+	         */
+	        return new JsonMessageRepresentation(message);
+	    }
     }
     
     @Override
     protected Representation put(Representation entity) throws ResourceException {
+    	/*
+    	 * Get  token from headers
+    	 */
+    	@SuppressWarnings("unchecked")
+		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
+    	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
+    	
+    	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can update shops");
+    	}
         /*
          * Get the shop id and check if it is valid 
          */
@@ -145,6 +180,16 @@ public class ShopResource extends ServerResource {
     
     @Override
     protected Representation patch(Representation entity) throws ResourceException {
+    	/*
+    	 * Get  token from headers
+    	 */
+    	@SuppressWarnings("unchecked")
+		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
+    	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
+    	
+    	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can update shops");
+    	}
     	/*
          * Get the shop id and check if it is valid 
          */

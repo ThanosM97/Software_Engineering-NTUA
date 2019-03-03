@@ -8,10 +8,12 @@ import gr.ntua.ece.stingy.data.model.Record;
 import gr.ntua.ece.stingy.data.model.Shop;
 
 import org.restlet.data.Form;
+import org.restlet.data.Header;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
+import org.restlet.util.Series;
 
 import com.google.gson.Gson;
 
@@ -130,6 +132,16 @@ public class PricesResource extends ServerResource {
     
     @Override
     protected Representation post(Representation entity) throws ResourceException {
+    	/*
+    	 * Get  token from headers
+    	 */
+    	@SuppressWarnings("unchecked")
+		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
+    	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
+    	
+    	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can create new records");
+    	}
     	/*
          * Create a new restlet form
          */

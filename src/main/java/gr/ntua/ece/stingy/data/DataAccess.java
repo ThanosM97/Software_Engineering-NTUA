@@ -340,6 +340,20 @@ public class DataAccess {
 			return Optional.empty();
 		}
 	}
+	
+	public Optional<Message> withdrawnShop(long id) {
+		Long[] params = new Long[]{id};
+		/*
+		 * Set withdrawn to True and return 'OK' message.
+		 */
+		int found = jdbcTemplate.update("update Shop set withdrawn=1 where id=?", params);
+		if (found == 1)  {
+			return Optional.of(new Message("OK"));
+		}
+		else {
+			return Optional.empty();
+		}
+	}
 
 	public Optional<Product> updateProduct(long id, String name, String description, String category, boolean withdrawn, List<String> tags, String extraDataString ) {
 		/*
