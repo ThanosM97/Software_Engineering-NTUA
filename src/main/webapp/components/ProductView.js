@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Map from './Map';
+//import { NONAME } from 'dns';
+
 
 const smartphone = "../static/images/smartphone250x250.png";
 const like = "../static/images/like.png";
@@ -151,14 +154,37 @@ class ProductViewLaptop extends React.Component{
 }
 
 class ProductViewShopList extends React.Component{
+    
+    constructor(props){
+        super(props);
+        this.state = {
+            display: 'none'
+        };
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        const newDisplay = this.state.display == 'none' ? 'map' : 'none';
+        this.setState({display: newDisplay});
+    }
+    
     render(){
+        let map;
+        if (this.state.display == 'map'){
+            map = <Map />;
+        }
+        else{
+            map = <div></div>;
+        }
+
         const shoplist = this.props.shops.map(shop => 
             <div class='shopbox'>
                 <as class='shopname'>{shop.name} </as>
                 <as class='price'>{shop.price} </as><br></br> 
                 <as>Άλλα στοιχεία: {shop.otherData} </as><br></br>
                 <as>Αξιοπιστία καταχώρησης: <img src={like} class='like-img'/> <img src={unlike} class='like-img'/><img src={questionmark} class='questionmark-img'/></as><br></br>
-                <as class='address'>Αλέκου Παναγούλη 9, Νίκαια </as><br></br>
+                <button href='' class='address' onClick={this.handleClick}>Αλέκου Παναγούλη 9, Νίκαια </button><br></br>
+                <div>{map}</div>
             </div>
             );
         return(
