@@ -39,6 +39,7 @@ public class Product {
 	private String tagsString;
 	@XmlElement(name = "extraData")
     private final Map<String, String> extraData;
+	private final String image;
 	
 	private final Double bestPrice;
     
@@ -51,9 +52,10 @@ public class Product {
         this.tags        = null;
         this.extraData	 = null;
         this.bestPrice	 = null;
+        this.image       = null;
     }
 
-    public Product(long id, String name, String description, String category, boolean withdrawn, List<String> tags, Map<String, String> extraData, Double bestPrice) {
+    public Product(long id, String name, String description, String category, boolean withdrawn, List<String> tags, Map<String, String> extraData, Double bestPrice, String image) {
         this.id          = id;
         this.name        = name;
         this.description = description;
@@ -63,6 +65,7 @@ public class Product {
         this.tagsString  = String.join(",", tags);
         this.extraData	 = extraData;
         this.bestPrice	 = bestPrice; 
+        this.image       = image;
     }
 
     public long getId() {

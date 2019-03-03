@@ -80,7 +80,7 @@ public class DataAccess {
 	}
 
 	
-	public List<Product> getProducts(Limits limits, String status, String sort, List<String> tags) {
+	public List<Product> getProducts(Limits limits, String status, String sort, List<String> tags, String category) {
 		String sort_type = sort.replaceAll("\\|", " ");   
 		/*
 		 * Initialize withdrawn based on the status value
@@ -103,40 +103,44 @@ public class DataAccess {
 		/*
 		 * Return products based on the limits.
 		 */
+		MapSqlParameterSource parameters = new MapSqlParameterSource();
+		parameters.addValue("tags", tags);
+		parameters.addValue("sort", sort_type);
+		parameters.addValue("start", limits.getStart());
+		parameters.addValue("count", limits.getCount());
+		parameters.addValue("withdrawn", withdrawn);
+		parameters.addValue("category", category);
+		
+		String sqlStm;
 		if (tags == null || tags.isEmpty()) {
-			if (status.equals("ALL")) {
-				return jdbcTemplate.query("select * from Product order by ? limit ?,?", new Object[] { sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+			sqlStm = "select * from Product where 1=1";
+			if (category != null) {
+				sqlStm += " and category = :category ";
 			}
-			else {
-				return jdbcTemplate.query("select * from Product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+			if (!status.equals("ALL")) {
+				sqlStm += " and withdrawn=:withdrawn ";
 			}
+			sqlStm += " order by :sort limit :start,:count";
+			System.out.println(sqlStm);
+			
+			return namedJdbcTemplate.query(sqlStm, parameters, new ProductRowMapper());
 		}
 		else {
-			MapSqlParameterSource parameters = new MapSqlParameterSource();
-			parameters.addValue("tags", tags);
-			parameters.addValue("sort", sort_type);
-			parameters.addValue("start", limits.getStart());
-			parameters.addValue("count", limits.getCount());
-			parameters.addValue("withdrawn", withdrawn);
-			String sqlStm;
-			if (status.equals("ALL")) {
-				sqlStm = "select Product.id as id, Product.name as name, category, description, withdrawn, image  from Product, Product_Tag, Tag\n" + 
-						"where Product.id = Product_Tag.ProductId\n" + 
-						"and Tag.id = Product_Tag.TagId\n" + 
-						"and Tag.name in (:tags) \n" + 
-						"order by :sort limit :start,:count";
-				return namedJdbcTemplate.query(sqlStm, parameters, new ProductRowMapper());
+			sqlStm = "select image, Product.id as id, Product.name as name, category, description, withdrawn  from Product, Product_Tag, Tag "
+					+ " where Tag.id = Product_Tag.TagId and Product_Tag.ProductId = Product.id \n" + 
+					" and Tag.name in (:tags) ";
+			if (category != null) {
+				sqlStm += " and category = :category ";
 			}
-			else {
-				sqlStm = "select Product.id as id, Product.name, category, description, withdrawn, image  from Product, Product_Tag, Tag\n" + 
-						"where Product.id = Product_Tag.ProductId\n" + 
-						"and Tag.id = Product_Tag.TagId\n" + 
-						"and Tag.name in (:tags) \n" + 
-						"and  withdrawn=:withdrawn order by :sort limit :start,:count";
-				return namedJdbcTemplate.query(sqlStm, parameters, new ProductRowMapper());
+			if (!status.equals("ALL")) {
+				sqlStm += " and withdrawn=:withdrawn ";
 			}
+			sqlStm += " order by :sort limit :start,:count";
+			System.out.println(sqlStm);
+			return namedJdbcTemplate.query(sqlStm, parameters, new ProductRowMapper());
 		}
 	}
+	
 
 	public List<String> getProductTagsById(long id){
 		String query = "select distinct Tag.name from Product_Tag, Tag where productId=? and tagId = Tag.id";
@@ -184,7 +188,7 @@ public class DataAccess {
 		}
 	}
 	
-	public Product addProduct(String name, String description, String category, boolean withdrawn, ArrayList<String> tags, String extraDataString ) {
+	public Product addProduct(String name, String description, String category, boolean withdrawn, ArrayList<String> tags, String extraDataString , String image) {
 		/*
 		 * Insert the new product in the Product table
 		 */
@@ -193,12 +197,13 @@ public class DataAccess {
 				new PreparedStatementCreator() {
 					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 						PreparedStatement ps =
-								connection.prepareStatement("insert into Product(name, description, category, withdrawn) "
-										+ "values(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+								connection.prepareStatement("insert into Product(name, description, category, withdrawn, image) "
+										+ "values(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 						ps.setString(1, name);
 						ps.setString(2, description);
 						ps.setString(3, category);
 						ps.setBoolean(4, withdrawn);
+						ps.setString(6, image);
 						return ps;
 					}
 				},
@@ -325,7 +330,8 @@ public class DataAccess {
 				withdrawn,
 				tags,
 				extraData,
-				null
+				null,
+				image
 				);
 		return product;
 	}
@@ -894,7 +900,7 @@ public class DataAccess {
 
 
 	public List<Record> getRecords(Limits limits, String geoDistString, String geoLngString, String geoLatString, String dateFrom, String dateTo, 
-			String shops, String products, List<String> tags , String sort, String category) {
+			String shops, String products, List<String> tags , String sort) {
 		String sort_type = sort.replaceAll("\\|", " ");
 
 		/*
@@ -913,7 +919,6 @@ public class DataAccess {
 		parameters.addValue("sort", sort_type);
 		parameters.addValue("start", limits.getStart());
 		parameters.addValue("count", limits.getCount());
-		parameters.addValue("category", category);
 		/*
 		System.out.println(geoLngString);
 		System.out.println(geoLatString);
@@ -966,9 +971,7 @@ public class DataAccess {
 					"		and Shop_Tag.ShopId = Shop.id\n" + 
 					"		and Tag.name in (:shopTags)))";
 		}
-		if (category != null) {
-			sqlStm += " and Product.category = :category ";
-		}
+
 
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
 		namedJdbcTemplate.query(sqlStm, parameters, countCallback);

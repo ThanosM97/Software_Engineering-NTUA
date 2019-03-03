@@ -29,14 +29,14 @@ public class ProductRowMapper implements RowMapper {
 		String description = rs.getString("description");
 		String category    = rs.getString("category");
 		boolean withdrawn  = rs.getBoolean("withdrawn");
-		
+		String image	   = rs.getString("image");
 		/*
 		 * Convert tags to a list of tags (tags are separated by comma).
 		 */
 		List<String> tags = dataAccess.getProductTagsById(id);
 		Map<String, String> extraData = dataAccess.getExtraDataById(id); 
 		Double bestPrice = dataAccess.getBestPrice(id);
-		return new Product(id, name, description, category, withdrawn, tags, extraData, bestPrice);
+		return new Product(id, name, description, category, withdrawn, tags, extraData, bestPrice, image);
 	}
 
 }

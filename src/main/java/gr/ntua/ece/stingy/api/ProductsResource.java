@@ -40,6 +40,7 @@ public class ProductsResource extends ServerResource {
 		String sort = queryParams.getFirstValue("sort");
 		String format = queryParams.getFirstValue("format");
 		String tagsString = queryParams.getFirstValue("tags");
+		String category = queryParams.getFirstValue("category");
 
 		/*
 		 * Convert tagString that represents a list of tags to a list.
@@ -105,7 +106,7 @@ public class ProductsResource extends ServerResource {
 		/*
 		 * Get products based on the limits.
 		 */
-		List<Product> products = dataAccess.getProducts(limits, status, sort, tags);
+		List<Product> products = dataAccess.getProducts(limits, status, sort, tags, category);
 		/*
 		 * Set current total products.
 		 */
@@ -148,6 +149,7 @@ public class ProductsResource extends ServerResource {
 		String withdrawnString = form.getFirstValue("withdrawn");
 		String tagsString = form.getFirstValue("tags");
 		String extraDataString = form.getFirstValue("extraData");
+		String image = form.getFirstValue("image");
 
 		/*
 		 * Convert tagString that represents a list of tags to a list.
@@ -184,7 +186,7 @@ public class ProductsResource extends ServerResource {
 		/*
 		 * Add requested product in the database.
 		 */
-		Product product = dataAccess.addProduct(name, description, category, withdrawn, tags, extraDataString);
+		Product product = dataAccess.addProduct(name, description, category, withdrawn, tags, extraDataString, image );
 		return new JsonProductRepresentation(product);
 	}
 }
