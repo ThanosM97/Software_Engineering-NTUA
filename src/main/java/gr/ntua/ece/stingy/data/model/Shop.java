@@ -10,11 +10,11 @@ public class Shop {
     private final String address;
     private final double lng;
     private final double lat;
-    private final String[] tags;
+    private final List<String> tags;
     private final boolean withdrawn;
     private final String image;
     
-	public Shop(long id, String name, String address, double lng, double lat, String[] tags, boolean withdrawn, String image) {
+	public Shop(long id, String name, String address, double lng, double lat, List<String> tags, boolean withdrawn, String image) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -63,7 +63,7 @@ public class Shop {
 	/**
 	 * @return the tags
 	 */
-	public String[] getTags() {
+	public List<String> getTags() {
 		return tags;
 	}
 

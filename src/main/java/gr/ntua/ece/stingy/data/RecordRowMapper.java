@@ -35,8 +35,8 @@ public class RecordRowMapper implements RowMapper {
 		Date dateFrom 		= rs.getDate("dateFrom");
 		Date dateTo 		= rs.getDate("dateTo");		
 		
-		String[] shopTags = dataAccess.getShopTagsById(shopId);
-		String[] productTags = dataAccess.getProductTagsById(productId);		
+		List<String> shopTags = dataAccess.getShopTagsById(shopId);
+		List<String> productTags = dataAccess.getProductTagsById(productId);		
 		return new Record(price, productName, productId, productTags, shopId, shopName, shopTags, shopAddress, shopDist, dateFrom, dateTo);
 	}
 

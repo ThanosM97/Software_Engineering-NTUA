@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -116,7 +117,7 @@ public class PricesResource extends ServerResource {
          * Get prices based on the limits.
          */
     	List<Record> records = dataAccess.getRecords(limits, geoDistString, geoLngString, geoLatString, dateFrom, dateTo, 
-    			shops, products, tags ,sort);
+    			shops, products, Arrays.asList(tags),sort);
     	/*
     	 * Set current total products.
     	 */

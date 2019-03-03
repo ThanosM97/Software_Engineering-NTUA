@@ -24,7 +24,7 @@ public class ShopRowMapper implements RowMapper {
         /*
 		 * Convert tags to a list of tags (tags are separated by comma).
 		 */
-		String[] tags = dataAccess.getShopTagsById(id);
+		List<String> tags = dataAccess.getShopTagsById(id);
         return new Shop(id, name, address, lng, lat, tags, withdrawn, image);
     }
 

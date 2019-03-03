@@ -16,6 +16,7 @@ import org.restlet.util.Series;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -155,7 +156,7 @@ public class ShopsResource extends ServerResource {
 		}
 
 		
-        Shop shop = dataAccess.addShop(name, address, lng, lat, tags, withdrawn, image);
+        Shop shop = dataAccess.addShop(name, address, lng, lat, Arrays.asList(tags), withdrawn, image);
         /*
          * Return the json representation of the shop.
          */

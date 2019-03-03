@@ -34,7 +34,7 @@ public class Product {
 	@XmlElement(name = "withdrawn")
     private final boolean withdrawn;
 	
-	private String[] tags;
+	private List<String> tags;
 	@XmlElement(name = "tags")
 	private String tagsString;
 	@XmlElement(name = "extraData")
@@ -55,7 +55,7 @@ public class Product {
         this.image       = null;
     }
 
-    public Product(long id, String name, String description, String category, boolean withdrawn, String[] tags, Map<String, String> extraData, Double bestPrice, String image) {
+    public Product(long id, String name, String description, String category, boolean withdrawn, List<String> tags, Map<String, String> extraData, Double bestPrice, String image) {
         this.id          = id;
         this.name        = name;
         this.description = description;
@@ -88,7 +88,7 @@ public class Product {
         return withdrawn;
     }
 
-    public String[] getTags() {
+    public List<String> getTags() {
         return tags;
     }
     

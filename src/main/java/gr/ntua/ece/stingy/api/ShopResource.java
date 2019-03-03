@@ -17,6 +17,7 @@ import org.restlet.util.Series;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 public class ShopResource extends ServerResource {
@@ -168,7 +169,7 @@ public class ShopResource extends ServerResource {
         /*
          * Update the certain shop
          */
-        Optional<Shop> optional = dataAccess.updateShop(id, name, address, lng, lat, tags, withdrawn, image);
+        Optional<Shop> optional = dataAccess.updateShop(id, name, address, lng, lat, Arrays.asList(tags), withdrawn, image);
         Shop shop = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
         return new JsonShopRepresentation(shop);
     }
@@ -237,7 +238,7 @@ public class ShopResource extends ServerResource {
             optional = dataAccess.patchShop(id, lat, "lat", null);
     	}
     	else if (tags != null) {
-            optional = dataAccess.patchShop(id, null, "tags", tags);
+            optional = dataAccess.patchShop(id, null, "tags", Arrays.asList(tags));
     	}
     	else if (withdrawn != null) {
             optional = dataAccess.patchShop(id, withdrawn, "withdrawn", null);

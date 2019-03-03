@@ -16,6 +16,7 @@ import org.restlet.util.Series;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
 
 public class ProductResource extends ServerResource {
@@ -178,7 +179,7 @@ public class ProductResource extends ServerResource {
         /*
          * Update the certain product
          */
-        Optional<Product> optional = dataAccess.updateProduct(id, name, description, category, withdrawn, tags, extraDataString);
+        Optional<Product> optional = dataAccess.updateProduct(id, name, description, category, withdrawn, Arrays.asList(tags), extraDataString);
         Product product = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
         return new JsonProductRepresentation(product);
     }
@@ -245,7 +246,7 @@ public class ProductResource extends ServerResource {
             optional = dataAccess.patchProduct(id, withdrawn, "withdrawn", null);
     	}
     	else if (tags != null) {
-            optional = dataAccess.patchProduct(id, null, "tags", tags);
+            optional = dataAccess.patchProduct(id, null, "tags", Arrays.asList(tags));
     	}
     	else if (extraDataString != null) {
             optional = dataAccess.patchProduct(id, extraDataString, "extraData", null);

@@ -33,8 +33,6 @@
         <init-param>
             <param-name>org.restlet.application</param-name>
             <param-value>gr.ntua.ece.stingy.api.RestfulApp</param-value>
-            <param-name>dispatchOptionsRequest</param-name>
-        	<param-value>true</param-value>
         </init-param>
         <load-on-startup>2</load-on-startup>
     </servlet>
