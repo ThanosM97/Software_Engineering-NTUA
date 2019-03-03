@@ -102,9 +102,7 @@ public class DataAccess {
 		 * Get number of all products
 		 */
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  /* not reusable */
-		jdbcTemplate.query("select * from Product order by id", countCallback);
-		int rowCount = countCallback.getRowCount();
-		limits.setTotal(rowCount);
+		
 		/*
 		 * Return products based on the limits.
 		 */
@@ -126,8 +124,10 @@ public class DataAccess {
 			if (!status.equals("ALL")) {
 				sqlStm += " and withdrawn=:withdrawn ";
 			}
+			namedJdbcTemplate.query(sqlStm, parameters, countCallback);
+			int rowCount = countCallback.getRowCount();
+			limits.setTotal(rowCount);
 			sqlStm += " order by :sort limit :start,:count";
-			System.out.println(sqlStm);
 			
 			return namedJdbcTemplate.query(sqlStm, parameters, new ProductRowMapper());
 		}
@@ -141,8 +141,10 @@ public class DataAccess {
 			if (!status.equals("ALL")) {
 				sqlStm += " and withdrawn=:withdrawn ";
 			}
+			namedJdbcTemplate.query(sqlStm, parameters, countCallback);
+			int rowCount = countCallback.getRowCount();
+			limits.setTotal(rowCount);
 			sqlStm += " order by :sort limit :start,:count";
-			System.out.println(sqlStm);
 			return namedJdbcTemplate.query(sqlStm, parameters, new ProductRowMapper());
 		}
 	}
