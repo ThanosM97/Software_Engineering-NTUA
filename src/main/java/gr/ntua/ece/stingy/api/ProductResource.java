@@ -115,6 +115,17 @@ public class ProductResource extends ServerResource {
     
     @Override
     protected Representation put(Representation entity) throws ResourceException {
+    	/*
+    	 * Get  token from headers
+    	 */
+    	@SuppressWarnings("unchecked")
+		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
+    	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
+    	
+    	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can update products");
+    	}
+    	
         /*
          * Get the product id.
          */
@@ -178,6 +189,16 @@ public class ProductResource extends ServerResource {
     
     @Override
     protected Representation patch(Representation entity) throws ResourceException {
+    	/*
+    	 * Get  token from headers
+    	 */
+    	@SuppressWarnings("unchecked")
+		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
+    	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
+    	
+    	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can update products");
+    	}
     	/*
          * Get the product id and check if it is valid 
          */
