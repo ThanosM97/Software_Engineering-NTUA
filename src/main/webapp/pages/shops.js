@@ -35,24 +35,32 @@ class Shops extends Component {
     if (cookies.get('auth'))  this.setState({loggedIn:true})
   }
 
-
-
-  handleChange(event){
-    let st = (event.target.id -1) * this.state.count +1;
-    this.setState({activePage: event.target.id,start:st});
-  }
-
-
-  render() {
+  componentDidMount(){
     let data = fetch('https://localhost:8765/observatory/api/shops?start='+this.state.start+"&count="+this.state.count).then((resp)=>{
       resp.json().then((res)=>{
         this.setState({data:res.shops, total:res.total, pagesNo:Math.ceil(res.total/this.state.count)});
       })
     })
+  }
 
-    const shops = this.state.data.map(shop =>
-        <div className='shop'>
-            <img src={shop.image} class='product-image' />
+
+  handleChange(event){
+    let st = (event.target.id -1) * (this.state.count +1);
+    let data = fetch('https://localhost:8765/observatory/api/shops?start='+st+"&count="+this.state.count).then((resp)=>{
+      resp.json().then((res)=>{
+        this.setState({data:res.shops, total:res.total, pagesNo:Math.ceil(res.total/this.state.count)});
+      })
+    })
+    this.setState({activePage: event.target.id,start:st});
+  }
+
+
+  render() {
+
+
+    const shops = this.state.data.map((shop,i) =>
+        <div key={i} className='shop'>
+            <img src={shop.image} className='product-image' />
             <h2>{shop.name}</h2>
             <h4>{shop.address}</h4>
         </div>
