@@ -42,6 +42,7 @@ public class PricesResource extends ServerResource {
     	String geoLatString = queryParams.getFirstValue("geoLat");
     	String dateFrom = queryParams.getFirstValue("dateFrom");
     	String dateTo = queryParams.getFirstValue("dateTo");
+    	String category = queryParams.getFirstValue("category");
     	
     	String shops = queryParams.getValues("shops");
     	String products = queryParams.getValues("products");
@@ -117,7 +118,7 @@ public class PricesResource extends ServerResource {
          * Get prices based on the limits.
          */
     	List<Record> records = dataAccess.getRecords(limits, geoDistString, geoLngString, geoLatString, dateFrom, dateTo, 
-    			shops, products, tags ,sort);
+    			shops, products, tags ,sort, category);
     	/*
     	 * Set current total products.
     	 */

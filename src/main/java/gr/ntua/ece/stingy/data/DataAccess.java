@@ -831,7 +831,7 @@ public class DataAccess {
 
 
 	public List<Record> getRecords(Limits limits, String geoDistString, String geoLngString, String geoLatString, String dateFrom, String dateTo, 
-			String shops, String products, List<String> tags , String sort) {
+			String shops, String products, List<String> tags , String sort, String category) {
 		String sort_type = sort.replaceAll("\\|", " ");
 
 		/*
@@ -850,6 +850,7 @@ public class DataAccess {
 		parameters.addValue("sort", sort_type);
 		parameters.addValue("start", limits.getStart());
 		parameters.addValue("count", limits.getCount());
+		parameters.addValue("category", category);
 		/*
 		System.out.println(geoLngString);
 		System.out.println(geoLatString);
@@ -901,6 +902,9 @@ public class DataAccess {
 					"		or (Tag.id = Shop_Tag.TagId\n" + 
 					"		and Shop_Tag.ShopId = Shop.id\n" + 
 					"		and Tag.name in (:shopTags)))";
+		}
+		if (category != null) {
+			sqlStm += " and Product.category = :category ";
 		}
 
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
