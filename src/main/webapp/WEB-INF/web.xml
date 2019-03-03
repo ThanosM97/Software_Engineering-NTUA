@@ -13,10 +13,12 @@
         <param-name>properties</param-name>
         <param-value>/gr/ntua/ece/stingy/app.properties</param-value>
     </context-param>
+    
 
     <!-- //////// -->
     <!-- Servlets -->
     <!-- //////// -->
+    
 
     <servlet>
         <!-- Example Servlet -->
@@ -31,8 +33,13 @@
         <init-param>
             <param-name>org.restlet.application</param-name>
             <param-value>gr.ntua.ece.stingy.api.RestfulApp</param-value>
+            <param-name>dispatchOptionsRequest</param-name>
+        	<param-value>true</param-value>
         </init-param>
+        <load-on-startup>2</load-on-startup>
     </servlet>
+    
+
 
     <!-- //////////////////// -->
     <!-- Servlet URL Mappings -->
