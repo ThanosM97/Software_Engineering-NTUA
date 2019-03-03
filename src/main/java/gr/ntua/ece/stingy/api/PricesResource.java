@@ -47,12 +47,9 @@ public class PricesResource extends ServerResource {
     	
     	String shops = queryParams.getValues("shops");
     	String products = queryParams.getValues("products");
-    	String tagsString = queryParams.getValues("tags");
+		String[] tags = queryParams.getValuesArray("tags");
     	String sort = queryParams.getFirstValue("sort");
-    	/*
-		 * Convert tagString that represents a list of tags to a list.
-		 */
-		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
+    	
 		
         Map<String, Object> map = new HashMap<>();
         Limits limits = new Limits();

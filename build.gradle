@@ -37,6 +37,10 @@ dependencies {
     compile "org.apache.commons:commons-pool2:2.4.3"             //object pool
     compile "org.apache.commons:commons-dbcp2:2.1.1"             //db connection pool
     compile "org.springframework:spring-jdbc:5.0.2.RELEASE"      //spring JDBC template utility
+    
+    testCompile "org.codehaus.groovy:groovy-all:2.5.4"
+    testCompile "org.spockframework:spock-core:1.2-groovy-2.5"
+    testCompile "com.github.saikos:softeng18b-rest-api-client:v1.3"
 
     providedRuntime "javax.servlet:javax.servlet-api:3.1.0"      //provided by the servlet container at runtime
 

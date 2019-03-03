@@ -146,7 +146,7 @@ public class ShopResource extends ServerResource {
         String address = form.getFirstValue("address");
         Double lng = Double.valueOf(form.getFirstValue("lng"));
         Double lat = Double.valueOf(form.getFirstValue("lat"));
-        String tagsString = form.getFirstValue("tags");
+		String[] tags = form.getValuesArray("tags");
         boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
         String image = form.getFirstValue("image");
         /*
@@ -161,15 +161,10 @@ public class ShopResource extends ServerResource {
      	if (lng == null || lat == null) {
      		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Longitude and latitude are required");
      	}
-     	if (tagsString == null || tagsString.isEmpty()) {
+     	if (tags == null ) {
      		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
      	}
-     		
-     	/*
-     	 * Convert tagString that represents a list of tags to a list.
-     	 */
-     	ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class); 
-        
+
         /*
          * Update the certain shop
          */
@@ -219,7 +214,7 @@ public class ShopResource extends ServerResource {
         String address = form.getFirstValue("address");
         String lng = form.getFirstValue("lng");
         String lat = form.getFirstValue("lat");
-        String tagsString = form.getFirstValue("tags");
+		String[] tags = form.getValuesArray("tags");
         String withdrawn = form.getFirstValue("withdrawn");
         String image = form.getFirstValue("image");
         /*
@@ -230,25 +225,25 @@ public class ShopResource extends ServerResource {
          */
         Optional<Shop> optional = null;
         if (name != null) {
-            optional = dataAccess.patchShop(id, name, "name");
+            optional = dataAccess.patchShop(id, name, "name", null);
     	}
     	else if (address != null) {
-            optional = dataAccess.patchShop(id, address, "address");
+            optional = dataAccess.patchShop(id, address, "address", null);
     	}
     	else if (lng != null) {
-            optional = dataAccess.patchShop(id, lng, "lng");
+            optional = dataAccess.patchShop(id, lng, "lng", null);
     	}
     	else if (lat != null) {
-            optional = dataAccess.patchShop(id, lat, "lat");
+            optional = dataAccess.patchShop(id, lat, "lat", null);
     	}
-    	else if (tagsString != null) {
-            optional = dataAccess.patchShop(id, tagsString, "tags");
+    	else if (tags != null) {
+            optional = dataAccess.patchShop(id, null, "tags", tags);
     	}
     	else if (withdrawn != null) {
-            optional = dataAccess.patchShop(id, withdrawn, "withdrawn");
+            optional = dataAccess.patchShop(id, withdrawn, "withdrawn", null);
     	}
     	else if (image != null) {
-            optional = dataAccess.patchShop(id, image, "image");
+            optional = dataAccess.patchShop(id, image, "image", null);
     	}
     	else {
     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "None field changed");

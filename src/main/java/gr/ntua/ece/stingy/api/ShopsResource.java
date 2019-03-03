@@ -123,7 +123,7 @@ public class ShopsResource extends ServerResource {
         String address = form.getFirstValue("address");
         Double lng = Double.valueOf(form.getFirstValue("lng"));
         Double lat = Double.valueOf(form.getFirstValue("lat"));
-        String tagsString = form.getFirstValue("tags");
+		String[] tags = form.getValuesArray("tags");
         String withdrawnString = form.getFirstValue("withdrawn");
         String image = form.getFirstValue("image");
 
@@ -139,7 +139,7 @@ public class ShopsResource extends ServerResource {
 		if (lng == null || lat == null) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Longitude and latitude are required");
 		}
-		if (tagsString == null || tagsString.isEmpty()) {
+		if (tags == null ) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
 		}
 		
@@ -153,10 +153,7 @@ public class ShopsResource extends ServerResource {
 		else {
 			withdrawn = Boolean.valueOf(withdrawnString);
 		}
-		/*
-		 * Convert tagString that represents a list of tags to a list.
-		 */
-		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
+
 		
         Shop shop = dataAccess.addShop(name, address, lng, lat, tags, withdrawn, image);
         /*

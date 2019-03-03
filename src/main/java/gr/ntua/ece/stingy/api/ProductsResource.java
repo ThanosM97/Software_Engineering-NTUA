@@ -39,13 +39,9 @@ public class ProductsResource extends ServerResource {
 		String status = queryParams.getFirstValue("status");
 		String sort = queryParams.getFirstValue("sort");
 		String format = queryParams.getFirstValue("format");
-		String tagsString = queryParams.getFirstValue("tags");
+		String[] tags = queryParams.getValuesArray("tags");
 		String category = queryParams.getFirstValue("category");
 
-		/*
-		 * Convert tagString that represents a list of tags to a list.
-		 */
-		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
 		
 		Map<String, Object> map = new HashMap<>();
 		Limits limits = new Limits();
@@ -147,14 +143,11 @@ public class ProductsResource extends ServerResource {
 		String description = form.getFirstValue("description");
 		String category = form.getFirstValue("category");
 		String withdrawnString = form.getFirstValue("withdrawn");
-		String tagsString = form.getFirstValue("tags");
+		String[] tags = form.getValuesArray("tags");
 		String extraDataString = form.getFirstValue("extraData");
 		String image = form.getFirstValue("image");
 
-		/*
-		 * Convert tagString that represents a list of tags to a list.
-		 */
-		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
+		
 
 		/*
 		 *  Validate the values (in the general case)
@@ -168,7 +161,7 @@ public class ProductsResource extends ServerResource {
 		if (category == null || category.isEmpty()) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category is required");
 		}
-		if (tagsString == null || tagsString.isEmpty()) {
+		if (tags == null) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
 		}
 

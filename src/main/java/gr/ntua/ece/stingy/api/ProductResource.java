@@ -155,7 +155,7 @@ public class ProductResource extends ServerResource {
         String description = form.getFirstValue("description");
         String category = form.getFirstValue("category");
         boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
-        String tagsString = form.getFirstValue("tags");
+		String[] tags = form.getValuesArray("tags");
         String extraDataString = form.getFirstValue("extraData");
         
         /*
@@ -170,14 +170,10 @@ public class ProductResource extends ServerResource {
 		if (category == null || category.isEmpty()) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category is required");
 		}
-		if (tagsString == null || tagsString.isEmpty()) {
+		if (tags == null ) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
 		}
 		
-        /*
-		 * Convert tagString that represents a list of tags to a list.
-		 */
-		ArrayList<String> tags = new Gson().fromJson(tagsString, ArrayList.class);
 		
         /*
          * Update the certain product
@@ -226,7 +222,7 @@ public class ProductResource extends ServerResource {
         String description = form.getFirstValue("description");
         String category = form.getFirstValue("category");
         String withdrawn = form.getFirstValue("withdrawn");
-        String tagsString = form.getFirstValue("tags");
+		String[] tags = form.getValuesArray("tags");
         String extraDataString = form.getFirstValue("extraData");
         /*
          * patch the certain product based on the non null value.
@@ -236,23 +232,23 @@ public class ProductResource extends ServerResource {
          */
         Optional<Product> optional = null;
         if (name != null) {
-            optional = dataAccess.patchProduct(id, name, "name");
+            optional = dataAccess.patchProduct(id, name, "name", null);
     	}
     	else if (description != null) {
     		System.out.println("asa");
-            optional = dataAccess.patchProduct(id, description, "description");
+            optional = dataAccess.patchProduct(id, description, "description", null);
     	}
     	else if (category != null) {
-            optional = dataAccess.patchProduct(id, category, "category");
+            optional = dataAccess.patchProduct(id, category, "category", null);
     	}
     	else if (withdrawn != null) {
-            optional = dataAccess.patchProduct(id, withdrawn, "withdrawn");
+            optional = dataAccess.patchProduct(id, withdrawn, "withdrawn", null);
     	}
-    	else if (tagsString != null) {
-            optional = dataAccess.patchProduct(id, tagsString, "tags");
+    	else if (tags != null) {
+            optional = dataAccess.patchProduct(id, null, "tags", tags);
     	}
     	else if (extraDataString != null) {
-            optional = dataAccess.patchProduct(id, extraDataString, "extraData");
+            optional = dataAccess.patchProduct(id, extraDataString, "extraData", null);
     	}
     	else {
     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "None field changed");

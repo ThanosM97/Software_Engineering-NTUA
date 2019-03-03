@@ -80,7 +80,7 @@ public class DataAccess {
 	}
 
 	
-	public List<Product> getProducts(Limits limits, String status, String sort, List<String> tags, String category) {
+	public List<Product> getProducts(Limits limits, String status, String sort, String[] tags, String category) {
 		String sort_type = sort.replaceAll("\\|", " ");   
 		/*
 		 * Initialize withdrawn based on the status value
@@ -112,7 +112,7 @@ public class DataAccess {
 		parameters.addValue("category", category);
 		
 		String sqlStm;
-		if (tags == null || tags.isEmpty()) {
+		if (tags == null ) {
 			sqlStm = "select * from Product where 1=1";
 			if (category != null) {
 				sqlStm += " and category = :category ";
@@ -142,14 +142,14 @@ public class DataAccess {
 	}
 	
 
-	public List<String> getProductTagsById(long id){
+	public String[] getProductTagsById(long id){
 		String query = "select distinct Tag.name from Product_Tag, Tag where productId=? and tagId = Tag.id";
-		return jdbcTemplate.queryForList(query, new Object[] { id }, String.class);
+		return jdbcTemplate.queryForObject(query, new Object[] { id }, String[].class);
 	}
 	
-	public List<String> getShopTagsById(long id){
+	public String[] getShopTagsById(long id){
 		String query = "select distinct Tag.name from Shop_Tag, Tag where ShopId=? and TagId = Tag.id";
-		return jdbcTemplate.queryForList(query, new Object[] { id }, String.class);
+		return jdbcTemplate.queryForObject(query, new Object[] { id }, String[].class);
 	}
 
 	public Map<String, String> getExtraDataById(long id){
@@ -188,7 +188,7 @@ public class DataAccess {
 		}
 	}
 	
-	public Product addProduct(String name, String description, String category, boolean withdrawn, ArrayList<String> tags, String extraDataString , String image) {
+	public Product addProduct(String name, String description, String category, boolean withdrawn, String[] tags, String extraDataString , String image) {
 		/*
 		 * Insert the new product in the Product table
 		 */
@@ -203,7 +203,7 @@ public class DataAccess {
 						ps.setString(2, description);
 						ps.setString(3, category);
 						ps.setBoolean(4, withdrawn);
-						ps.setString(6, image);
+						ps.setString(5, image);
 						return ps;
 					}
 				},
@@ -395,7 +395,7 @@ public class DataAccess {
 		}
 	}
 
-	public Optional<Product> updateProduct(long id, String name, String description, String category, boolean withdrawn, List<String> tags, String extraDataString ) {
+	public Optional<Product> updateProduct(long id, String name, String description, String category, boolean withdrawn, String[] tags, String extraDataString ) {
 		/*
 		 * Update the new product record.
 		 */
@@ -527,7 +527,7 @@ public class DataAccess {
 		}
 	}
 
-	public Optional<Product> patchProduct(long id, String value, String field ) {
+	public Optional<Product> patchProduct(long id, String value, String field, String[] tags) {
 		/*
 		 *  Updates the new product record based on the non null value
 		 */
@@ -537,10 +537,7 @@ public class DataAccess {
 			rows = jdbcTemplate.update("update Product set " + field + "=? where id =?", new Object[] {withdrawn, id});
 		}
 		else if (field.equals("tags")){
-			/*
-			 * Convert tagString that represents a list of tags to a list.
-			 */
-			ArrayList<String> tags = new Gson().fromJson(value, ArrayList.class);
+			
 			/*
 			 * Delete existing tags
 			 */
@@ -692,7 +689,7 @@ public class DataAccess {
 		return jdbcTemplate.query("select * from Shop where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn,sort_type, limits.getStart(), limits.getCount() }, new ShopRowMapper());
 	}
 
-	public Shop addShop(String name, String address,double lng, double lat, List<String> tags, boolean withdrawn, String image) {
+	public Shop addShop(String name, String address,double lng, double lat, String[] tags, boolean withdrawn, String image) {
 		/*
 		 * Insert the new shop in the Product table
 		 */
@@ -779,7 +776,7 @@ public class DataAccess {
 		}
 	}
 
-	public Optional<Shop> updateShop(long id, String name, String address, double lng, double lat, List<String> tags, boolean withdrawn, String image) {
+	public Optional<Shop> updateShop(long id, String name, String address, double lng, double lat, String[] tags, boolean withdrawn, String image) {
 		/*
 		 *  Updates the new shop record
 		 */
@@ -831,7 +828,7 @@ public class DataAccess {
 		}
 	}
 
-	public Optional<Shop> patchShop(long id, String value, String field ) {
+	public Optional<Shop> patchShop(long id, String value, String field, String[] tags ) {
 		/*
 		 *  Updates the new shop record based on the non null value
 		 */
@@ -849,10 +846,6 @@ public class DataAccess {
 			rows = jdbcTemplate.update("update Shop set " + field + "=? where id =?", new Object[] {lat, id});
 		}
 		else if (field.equals("tags")){
-			/*
-			 * Convert tagString that represents a list of tags to a list.
-			 */
-			ArrayList<String> tags = new Gson().fromJson(value, ArrayList.class);
 			/*
 			 * Delete existing tags
 			 */
@@ -900,7 +893,7 @@ public class DataAccess {
 
 
 	public List<Record> getRecords(Limits limits, String geoDistString, String geoLngString, String geoLatString, String dateFrom, String dateTo, 
-			String shops, String products, List<String> tags , String sort) {
+			String shops, String products, String[] tags , String sort) {
 		String sort_type = sort.replaceAll("\\|", " ");
 
 		/*
