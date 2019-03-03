@@ -20,8 +20,8 @@ class Map extends Component {
 
     // Create A Map
     var map = new window.google.maps.Map(document.getElementById('map'), {
-      center: {lat:37.983810, lng:23.727539},
-      zoom: 13
+      center: {lat:this.props.lat, lng:this.props.lng},
+      zoom: 15
     })
 
     // Create An InfoWindow
@@ -30,7 +30,7 @@ class Map extends Component {
 
       // Create A Marker
       var marker = new window.google.maps.Marker({
-        position: {lat:37.983810, lng:23.727539},
+        position: {lat:this.props.lat, lng:this.props.lng},
         map: map
       })
 
