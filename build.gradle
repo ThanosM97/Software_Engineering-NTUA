@@ -52,7 +52,7 @@ dependencies {
 gretty {
     httpEnabled = false
     httpsEnabled = true
-    httpPort = 8765
+    //httpPort = 8765
     httpsPort = 8765
     contextPath = ''
     integrationTestTask = 'test'

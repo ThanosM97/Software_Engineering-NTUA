@@ -23,6 +23,8 @@ public class LogoutResource extends ServerResource {
     	@SuppressWarnings("unchecked")
 		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
     	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
+    	
+    	
     	/*
     	 * Check if it is valid and disable it.
     	 */
