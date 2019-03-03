@@ -21,6 +21,8 @@ public class RestfulApp extends Application {
 		 CorsFilter corsFilter = new CorsFilter(getContext(), router);
 		 corsFilter.setAllowedOrigins(new HashSet<String>(Arrays.asList("*")));
 		 corsFilter.setAllowedCredentials(true);
+		 corsFilter.setAllowedHeaders(new HashSet<String>(Arrays.asList("*")));
+		 corsFilter.setAllowingAllRequestedHeaders(true);
 		
 		/**
 		 * Attach all resources to the corresponding URIs.
