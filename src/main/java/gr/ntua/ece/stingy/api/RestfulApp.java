@@ -21,8 +21,7 @@ public class RestfulApp extends Application {
 		 CorsFilter corsFilter = new CorsFilter(getContext(), router);
 		 corsFilter.setAllowedOrigins(new HashSet<String>(Arrays.asList("*")));
 		 corsFilter.setAllowedCredentials(true);
-		 corsFilter.setAllowedHeaders(new HashSet<String>(Arrays.asList("*")));
-		 corsFilter.setAllowingAllRequestedHeaders(true);
+		 corsFilter.setAllowedHeaders(new HashSet<String>(Arrays.asList("X-OBSERVATORY-AUTH")));
 		 corsFilter.setAllowingAllRequestedHeaders(true);
 		 corsFilter.setExposedHeaders(new HashSet<String>(Arrays.asList("*")));
 		 
