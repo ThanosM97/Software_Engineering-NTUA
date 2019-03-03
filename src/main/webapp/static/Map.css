@@ -1,5 +1,6 @@
 
 #map {
-  width: 50%;
-  height: 50vh;
+  width: 400px;
+  height: 500px;
+  z-index: 1;
 }
