@@ -297,11 +297,21 @@ public class DataAccess {
 				category,
 				withdrawn,
 				tags,
-				extraData
+				extraData,
+				null
 				);
 		return product;
 	}
 
+	public Double getBestPrice(long id) {
+		Double bestPrice = jdbcTemplate.queryForObject("select min(price) \n" + 
+				"		from Product, Record\n" + 
+				"		where Product.id = Record.productId\n" + 
+				"		and Product.id = ?", new Object[] {id}, Double.class);
+		
+		return bestPrice;
+	}
+	
 	public Optional<Product> getProduct(long id) {
 		Long[] params = new Long[]{id};
 		List<Product> products = jdbcTemplate.query("select * from Product where id = ?", params, new ProductRowMapper());
