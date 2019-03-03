@@ -6,10 +6,12 @@ import gr.ntua.ece.stingy.data.model.Product;
 import gr.ntua.ece.stingy.data.model.Message;
 
 import org.restlet.data.Form;
+import org.restlet.data.Header;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
+import org.restlet.util.Series;
 
 import com.google.gson.Gson;
 
@@ -59,6 +61,17 @@ public class ProductResource extends ServerResource {
 
     @Override
     protected Representation delete() throws ResourceException {
+    	/*
+    	 * Get  token from headers
+    	 */
+    	@SuppressWarnings("unchecked")
+		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
+    	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
+    	
+    	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
+			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can delete products");
+    	}
+    	
         String idAttr = getAttribute("id");
         /*
          * Check if given id is null.
@@ -76,15 +89,28 @@ public class ProductResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid product id: " + idAttr);
         }
-        /*
-         * Delete product based on the id.
-         */
-        Optional<Message> optional = dataAccess.deleteProduct(id);
-        Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
-        /*
-         * Return message.
-         */
-        return new JsonMessageRepresentation(message);
+        if (dataAccess.isAdmin(auth)) {
+	        /*
+	         * Delete product based on the id.
+	         */
+	        Optional<Message> optional = dataAccess.deleteProduct(id);
+	        Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
+	        /*
+	         * Return message.
+	         */
+	        return new JsonMessageRepresentation(message);
+        }
+	    else {
+	    	/*
+	         * Change withdrawn product based on the id.
+	         */
+	        Optional<Message> optional = dataAccess.withdrawnProduct(id);
+	        Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
+	        /*
+	         * Return message.
+	         */
+	        return new JsonMessageRepresentation(message);
+	    }
     }
     
     @Override

@@ -86,13 +86,10 @@ public class DataAccess {
 		 * Initialize withdrawn based on the status value
 		 */
 		String withdrawn = null;
-		if (status.equals("ALL")) {
-			withdrawn = "withdrawn";
-		}
-		else if (status.equals("WITHDRAWN")) {
+		if (status.equals("WITHDRAWN")) {
 			withdrawn = "1";
 		}
-		else {
+		if (status.equals("ACTIVE")){
 			withdrawn = "0";
 		}
 
@@ -106,7 +103,12 @@ public class DataAccess {
 		/*
 		 * Return products based on the limits.
 		 */
-		return jdbcTemplate.query("select * from Product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+		if (status.equals("ALL")) {
+			return jdbcTemplate.query("select * from Product order by ? limit ?,?", new Object[] { sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+		}
+		else {
+			return jdbcTemplate.query("select * from Product where withdrawn=? order by ? limit ?,?", new Object[] { withdrawn, sort_type, limits.getStart(), limits.getCount() }, new ProductRowMapper());
+		}
 	}
 
 	public List<String> getProductTagsById(long id){
@@ -317,6 +319,20 @@ public class DataAccess {
 		 * Delete product from Product table and return 'OK' message.
 		 */
 		int found = jdbcTemplate.update("delete from Product where id=?", params);
+		if (found == 1)  {
+			return Optional.of(new Message("OK"));
+		}
+		else {
+			return Optional.empty();
+		}
+	}
+	
+	public Optional<Message> withdrawnProduct(long id) {
+		Long[] params = new Long[]{id};
+		/*
+		 * Set withdrawn to True and return 'OK' message.
+		 */
+		int found = jdbcTemplate.update("update Product set withdrawn=1 where id=?", params);
 		if (found == 1)  {
 			return Optional.of(new Message("OK"));
 		}
