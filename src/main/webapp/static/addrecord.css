@@ -1,0 +1,76 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.main {
+    margin:0;
+    padding:0;
+    height: 100%;
+    min-height:100%;
+ }
+
+ #container {
+    min-height:100%;
+    position: relative;
+ }
+
+ .aheader {
+     margin-left: 22%;
+     font: 400 25px/30px "Roboto", Helvetica, Arial, sans-serif;
+ }
+ .form {
+     font-family: "Roboto", Helvetica, Arial, sans-serif;
+     background-color: beige;
+     margin-left: 20%;
+     margin-right: 20%;
+     border: ridge;
+     border-width: 4%;
+     border-spacing: 10px;
+     border-radius: 20px;
+     box-shadow: 5px 10px #888888;
+     padding-left: 6%;
+ }
+
+ .button {
+    width:30%;
+    height: 40%;
+    background-color:#808080;
+    color: white;
+ }
+
+.footerdiv {
+    position: relative;
+    top: 70px;
+    bottom: 0px;
+}
+
+.tablecontent tr{
+    height: 20%;
+}
+
+.tablecontent td{
+    width: 50%;
+}
+
+.tablecontent label{
+    font-size: 20px;
+}
+
+.tablecontent input[type=text] {
+    margin: 0 .25rem;
+    min-width: 125px;
+    border: 1px solid rgb(39, 34, 34);
+    border-left: 3px solid;
+    border-radius: 5px;
+    transition: border-color .5s ease-out;
+  }
+  .tablecontent input:optional {
+    border-color: #999;
+  }
+  .tablecontent input:required {
+    border-color: rgb(43, 36, 56);
+  }
+  .tablecontent input:invalid {
+    border-color: salmon;
+  }
