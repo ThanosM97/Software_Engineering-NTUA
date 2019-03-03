@@ -314,11 +314,10 @@ public class DataAccess {
 	}
 
 	public Optional<Message> deleteProduct(long id) {
-		Long[] params = new Long[]{id};
 		/*
 		 * Delete product from Product table and return 'OK' message.
 		 */
-		int found = jdbcTemplate.update("delete from Product where id=?", params);
+		int found = jdbcTemplate.update("delete from Product where id=?", id);
 		if (found == 1)  {
 			return Optional.of(new Message("OK"));
 		}
@@ -328,11 +327,10 @@ public class DataAccess {
 	}
 	
 	public Optional<Message> withdrawnProduct(long id) {
-		Long[] params = new Long[]{id};
 		/*
 		 * Set withdrawn to True and return 'OK' message.
 		 */
-		int found = jdbcTemplate.update("update Product set withdrawn=1 where id=?", params);
+		int found = jdbcTemplate.update("update Product set withdrawn=1 where id=?", id);
 		if (found == 1)  {
 			return Optional.of(new Message("OK"));
 		}
@@ -342,11 +340,10 @@ public class DataAccess {
 	}
 	
 	public Optional<Message> withdrawnShop(long id) {
-		Long[] params = new Long[]{id};
 		/*
 		 * Set withdrawn to True and return 'OK' message.
 		 */
-		int found = jdbcTemplate.update("update Shop set withdrawn=1 where id=?", params);
+		int found = jdbcTemplate.update("update Shop set withdrawn=1 where id=?", id);
 		if (found == 1)  {
 			return Optional.of(new Message("OK"));
 		}
@@ -730,8 +727,7 @@ public class DataAccess {
 	}
 
 	public Optional<Message> deleteShop(long id) {
-		Long[] params = new Long[]{id};
-		int found = jdbcTemplate.update("delete from Shop where id=?", params);
+		int found = jdbcTemplate.update("delete from Shop where id=?", id);
 		if (found == 1)  {
 			return Optional.of(new Message("OK"));
 		}
