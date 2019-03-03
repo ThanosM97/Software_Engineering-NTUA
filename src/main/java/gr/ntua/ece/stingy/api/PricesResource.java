@@ -209,11 +209,11 @@ public class PricesResource extends ServerResource {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shopId: " + shopIdString);
         }
 		
-		Record record = dataAccess.addRecord(price, dateFrom, dateTo, productId, shopId, userId, validity);
+		List<Record> records = dataAccess.addRecord(price, dateFrom, dateTo, productId, shopId, userId, validity);
         /*
          * Return the json representation of the record.
          */
-        return new JsonRecordRepresentation(record);
+        return new JsonRecordsRepresentation(records);
        
     
     }

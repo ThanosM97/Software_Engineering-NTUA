@@ -4,6 +4,7 @@
 package gr.ntua.ece.stingy.data.model;
 
 import java.util.Objects;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -18,11 +19,10 @@ public class Record {
     private final List<String> shopTags;
     private final String shopAddress;
     private final int shopDist;
-    private final Date dateFrom;
-    private final Date dateTo;
+    private final LocalDate date;
     
 	public Record(double price, String productName, long productId, List<String> productTags, long shopId, String shopName,
-			List<String> shopTags, String shopAddress, int shopDist, Date dateFrom, Date dateTo) {
+			List<String> shopTags, String shopAddress, int shopDist, LocalDate date) {
 		this.price = price;
 		this.productName = productName;
 		this.productId = productId;
@@ -32,8 +32,7 @@ public class Record {
 		this.shopTags = shopTags;
 		this.shopAddress = shopAddress;
 		this.shopDist = shopDist;
-		this.dateFrom = dateFrom;
-		this.dateTo = dateTo;
+		this.date = date;
 	}
 
 	/**
