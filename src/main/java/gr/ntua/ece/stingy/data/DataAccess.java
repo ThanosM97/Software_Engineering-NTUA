@@ -114,8 +114,8 @@ public class DataAccess {
 		parameters.addValue("category", category);
 		
 		String sqlStm;
-		
-		if (tags == null || tags.isEmpty()) {
+		System.out.println(tags.size());
+		if (tags.get(0).equals("all")) {
 			sqlStm = "select * from Product where 1=1";
 			if (category != null) {
 				sqlStm += " and category = :category ";
@@ -183,15 +183,16 @@ public class DataAccess {
 		String sqlStm;
 		
 		sqlStm = "select * from Product ";
-		if (tags!=null && !tags.isEmpty() ) {
+		if (!tags.get(0).equals("all")) {
 			sqlStm += " , Tag, Product_Tag ";
 		}	
 		sqlStm += " where category = '" + category + "'";
 		if (!status.equals("ALL")) {
 			sqlStm += " and withdrawn=:withdrawn ";
 		}
-		if (tags!=null && !tags.isEmpty() ) {
-			sqlStm += " and Product_Tag.id = Product.id and Tag.id = Product_Tag.TagId and Tag.name = '"+tags.get(0)+"'";
+		System.out.println(tags);
+		if (!tags.get(0).equals("all")) {
+			sqlStm += " and Product_Tag.Tagid = Tag.id and Product.id = Product_Tag.ProductId and Tag.name = '"+tags.get(0)+"'";
 		}
 		sqlStm += " and Product.id IN ";
 		int i=1;
