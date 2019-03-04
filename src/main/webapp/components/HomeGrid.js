@@ -10,15 +10,15 @@ class HomeGrid extends Component {
   render () {
     return (
       <div className="categories-container">
-        <a href="" style={{textDecoration:"none"}} ><div className="box purple">
+        <a href="/productlist?category=tv" style={{textDecoration:"none"}} ><div className="box purple">
           <img className="image" src={tv} width="40%" />
           <h1>TVs</h1>
         </div></a>
-        <a href="" style={{textDecoration:"none"}} ><div className="box blue">
+        <a href="/productlist?category=smartphone" style={{textDecoration:"none"}} ><div className="box blue">
             <img className="image" src={smartphone} width="40%" />
           <h1>Smartphones</h1>
         </div> </a>
-        <a href="" style={{textDecoration:"none"}} ><div className="box yellow">
+        <a href="/productlist?category=monitor" style={{textDecoration:"none"}} ><div className="box yellow">
           <img className="image" src={monitor} width="40%" />
           <h1>Monitors</h1>
         </div></a>
@@ -26,11 +26,11 @@ class HomeGrid extends Component {
           <img className="stingy-image" src={logo} width="70%" />
           <p> Το Stingy είναι μια μηχανή σύγκρισης προϊόντων και τιμών που αναπτύχθηκε με στόχο να βοηθήσει τους καταναλωτές στις online αγορές τους. Δεσμευόμαστε να προσφέρουμε στους χρήστες τις χαμηλότερες τιμές της αγοράς. Εγγραφείτε στην ιστοσελίδα μας για την έγκαιρη ενημέρωσή σας καθώς και για να κερδίσετε εκπτώσεις στις μελλοντικές αγορές σας.</p>
         </div>
-        <a href="" style={{textDecoration:"none"}} ><div className="box red">
+        <a href="/productlist?category=tablet" style={{textDecoration:"none"}} ><div className="box red">
           <img className="image" src={tablet} width="40%" />
           <h1>Tablets</h1>
         </div></a>
-        <a href="" style={{textDecoration:"none"}} ><div className="box green">
+        <a href="/productlist?category=laptop" style={{textDecoration:"none"}} ><div className="box green">
           <img className="image" src={laptop} width="40%" />
           <h1>Laptops</h1>
         </div></a>
