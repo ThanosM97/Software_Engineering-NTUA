@@ -12,17 +12,17 @@ public class Record {
 
     private final double price;
     private final String productName;
-    private final long productId;
+    private final String productId;
     private final List<String> productTags;
-    private final long shopId;
+    private final String shopId;
     private final String shopName;
     private final List<String> shopTags;
     private final String shopAddress;
     private final int shopDist;
-    private final LocalDate date;
+    private final String date;
     
-	public Record(double price, String productName, long productId, List<String> productTags, long shopId, String shopName,
-			List<String> shopTags, String shopAddress, int shopDist, LocalDate date) {
+	public Record(double price, String productName, String productId, List<String> productTags, String shopId, String shopName,
+			List<String> shopTags, String shopAddress, int shopDist, String date) {
 		this.price = price;
 		this.productName = productName;
 		this.productId = productId;
@@ -52,7 +52,7 @@ public class Record {
 	/**
 	 * @return the productId
 	 */
-	public long getProductId() {
+	public String getProductId() {
 		return productId;
 	}
 
@@ -66,7 +66,7 @@ public class Record {
 	/**
 	 * @return the shopId
 	 */
-	public long getShopId() {
+	public String getShopId() {
 		return shopId;
 	}
 

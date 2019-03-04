@@ -448,25 +448,24 @@ Smartphones have the following extra data: CPU cores, cpu freq, RAM, capacity, s
 LOCK TABLES `Product` WRITE;
 /*!40000 ALTER TABLE `Product` DISABLE KEYS */;
 INSERT INTO Product(id,name,description,category,image,withdrawn) VALUES 
-							 (1,'Samsung TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','TV','static/images1/image1.png',0),
-							 (2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','TV','static/images1/image2.png',0),
-							 (3,'Dell Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'Laptop','static/images1/image3.png',0),
-							 (4,'Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'Laptop','static/images1/image4.png',0),
-							 (5,'Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'Smartphone', 'static/images1/image5.png',0),
-							 (6,'Samsung Galaxy J4 PLUS DUAL SIM GOLD','Με True HD+ Infinity Display, Dual-SIM και Emotify για ξεχωριστή επικοινωνία, Snapdragon SoC και Android Oreο απολαμβάνεις μια ανώτερη εμπειρία χρήσης','Smartphone','static/images1/image6.png',0),
-							 (7,'Apple iPhone XS','Με τη μεγαλύτερη οθόνη σε iPhone, Super Retina 6,5" τεχνολογίας OLED, το πιο έξυπνο & ισχυρό επεξεργαστή σε smartphone, ταχύτερη αναγνώριση προσώπου Face ID και διπλή πίσω κάμερα για μοναδικές λήψεις','Smartphone','static/images1/image7.png',0),
-							 (8,'Honor 10 Lite Smartphone Blue', 'Dewdrop οθόνη 6,21" με FHD+ ανάλυση, Dual AI και 24MP Selfie κάμερες, 8πύρηνο SoC Kirin 710 με GPU Turbo και EMUI 9.0 out-of-the-box!', 'Smartphone','static/images1/image8.png',0),
-							 (9,'Huawei Mate 20 Pro Smartphone Μαύρο', 'Μεγάλη FullView 2K+ οθόνη 6,39 ιντσών, 8πύρηνος Kirin 980 με διπλό NPU, 6GB μνήμης RAM, μπαταρία 4.200mAh, σύστημα τριπλής AI κάμερας και αντοχή σε νερό και σκόνη', 'Smartphone', 'static/images1/image9.png',0),
-							 (10,'Apple MacBook Air 13\'\' MQD42GR/A', 'Απίστευτα ελαφρύ και απίστευτα λεπτό MacBook Air, με μπαταρία που κρατάει 12 συνεχόμενες ώρες, φωτιζόμενο keyboard και μεγάλες ταχύτητες μεταφοράς δεδομένων', 'Laptop','static/images1/image10.png',0),
-							 (11,'Dell Alienware 17 R5 Laptop','Με Intel Core i7-7700HQ επεξεργαστή, αυτόνομη κάρτα γραφικών 4GB, 12GB RAM και 17’’ οθόνη Full HD IPS το extreme gaming πάει παντού!','Laptop','static/images1/image11.png',0),
-							 (12,'Toshiba Tecra X40-D-10H Laptop','Ένας δυνατός φορητός με βάρος μόλις 1,25 Kg επεξεργαστή Intel Core i7-7500U, 16GB RAM DDR4, Intel HD Graphics 620 και SSD με χωρητικότητα 512GB','Laptop','static/images1/image12.png',0),
-							 (13,'Apple iPad mini 4 Tablet 7.9\'\'Gold','Είναι πολύ λεπτό, απίστευτα ελαφρύ και ασυμβίβαστα ισχυρό! Έχει κάμερα στα 8MP, Retina οθόνη και iOS9.','Tablet','static/images1/image13.png',0),
-							 (14,'Samsung Galaxy Tab S4 T835 Tablet 10.5\'\'  Γκρι','Με εντυπωσιακή οθόνη Super AMOLED 10,5", 8πυρηνο Snapdragon 835 και 4GB μνήμης RAM, σύνδεση σε 4G δίκτυα, αποθηκευτικό χώρο 64GB, νέο S-Pen, 4 ηχεία AKG και μεγάλη μπαταρία 7.300mAh','Tablet','static/images1/image14.png',0),
-							 (15,'LG OLED TV OLED77C8 77\'\'', 'Υψηλή αισθητική και UHD ευκρίνεια, με τεχνολογίες OLED και Cinema HDR, επεξεργαστή α9, ήχο Dolby Atmos και webOS 4.0 για πρόσβαση σε multimedia περιεχόμενο','TV','static/images1/image15.png',0);
+							 (1,'Samsung TV 43\'\' UE43NU7122','Μινιμαλιστικό design και ποιότητα κατασκευής, 4Κ ανάλυση, Smart εφαρμογές και πρωτοποριακές τεχνολογίες για ακόμη ελκυστικότερη εικόνα στην πιο προσιτή τιμή','tv','static/images1/image1.png',0),
+							 (2,'LG TV 49\'\' 49UK6200','Με ανάλυση UHD 4K, τεχνολογία 4K Active HDR, «έξυπνο» λειτουργικό webOS και ήχοUltra Surround για ανεπανάληπτη εμπειρία θέασης','tv','static/images1/image2.png',0),
+							 (3,'Dell Laptop Inspiron 3573', 'Laptop Dell Inspiron 3573 με επεξεργαστή Intel Celeron N4000, μνήμη RAM 4GB, σκληρό δίσκο 500GB και HD αντι-ανακλαστική οθόνη 15.6 ιντσών, ιδανικό για καθημερινή χρήση.', 'laptop','static/images1/image3.png',0),
+							 (4,'Lenovo Laptop IdeaPad 330S-14AST', 'Αν ψάχνεις έναν υπερπλήρη φορητό ηλεκτρονικό υπολογιστή, για υψηλής απόδοσης εφαρμογές multimedia, ήχο και επεξεργαστική ισχύ, τότε το Lenovo IdeaPad 330S-14AST είναι το ιδανικό Laptop για εσένα!', 'laptop','static/images1/image4.png',0),
+							 (5,'Xiaomi Smartphone Redmi Note 6 Pro', 'Το Redmi Note 6 Pro διαθέτει διπλή εμπρόσθια και πίσω κάμερα που κάνει τη διαφορά, ενσωματώνει τον Snapdragon 636, τον νεότερο 14nm επεξεργαστή της Qualcomm, βελτιώνοντας σημαντικά τις συνολικές επιδόσεις και την ενεργειακή αποτελεσματικότητα. Επιπλέον, τα 3GB μνήμη RAM συνεισφέρουν στην ομαλή λειτουργία, ενώ η μπαταρία των 4000mAh θα καλύψει κάθε σου ανάγκη.', 'smartphone', 'static/images1/image5.png',0),
+							 (6,'Samsung Galaxy J4 PLUS DUAL SIM GOLD','Με True HD+ Infinity Display, Dual-SIM και Emotify για ξεχωριστή επικοινωνία, Snapdragon SoC και Android Oreο απολαμβάνεις μια ανώτερη εμπειρία χρήσης','smartphone','static/images1/image6.png',0),
+							 (7,'Apple iPhone XS','Με τη μεγαλύτερη οθόνη σε iPhone, Super Retina 6,5" τεχνολογίας OLED, το πιο έξυπνο & ισχυρό επεξεργαστή σε smartphone, ταχύτερη αναγνώριση προσώπου Face ID και διπλή πίσω κάμερα για μοναδικές λήψεις','smartphone','static/images1/image7.png',0),
+							 (8,'Honor 10 Lite Smartphone Blue', 'Dewdrop οθόνη 6,21" με FHD+ ανάλυση, Dual AI και 24MP Selfie κάμερες, 8πύρηνο SoC Kirin 710 με GPU Turbo και EMUI 9.0 out-of-the-box!', 'smartphone','static/images1/image8.png',0),
+							 (9,'Huawei Mate 20 Pro Smartphone Μαύρο', 'Μεγάλη FullView 2K+ οθόνη 6,39 ιντσών, 8πύρηνος Kirin 980 με διπλό NPU, 6GB μνήμης RAM, μπαταρία 4.200mAh, σύστημα τριπλής AI κάμερας και αντοχή σε νερό και σκόνη', 'smartphone', 'static/images1/image9.png',0),
+							 (10,'Apple MacBook Air 13\'\' MQD42GR/A', 'Απίστευτα ελαφρύ και απίστευτα λεπτό MacBook Air, με μπαταρία που κρατάει 12 συνεχόμενες ώρες, φωτιζόμενο keyboard και μεγάλες ταχύτητες μεταφοράς δεδομένων', 'laptop','static/images1/image10.png',0),
+							 (11,'Dell Alienware 17 R5 Laptop','Με Intel Core i7-7700HQ επεξεργαστή, αυτόνομη κάρτα γραφικών 4GB, 12GB RAM και 17’’ οθόνη Full HD IPS το extreme gaming πάει παντού!','laptop','static/images1/image11.png',0),
+							 (12,'Toshiba Tecra X40-D-10H Laptop','Ένας δυνατός φορητός με βάρος μόλις 1,25 Kg επεξεργαστή Intel Core i7-7500U, 16GB RAM DDR4, Intel HD Graphics 620 και SSD με χωρητικότητα 512GB','laptop','static/images1/image12.png',0),
+							 (13,'Apple iPad mini 4 Tablet 7.9\'\'Gold','Είναι πολύ λεπτό, απίστευτα ελαφρύ και ασυμβίβαστα ισχυρό! Έχει κάμερα στα 8MP, Retina οθόνη και iOS9.','tablet','static/images1/image13.png',0),
+							 (14,'Samsung Galaxy Tab S4 T835 Tablet 10.5\'\'  Γκρι','Με εντυπωσιακή οθόνη Super AMOLED 10,5", 8πυρηνο Snapdragon 835 και 4GB μνήμης RAM, σύνδεση σε 4G δίκτυα, αποθηκευτικό χώρο 64GB, νέο S-Pen, 4 ηχεία AKG και μεγάλη μπαταρία 7.300mAh','tablet','static/images1/image14.png',0),
+							 (15,'LG OLED TV OLED77C8 77\'\'', 'Υψηλή αισθητική και UHD ευκρίνεια, με τεχνολογίες OLED και Cinema HDR, επεξεργαστή α9, ήχο Dolby Atmos και webOS 4.0 για πρόσβαση σε multimedia περιεχόμενο','tv','static/images1/image15.png',0);
 /*!40000 ALTER TABLE `Product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
 
 
 --
@@ -475,21 +474,21 @@ UNLOCK TABLES;
 LOCK TABLES `extraData` WRITE;
 /*!40000 ALTER TABLE `extraData` DISABLE KEYS */;
 INSERT INTO extraData(id,characteristic,value,ProductId) VALUES 
-							   (1, 'Resolution', '4K', 1), (2, 'Smart', 'Yes', 1), (3, 'Frequency', '1300 PQI', 1), 
-							   (4, 'Resolution', '4K', 2), (5, 'Smart', 'Yes', 2), (6, 'Frequency', '1500 PMI', 2), 
-							   (7, 'CPU', 'Intel Celeron N4000', 3), (8, 'RAM', '4GB', 3), (9, 'Hard Drive', '500GB', 3), (10, 'OS', 'Windows 10', 3), (11, 'Graphics Card', 'Intel HD Graphics 600', 3), 
-							   (12, 'CPU', 'AMD A-Series', 4), (13, 'RAM', '4GB', 4), (14, 'Hard Drive', '128GB', 4), (15, 'OS', 'Windows 10', 4), (16, 'Graphics Card', 'Radeon R5', 4), 
-							   (17, 'Number of Cores', '8', 5), (18, 'CPU frequency', '1.8GHz', 5), (19, 'RAM', '4GB', 5), (20, 'Capacity', '32GB', 5), (21, 'Camera', '12Mp + 5MP', 5),(22, 'Selfie Camera', '20MP + 2MP', 5), (23,'OS','Android 8.1 Oreo',5),
-							   (24, 'Number of Cores', '4',6), (25,'CPU frequency','1.4GHz',6) ,(26,'RAM','2GB',6), (27,'Capacity','32GB',6), (28, 'Camera', '13Mp', 6), (29, 'Selfie Camera', '5Mp', 6), (30,'OS','Android 8.1 Oreo',6),
-							   (31, 'Number of Cores', '6',7), (32,'CPU frequency','2.49GHz',7) ,(33,'RAM','4GB',7), (34,'Capacity','256GB',7), (35, 'Camera', '12+12Mp', 7), (36, 'Selfie Camera', '7Mp', 7), (37,'OS','iOS 12',7),
-							   (38, 'Number of Cores', '8',8), (39,'CPU frequency','2.2GHz',8) ,(40,'RAM','3GB',8), (41,'Capacity','32GB',8), (42, 'Camera', '13+2Mp', 8), (43, 'Selfie Camera', '24Mp', 8), (44,'OS','Android 9',8),
-							   (45, 'Number of Cores', '8',9), (46,'CPU frequency','2.6GHz',9) ,(47,'RAM','6GB',9), (48,'Capacity','128GB',9), (49, 'Camera', '40+20+8Mp', 9), (50, 'Selfie Camera', '24Mp', 9), (51,'OS','Android 9',9),
-							   (52, 'CPU', 'Intel Core i5', 10), (53, 'RAM', '8GB', 10), (54, 'Hard Drive', '256GB SDD', 10), (55, 'OS', 'Mac OS X', 10), (56, 'Graphics Card', ' Intel Iris 6000', 10), 
-							   (57, 'CPU', 'Intel Core i7 8750H', 11), (58, 'RAM', '16GB', 11), (59, 'Hard Drive', '256GB SSD + 1ΤΒ', 11), (60, 'OS', 'Windows 10', 11), (61, 'Graphics Card', 'Nvidia GeForce GTX 1070', 11), 
-							   (62, 'CPU', 'Intel Core i7 7500U', 12), (63, 'RAM', '16GB', 12), (64, 'Hard Drive', '512GB SSD', 12), (65, 'OS', 'Windows 10 Pro', 12), (66, 'Graphics Card', 'Intel HD Graphics 620', 12), 
-							   (67, 'Number of Cores', '2',13), (68,'CPU frequency','1.5GHz',13) ,(69,'RAM','2GB',13), (70,'Capacity','128GB',13), (71, 'Camera', '8Mp', 13), (72, 'Selfie Camera', '1.2Mp', 13), (73,'OS','iOS 9',13),
-							   (74, 'Number of Cores', '8 + 4',14), (75,'CPU frequency','2.35GHz + 1.9GHz',14) ,(76,'RAM','4GB',14), (77,'Capacity','64GB',14), (78, 'Camera', '13Mp', 14), (79, 'Selfie Camera', '8Mp', 14), (80,'OS','Android Oreo',14),
-							   (81, 'Resolution', '4K Ultra HD', 15), (82, 'Smart', 'Yes', 15), (83, 'Frequency', '1300 PQI', 15);			
+							   (1, 'Resolution', '4K', 1), (2, 'Smart', 'yes', 1), (3, 'ScreenSize', '43', 1), 
+							   (4, 'Resolution', '4K', 2), (5, 'Smart', 'yes', 2), (6, 'ScreenSize', '49', 2), 
+							   (7, 'CPU', 'Intel-Celeron-N4000', 3), (8, 'RAM', '4', 3), (9, 'HardDrive', '500', 3), (10, 'OS', 'Windows-10', 3), (11, 'GraphicsCard', 'Intel-HD-Graphics-600', 3), (12, 'CPUcores', '2', 3), (13, 'ScreenSize', '15.6', 3), 
+							   (14, 'CPU', 'AMD-A-Series', 4), (15, 'RAM', '4', 4), (16, 'HardDrive', '128', 4), (17, 'OS', 'Windows-10', 4), (18, 'GraphicsCard', 'Radeon-R5', 4), (19, 'CPUcores', '4', 4), (20, 'ScreenSize', '14', 4), 
+							   (21, 'CPUcores', '8', 5), (22, 'RAM', '4', 5), (23, 'Capacity', '32', 5), (24, 'FrontCamera', '12MP', 5),(25, 'SelfieCamera', '20MP', 5), (26,'OS','Android-8.1-Oreo',5), (27, 'ScreenSize', '6.3', 5), 
+							   (28, 'CPUcores', '4',6),(29,'RAM','2',6), (30,'Capacity','32',6), (31, 'FrontCamera', '13MP', 6), (32, 'SelfieCamera', '5MP', 6), (33,'OS','Android-8.1-Oreo',6), (34, 'ScreenSize', '6.3', 6), 
+							   (35, 'CPUcores', '6',7),(36,'RAM','4',7), (37,'Capacity','256',7), (38, 'FrontCamera', '12MP', 7), (39, 'SelfieCamera', '7MP', 7), (40,'OS','IOS-12',7), (41, 'ScreenSize', '5.9', 7), 
+							   (42, 'CPUcores', '8',8),  (43,'RAM','3',8), (44,'Capacity','32',8), (45, 'FrontCamera', '13MP', 8), (46, 'SelfieCamera', '24MP', 8), (47,'OS','Android-9',8), (48, 'ScreenSize', '6.3', 8), 
+							   (49, 'CPUcores', '8',9) ,(50,'RAM','6',9), (51,'Capacity','128',9), (52, 'FrontCamera', '40MP', 9), (53, 'SelfieCamera', '24MP', 9), (54,'OS','Android-9',9), (55, 'ScreenSize', '6.3', 9), 
+							   (56, 'CPU', 'Intel-i5-Core', 10), (57, 'RAM', '8', 10), (58, 'HardDrive', 'SSD-256', 10), (59, 'OS', 'Mac-OS', 10), (60, 'GraphicsCard', ' Intel-Iris-6000', 10), (61, 'ScreenSize', '13', 10), 
+							   (62, 'CPU', 'Intel-i7-Core-8750H', 11), (63, 'RAM', '16', 11), (64, 'HardDrive', 'SSD-256', 11), (65, 'OS', 'Windows-10', 11), (66, 'GraphicsCard', 'Nvidia-GeForce-GTX-1070', 11), (67, 'ScreenSize', '17.3', 11), 
+							   (68, 'CPU', 'Intel-i7-Core-7500U', 12), (69, 'RAM', '16', 12), (70, 'HardDrive', 'SSD-512', 12), (71, 'OS', 'Windows-10-Pro', 12), (72, 'GraphicsCard', 'Intel-HD-Graphics-620', 12), (73, 'ScreenSize', '14', 12), 
+							   (74, 'CPUcores', '2',13) ,(75,'RAM','2',13), (76,'Capacity','128',13), (77, 'FrontCamera', '8MP', 13), (78, 'SelfieCamera', '1.2MP', 13), (79,'OS','IOS-9',13), (80, 'ScreenSize', 'medium', 13), 
+							   (81, 'CPUcores', '8',14) ,(82,'RAM','4',14), (83,'Capacity','64',14), (84, 'FrontCamera', '13MP', 14), (85, 'SelfieCamera', '8MP', 14), (86,'OS','Android-Oreo',14), (87, 'ScreenSize', 'medium', 14), 
+							   (88, 'Resolution', '4K', 15), (89, 'Smart', 'yes', 15), (90, 'ScreenSize', '77', 15);			
 /*!40000 ALTER TABLE `extraData` ENABLE KEYS */;
 UNLOCK TABLES;
 

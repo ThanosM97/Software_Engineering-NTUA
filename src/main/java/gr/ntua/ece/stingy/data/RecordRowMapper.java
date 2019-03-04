@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -29,14 +30,17 @@ public class RecordRowMapper implements RowMapper {
 	public Record mapRow(ResultSet rs, int rowNum) throws SQLException {
 	    
 		double price            = rs.getDouble("price");
-		long productId        = rs.getLong("productId");
+		String productId        = rs.getString("productId");
 		String productName = rs.getString("productName");
-		long shopId        = rs.getLong("shopId");
+		String shopId        = rs.getString("shopId");
 		String shopName   = rs.getString("shopName");
 		String shopAddress   = rs.getString("address");
 		int shopDist	= rs.getInt("dist");
 		Date dateDate 		= rs.getDate("date");
-		LocalDate date = LocalDate.parse( new SimpleDateFormat("yyyy-MM-dd").format(dateDate) );
+		String pattern = "yyyy-dd-MM";
+		DateFormat df = new SimpleDateFormat(pattern);
+
+		String date = df.format(dateDate);
 
 		List<String> shopTags = dataAccess.getShopTagsById(shopId);
 		List<String> productTags = dataAccess.getProductTagsById(productId);		

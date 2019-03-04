@@ -1,5 +1,5 @@
 /*
- * This class converts an object of type Record in json format.
+ This class converts an object of type Record in json format.
  */
 package gr.ntua.ece.stingy.api;
 

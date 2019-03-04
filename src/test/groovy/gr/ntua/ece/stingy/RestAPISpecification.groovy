@@ -75,13 +75,13 @@ import spock.lang.Stepwise
         String dateTo = "2019-02-28"
         String shopId = "1"
         String productId = "2"
-        PriceInfoList list = api.postPrice(price, dateFrom, dateTo, shopId, productId, RestCallFormat.JSON)
+        PriceInfoList list = api.postPrice(price, dateFrom, dateTo, productId, shopId, RestCallFormat.JSON)
 
         then:
         list.total == 2 &&
         list.prices.every { PriceInfo p ->
             p.price == price &&
-            p.productId == productId
+            p.productId == productId &&
             p.shopId == shopId
         } &&
         list.prices[0].date == dateFrom &&

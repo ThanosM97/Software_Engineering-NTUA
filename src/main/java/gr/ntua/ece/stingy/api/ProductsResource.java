@@ -40,9 +40,57 @@ public class ProductsResource extends ServerResource {
 		String status = queryParams.getFirstValue("status");
 		String sort = queryParams.getFirstValue("sort");
 		String format = queryParams.getFirstValue("format");
+		
+		/*
+		 * Additional parameters
+		 */
 		String[] tags = queryParams.getValuesArray("tags");
 		String category = queryParams.getFirstValue("category");
-
+		Map<String, String> extra = new HashMap<>();
+		if (category != null && !category.isEmpty()) {
+			if (category.equals("laptop")){
+				extra.put("CPU", queryParams.getFirstValue("CPU"));
+				extra.put("CPUcores", queryParams.getFirstValue("CPUcores"));
+				extra.put("RAM", queryParams.getFirstValue("RAM"));
+				extra.put("HardDrive", queryParams.getFirstValue("HardDrive"));
+				extra.put("OS", queryParams.getFirstValue("OS"));
+				extra.put("ScreenSize", queryParams.getFirstValue("ScreenSize"));
+				extra.put("GraphicsCard", queryParams.getFirstValue("GraphicsCard"));
+			}
+			else if (category.equals("tv")) {
+				extra.put("Resolution", queryParams.getFirstValue("Resolution"));
+				extra.put("Smart", queryParams.getFirstValue("Smart"));
+				extra.put("ScreenSize", queryParams.getFirstValue("ScreenSize"));
+			}
+			else if (category.equals("smartphone")) {
+				extra.put("CPUcores", queryParams.getFirstValue("CPUcores"));
+				extra.put("RAM", queryParams.getFirstValue("RAM"));
+				extra.put("ScreenSize", queryParams.getFirstValue("ScreenSize"));
+				extra.put("FrontCamera", queryParams.getFirstValue("FrontCamera"));
+				extra.put("SelfieCamera", queryParams.getFirstValue("SelfieCamera"));
+				extra.put("OS", queryParams.getFirstValue("OS"));
+			}
+			else if (category.equals("tablet")) {
+				extra.put("RAM", queryParams.getFirstValue("RAM"));
+				extra.put("OS", queryParams.getFirstValue("OS"));
+				extra.put("ScreenSize", queryParams.getFirstValue("ScreenSize"));
+				extra.put("HardDrive", queryParams.getFirstValue("HardDrive"));
+			}
+			else if (category.equals("monitor")) {
+				extra.put("Resolution", queryParams.getFirstValue("Resolution"));
+				extra.put("ScreenSize", queryParams.getFirstValue("ScreenSize"));
+			}
+			else {
+				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category " + category + " is not supported in stingy");
+			}
+		}
+		boolean empty  = true;
+		for (String value : extra.values()) {
+			if (value != null && !value.isEmpty()) {
+				empty = false;
+				break;
+			}
+		}
 		
 		Map<String, Object> map = new HashMap<>();
 		Limits limits = new Limits();
@@ -103,7 +151,13 @@ public class ProductsResource extends ServerResource {
 		/*
 		 * Get products based on the limits.
 		 */
-		List<Product> products = dataAccess.getProducts(limits, status, sort, Arrays.asList(tags), category);
+		List<Product> products;
+		if (empty) {
+			products = dataAccess.getProducts(limits, status, sort, Arrays.asList(tags), category);
+		}
+		else {
+			products = dataAccess.getProductsByExtra(limits, status, sort, Arrays.asList(tags), category, extra);
+		}
 		/*
 		 * Set current total products.
 		 */

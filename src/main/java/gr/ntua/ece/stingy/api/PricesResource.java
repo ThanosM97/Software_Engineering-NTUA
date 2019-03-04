@@ -46,8 +46,8 @@ public class PricesResource extends ServerResource {
     	String dateFrom = queryParams.getFirstValue("dateFrom");
     	String dateTo = queryParams.getFirstValue("dateTo");
     	
-    	String shops = queryParams.getValues("shops");
-    	String products = queryParams.getValues("products");
+    	String[] shops = queryParams.getValuesArray("shops");
+    	String[] products = queryParams.getValuesArray("products");
 		String[] tags = queryParams.getValuesArray("tags");
     	String sort = queryParams.getFirstValue("sort");
     	
@@ -117,7 +117,7 @@ public class PricesResource extends ServerResource {
          * Get prices based on the limits.
          */
     	List<Record> records = dataAccess.getRecords(limits, geoDistString, geoLngString, geoLatString, dateFrom, dateTo, 
-    			shops, products, Arrays.asList(tags),sort);
+    			Arrays.asList(shops), Arrays.asList(products), Arrays.asList(tags),sort);
     	/*
     	 * Set current total products.
     	 */
@@ -208,12 +208,18 @@ public class PricesResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shopId: " + shopIdString);
         }
-		
+		System.out.println(productIdString);
+		System.out.println(productId);
 		List<Record> records = dataAccess.addRecord(price, dateFrom, dateTo, productId, shopId, userId, validity);
-        /*
+        Map<String, Object> map = new HashMap<>();
+        map.put("start", 0);
+        map.put("total", records.size());
+        map.put("count", records.size());
+        map.put("prices", records);
+		/*
          * Return the json representation of the record.
          */
-        return new JsonRecordsRepresentation(records);
+        return new JsonMapRepresentation(map);
        
     
     }
