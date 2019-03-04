@@ -36,6 +36,12 @@ export class ProductViewSpecs extends React.Component{
             case 'laptop':
                 product_render = ( <ProductViewLaptop product={this.props.product} />);
                 break;
+            case 'tablet':
+                product_render = ( <ProductViewTablet product={this.props.product} />);
+                break;
+            case 'monitor':
+                product_render = ( <ProductViewMonitor product={this.props.product} />);
+                break;
             default:
                 product_render = ( <div> Oops! Invalid product type :( </div> );
             }
@@ -151,6 +157,54 @@ class ProductViewLaptop extends React.Component{
             </div>
         )
 	}
+}
+
+class ProductViewMonitor extends React.Component{
+    render(){
+		return(
+            <div>
+                <a class='product-name'>{this.props.product.name}</a><br />
+                <img src={laptop} class='product-image' /><br />
+                <table class='specs-table'></table>
+                    <tr>
+                        <td>Μέγεθος οθόνης:</td>
+                        <td>{this.props.product.screensize}</td>
+                    </tr>
+                    <tr>
+                        <td>Ανάλυση:</td>
+                        <td>{this.props.product.resolution}</td>
+                    </tr>
+            </div>
+        )
+    }
+}
+
+class ProductViewTablet extends React.Component{
+    render(){
+		return(
+            <div>
+                <a class='product-name'>{this.props.product.name}</a><br />
+                <img src={laptop} class='product-image' /><br />
+                <table class='specs-table'></table>
+                    <tr>
+                        <td>Μέγεθος οθόνης:</td>
+                        <td>{this.props.product.screensize}</td>
+                    </tr>
+                    <tr>
+                        <td>RAM:</td>
+                        <td>{this.props.product.ram}</td>
+                    </tr>
+                    <tr>
+                        <td>Λειτουργικό:</td>
+                        <td>{this.props.product.os}</td>
+                    </tr>
+                    <tr>
+                        <td>Σκληρός Δίσκος:</td>
+                        <td>{this.props.product.harddrive}</td>
+                    </tr>
+            </div>
+        )
+    }
 }
 
 class ProductViewShopList extends React.Component{
