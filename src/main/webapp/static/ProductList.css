@@ -4,6 +4,9 @@
 
 }
 
+a:visited {
+  color:black;
+}
 
 
 .background{
@@ -49,45 +52,62 @@
 
 .product-name{
     float:left;
-    font-size: 150%;
+    font-size: 1.8vw;
     display:inline-block;
 }
 
 .product-description {
   float:left;
   width:100%;
+  font-size: 0.8vw;
 }
 
 .product-specs{
     float:left;
     color: grey;
-    font-size: 100%;
+    font-size: 0.8vw;
     position: relative;
 }
 
 .product-price{
   float:right;
   margin-top:20px;
+  margin-right:10px;
+  color: #910f2d;
 }
 
 
 
 .filters{
+  font-size:1.2vw;
   position:relative;
   width:20%;
-  height:100%;
+  height:100%
   float:left;
-  overflow: auto;
 }
 
 
 .filterGroups h3 {
   margin-top: 5%;
-  margin-left: 50%;
+  margin-left: 40%;
 }
 
 .filterGroups input {
-  margin-left:50%;
+  margin-left:40%;
+}
+.filterButton{
+  padding:5px 20px;
+  margin-top:10px;
+  background-color:#808080;
+  color: white;
+}
+.filterButton:hover{
+  background-color: #737373;
+  cursor:pointer;
+}
+
+.filterButton:focus{
+  outline-color: #808080;
 }
 
 label {
