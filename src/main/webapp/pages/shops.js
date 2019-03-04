@@ -56,8 +56,6 @@ class Shops extends Component {
 
 
   render() {
-
-
     const shops = this.state.data.map((shop,i) =>
         <div key={i} className='shop'>
             <img src={shop.image} className='product-image' />
@@ -87,7 +85,7 @@ class Shops extends Component {
         <div  id="horizontalLine" align="center"></div>
         <div style={{width:"80%",marginTop:"2%", position:"relative", display:"block"}}>
           {shops} <br />
-          <div className="pagesBar"> {pages} </div>
+          <div className="pagesBar" align="center"> <label>Pages:</label>{pages} </div>
         </div>
         <Footer />
       </div>
