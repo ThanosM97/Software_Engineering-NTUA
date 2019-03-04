@@ -4,6 +4,8 @@ import Cookies from 'universal-cookie'
 import Router from 'next/router'
 
 const cookies = new Cookies();
+const fetch = require("node-fetch");
+
 
 class Login extends Component {
   constructor(){
@@ -33,6 +35,9 @@ class Login extends Component {
     event.preventDefault();
   }
 
+  componentWillMount() {
+    if (cookies.get('auth')) Router.push("/")
+  }
 
   handleChange(event) {
    this.setState({

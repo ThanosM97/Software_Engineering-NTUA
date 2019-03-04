@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import Head from 'next/head';
 import NavBar from '../components/NavBar.js';
 import Footer from '../components/Footer.js';
+import Router from 'next/router'
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 class SignUp extends Component {
   constructor(){
@@ -10,6 +14,10 @@ class SignUp extends Component {
       passVisibility: 'password',
       buttonText: 'Show'
     }
+  }
+
+  componentWillMount(){
+    if (cookies.get('auth')) Router.push("/")
   }
 
   showPassword(){
