@@ -1,13 +1,15 @@
 import React from 'react';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
-
+import Head from 'next/head';
 
 class content extends React.Component {
     constructor(props) {
-        super(props);
+        super(props);       
+
         this.state = {
             value1: 'smartphone',
+            filevalue: '',
             product_render: (
                 <div>
                     <table class='tablecontent'>
@@ -81,8 +83,18 @@ class content extends React.Component {
                 </div>
             )
         };
+        
         this.handleChange = this.handleChange.bind(this);
-      
+        this.handleFileSelect = this.handleFileSelect.bind(this);
+        this.handleClick = this.handleClick.bind(this); 
+    }
+
+    handleClick(e) {
+        this.refs.fileUploader.click();
+    }
+
+    handleFileSelect(e) {
+        this.setState({filevalue: e.target.value});
     }
 
     handleChange(event) {
@@ -254,22 +266,91 @@ class content extends React.Component {
                     </div>
                 );
                 break;
+            case 'monitor':
+                this.state.product_render = (
+                    <div>
+                        <table class='tablecontent'>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label>Οθόνη:</label>
+                                    </td>
+                                    <td>
+                                        <input type='text' />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>Ανάλυση:</label>
+                                    </td>
+                                    <td>
+                                        <input type='text' />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                );
+                break;
+            case 'tablet':
+                this.state.product_render = (
+                    <div>
+                        <table class='tablecontent'>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label>Οθόνη:</label>
+                                    </td>
+                                    <td>
+                                        <input type='text' />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>RAM:</label>
+                                    </td>
+                                    <td>
+                                        <input type='text' />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>Λειτουργικό Σύστημα:</label>
+                                    </td>
+                                    <td>
+                                        <input type='text' />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>Σκληρός δίσκος:</label>
+                                    </td>
+                                    <td>
+                                        <input type='text' />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                );
+                break;
         }
     }
     
     render() {
         return (
             <div id="container">               
-                <head>
+                <Head>
                     <title> Προσθέστε προϊόν | Stingy </title>
                     <link rel="shortcut icon" href="../static/logo/logo.png"/>    
                     <link href='../static/addrecord.css' type='text/css' rel='stylesheet' />
-                </head>
+                </Head>
                 <div id='body'>
                     <NavBar />
                     <div>
-                    <h2 class='aheader'>Προσθήκη Προϊόντος</h2>
-                    <form class='form'>
+                    <h2 class='aheader'>Προσθήκη Προϊόντος:</h2>
+                    <div>
+                    <form class='form1'>
                         <table class='tablecontent'>
                             <tbody>
                                 <tr>
@@ -314,31 +395,35 @@ class content extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label>Φωτογραφία:</label>
+                                        <label class='photo'>Φωτογραφία:</label>
                                     </td>
                                     <td>
-                                        <input type='button' class='button' value='Browse...' />
+                                        <input type="file" id="file" ref="fileUploader" onChange={this.handleFileSelect} style={{display: "none"}} />
+                                        <input type='button' onClick={this.handleClick} class='button1' value='Browse...' /><br></br>
+                                        <label>{this.state.filevalue}</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <label>Κατηγορία:</label>
                                     </td>   
-                                </tr>
-                                <tr>
+                               
                                     <td>
                                         <select value={this.state.value1} onChange={this.handleChange}>
                                             <option value="smartphone">Smartphone</option>
-                                            <option value="tv">TV</option>
                                             <option value="laptop">Laptop</option>
+                                            <option value="monitor">Monitor</option>
+                                            <option value="tablet">Tablet</option>
+                                            <option value="tv">TV</option>
                                         </select>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div>{this.state.product_render}</div>
+                        <div class='optionalcontent'>{this.state.product_render}</div>
+                        <input type='button' class='button2' value='Submit' />
                     </form>
-                    
+                    </div>
                     <div class='footerdiv'>
                         <Footer />
                     </div>
