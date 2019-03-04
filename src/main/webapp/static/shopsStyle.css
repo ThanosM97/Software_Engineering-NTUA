@@ -40,9 +40,14 @@
   cursor:pointer;
 }
 
+label {
+  font-size:1.5vw;
+  margin-right:10px;
+}
+
 .pages {
-  width:5%;
-  padding: 0.8% 0%;
+  width:3%;
+  padding: 0.6% 0%;
   margin: 2% 0 2% 0;
   background-color:Floralwhite;
   border: 1px solid Dodgerblue;
@@ -50,7 +55,6 @@
   color: Dodgerblue;
   font-size: 1vw;
   text-decoration: underline;
-  vertical-align: bottom;
 }
 
 .pages:hover {
