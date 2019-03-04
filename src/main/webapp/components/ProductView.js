@@ -36,6 +36,12 @@ export class ProductViewSpecs extends React.Component{
             case 'laptop':
                 product_render = ( <ProductViewLaptop product={this.props.product} />);
                 break;
+            case 'tablet':
+                product_render = ( <ProductViewTablet product={this.props.product} />);
+                break;
+            case 'monitor':
+                product_render = ( <ProductViewMonitor product={this.props.product} />);
+                break;
             default:
                 product_render = ( <div> Oops! Invalid product type :( </div> );
             }
@@ -153,6 +159,54 @@ class ProductViewLaptop extends React.Component{
 	}
 }
 
+class ProductViewMonitor extends React.Component{
+    render(){
+		return(
+            <div>
+                <a class='product-name'>{this.props.product.name}</a><br />
+                <img src={laptop} class='product-image' /><br />
+                <table class='specs-table'></table>
+                    <tr>
+                        <td>Μέγεθος οθόνης:</td>
+                        <td>{this.props.product.screensize}</td>
+                    </tr>
+                    <tr>
+                        <td>Ανάλυση:</td>
+                        <td>{this.props.product.resolution}</td>
+                    </tr>
+            </div>
+        )
+    }
+}
+
+class ProductViewTablet extends React.Component{
+    render(){
+		return(
+            <div>
+                <a class='product-name'>{this.props.product.name}</a><br />
+                <img src={laptop} class='product-image' /><br />
+                <table class='specs-table'></table>
+                    <tr>
+                        <td>Μέγεθος οθόνης:</td>
+                        <td>{this.props.product.screensize}</td>
+                    </tr>
+                    <tr>
+                        <td>RAM:</td>
+                        <td>{this.props.product.ram}</td>
+                    </tr>
+                    <tr>
+                        <td>Λειτουργικό:</td>
+                        <td>{this.props.product.os}</td>
+                    </tr>
+                    <tr>
+                        <td>Σκληρός Δίσκος:</td>
+                        <td>{this.props.product.harddrive}</td>
+                    </tr>
+            </div>
+        )
+    }
+}
+
 class ProductViewShopList extends React.Component{
     
     constructor(props){
@@ -163,28 +217,22 @@ class ProductViewShopList extends React.Component{
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick() {
-        const newDisplay = this.state.display == 'none' ? 'map' : 'none';
+    handleClick(e) {
+        const newDisplay = this.state.display == 'none' ? e.target.name : 'none';
         this.setState({display: newDisplay});
     }
     
     render(){
-        let map;
-        if (this.state.display == 'map'){
-            map = <Map />;
-        }
-        else{
-            map = <div></div>;
-        }
-
-        const shoplist = this.props.shops.map(shop => 
-            <div class='shopbox'>
+        const shoplist = this.props.shops.map((shop, i) => 
+            <div class='shopbox' key={i}>
                 <as class='shopname'>{shop.name} </as>
                 <as class='price'>{shop.price} </as><br></br> 
                 <as>Άλλα στοιχεία: {shop.otherData} </as><br></br>
                 <as>Αξιοπιστία καταχώρησης: <img src={like} class='like-img'/> <img src={unlike} class='like-img'/><img src={questionmark} class='questionmark-img'/></as><br></br>
-                <button href='' class='address' onClick={this.handleClick}>Αλέκου Παναγούλη 9, Νίκαια </button><br></br>
-                <div>{map}</div>
+                <div>    
+                    <button href='#' class='address' name={'button_' + i} onClick={this.handleClick}>Αλέκου Παναγούλη 9, Νίκαια </button><br></br>
+                    {this.state.display == 'button_' + i ? <Map lat={37.947425} lng={23.664146}/> : <a></a>}
+                </div>
             </div>
             );
         return(
@@ -195,3 +243,4 @@ class ProductViewShopList extends React.Component{
         )
     }
 }
+

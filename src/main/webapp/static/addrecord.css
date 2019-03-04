@@ -3,7 +3,8 @@
     margin: 0;
 }
 
-.main {
+.body {
+    position: relative;
     margin:0;
     padding:0;
     height: 100%;
@@ -16,10 +17,14 @@
  }
 
  .aheader {
-     margin-left: 22%;
+     margin-top:1%;
+     margin-left: 23%;
+     margin-right:30%;
      font: 400 25px/30px "Roboto", Helvetica, Arial, sans-serif;
  }
- .form {
+
+ .form1 {
+     margin-top:1%;
      font-family: "Roboto", Helvetica, Arial, sans-serif;
      background-color: beige;
      margin-left: 20%;
@@ -32,45 +37,84 @@
      padding-left: 6%;
  }
 
- .button {
-    width:30%;
-    height: 40%;
-    background-color:#808080;
+ .photo {
+     float: right;
+ }
+
+ .button1 {
+    float: left;
+    background-color: #008CBA; /* Green */
+    border: none;
     color: white;
+    padding: 2% 3%;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+ }
+
+ .button2 {
+    background-color: #008CBA; /* Green */
+    border: none;
+    color: white;
+    padding: 2% 3%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 70%;
+    margin-bottom: 1%;
  }
 
 .footerdiv {
     position: relative;
     top: 70px;
-    bottom: 0px;
+    bottom: 0;
 }
 
-.tablecontent tr{
+.tablecontent tr {
     height: 20%;
+    text-align: center;
 }
 
-.tablecontent td{
+.tablecontent td {
     width: 50%;
+    margin-top:10%;
+}
+
+.tablecontent td select{
+    margin: 0 .10rem;
+    min-width: 100%;
+    border: 1px solid rgb(39, 34, 34);
+    border-left: 3px solid;
+    border-radius: 15px;
+    transition: border-color .5s ease-out;
+    padding: 8px;
+
 }
 
 .tablecontent label{
-    font-size: 20px;
+    font-size: 15px;
+    float: right;
 }
 
 .tablecontent input[type=text] {
-    margin: 0 .25rem;
+    margin: 0 .10rem;
     min-width: 125px;
     border: 1px solid rgb(39, 34, 34);
     border-left: 3px solid;
-    border-radius: 5px;
+    border-radius: 15px;
     transition: border-color .5s ease-out;
-  }
-  .tablecontent input:optional {
+    padding: 8px;
+}
+
+.tablecontent input:optional {
     border-color: #999;
-  }
-  .tablecontent input:required {
+}
+
+.tablecontent input:required {
     border-color: rgb(43, 36, 56);
-  }
-  .tablecontent input:invalid {
+}
+
+.tablecontent input:invalid {
     border-color: salmon;
-  }
+}

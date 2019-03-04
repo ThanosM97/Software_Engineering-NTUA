@@ -23,7 +23,7 @@ h3 {
 
 .specs {
     width: 30%;
-    background-color: #9b384f;
+    background-color: #f1f1f1;
     padding: 3%;
     float: left;
     margin-bottom: 7vw;
@@ -55,15 +55,16 @@ h3 {
 }
 
 .shopbox{
-    padding: 5px;
+    padding: 20px 50px;
     margin-top: 10px;
-    background-color: rgb(113, 153, 153);
+    background-color: rgb(167, 180, 180);
 }
 
 .price{
     padding-left: 10%;
     border-left: 1px solid tomato;
     height: 100%;
+    font-size: 150%;
     float: right;
 }
 
