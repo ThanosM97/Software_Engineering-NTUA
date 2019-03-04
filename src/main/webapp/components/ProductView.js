@@ -163,28 +163,22 @@ class ProductViewShopList extends React.Component{
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick() {
-        const newDisplay = this.state.display == 'none' ? 'map' : 'none';
+    handleClick(e) {
+        const newDisplay = this.state.display == 'none' ? e.target.name : 'none';
         this.setState({display: newDisplay});
     }
     
     render(){
-        let map;
-        if (this.state.display == 'map'){
-            map = <Map />;
-        }
-        else{
-            map = <div></div>;
-        }
-
-        const shoplist = this.props.shops.map(shop => 
-            <div class='shopbox'>
+        const shoplist = this.props.shops.map((shop, i) => 
+            <div class='shopbox' key={i}>
                 <as class='shopname'>{shop.name} </as>
                 <as class='price'>{shop.price} </as><br></br> 
                 <as>Άλλα στοιχεία: {shop.otherData} </as><br></br>
                 <as>Αξιοπιστία καταχώρησης: <img src={like} class='like-img'/> <img src={unlike} class='like-img'/><img src={questionmark} class='questionmark-img'/></as><br></br>
-                <button href='' class='address' onClick={this.handleClick}>Αλέκου Παναγούλη 9, Νίκαια </button><br></br>
-                <div>{map}</div>
+                <div>    
+                    <button href='#' class='address' name={'button_' + i} onClick={this.handleClick}>Αλέκου Παναγούλη 9, Νίκαια </button><br></br>
+                    {this.state.display == 'button_' + i ? <Map lat={37.947425} lng={23.664146}/> : <a></a>}
+                </div>
             </div>
             );
         return(
@@ -195,3 +189,4 @@ class ProductViewShopList extends React.Component{
         )
     }
 }
+
