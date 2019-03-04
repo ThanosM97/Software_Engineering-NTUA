@@ -70,14 +70,6 @@ class content extends React.Component {
                                         <input type='text' />
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <label>Ταχύτητα επεξεργαστή:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                 </div>
@@ -161,14 +153,6 @@ class content extends React.Component {
                                         <input type='text' />
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        <label>Ταχύτητα επεξεργαστή:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -181,7 +165,7 @@ class content extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>
-                                        <label>Συχνότητα:</label>
+                                        <label>Οθόνη:</label>
                                     </td>
                                     <td>
                                         <input type='text' />
@@ -189,10 +173,10 @@ class content extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label>4K:</label>
+                                        <label>Ανάλυση:</label>
                                     </td>
                                     <td>
-                                        <input type='checkbox' />
+                                        <input type='text' />
                                     </td>
                                 </tr>
                                 <tr>
@@ -216,6 +200,14 @@ class content extends React.Component {
                                 <tr>
                                     <td>
                                         <label>CPU:</label>
+                                    </td>
+                                    <td>
+                                        <input type='text' />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>Πυρήνες επεξεργαστή:</label>
                                     </td>
                                     <td>
                                         <input type='text' />
