@@ -15,7 +15,7 @@ class HomeHeader extends Component {
       offersVis: 'hidden',
     }
     topBar = this.props.loggedIn ? (<nav><a href="/" onClick={this.handleLogOut}> Αποσύνδεση </a>
-          <a href="/my_profile">Geia </a></nav>) : (<nav><p>
+          <a href="/my_profile">Το προφίλ μου</a></nav>) : (<nav><p>
       <a href="signup">Εγγραφή</a>
       <a href="login">Σύνδεση</a></p>
     </nav>);
@@ -66,8 +66,10 @@ class HomeHeader extends Component {
         </div>
         <div className="searchcontainer" style={{ position: 'relative'}}>
           <div className="searchspace">
-            <input href="#" placeholder="Αναζητήστε κάποιο προϊόν..." />
-            <input type="submit" value="Αναζήτηση" />
+            <form action="/productlist">
+              <input placeholder="Αναζητήστε κάποιο προϊόν..." name="tags" />
+              <input type="submit" value="Αναζήτηση" />
+            </form>
           </div>
         </div>
         <div className="hotoffers" style={{visibility: this.state.offersVis}}>

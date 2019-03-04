@@ -14,7 +14,7 @@ class NavBar extends Component {
 
     bar = this.props.loggedIn ? (<div className="nav-right">
       <p><a href="" onClick={this.handleLogOut} className="right"> Αποσύνδεση </a>
-        <a href="/my_profile" className="right"> Εγώ </a></p>
+        <a href="/my_profile" className="right"> Το προφίλ μου </a></p>
     </div>) : (<div className="nav-right">
       <a href="signup" className="right"> Εγγραφή </a>
       <a href="login" className= "right"> Σύνδεση </a>
@@ -36,7 +36,7 @@ class NavBar extends Component {
           <div className="nav-left">
             <a href="/" ><img href="/" src="../static/logo/LogoFinal-small.png" alt="" width="30%"/> </a>
             <form className="form" action="/productlist" >
-              <input placeholder="Αναζητήστε κάποιο προϊόν..." name="search"/>
+              <input placeholder="Αναζητήστε κάποιο προϊόν..." name="tags"/>
               <input type="submit"/>
             </form>
           </div>
