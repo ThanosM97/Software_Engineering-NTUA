@@ -86,7 +86,6 @@ public class ProductsResource extends ServerResource {
 			}
 		}
 		boolean empty  = true;
-		System.out.println(extra);
 		for (String value : extra.values()) {
 			if (value != null && !value.isEmpty()) {
 				empty = false;
@@ -170,10 +169,7 @@ public class ProductsResource extends ServerResource {
 		}
 
 		else {
-			/*
 			return new XmlMapRepresentation(map);
-			 */
-			return null;
 		}
 	}
 

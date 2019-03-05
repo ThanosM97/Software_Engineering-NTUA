@@ -1083,7 +1083,7 @@ public class DataAccess {
 		/*
 		 * Initialize named parameters
 		 */
-		
+	
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("geoLng", geoLngString);
 		parameters.addValue("geoLat", geoLatString);
@@ -1109,7 +1109,7 @@ public class DataAccess {
 		System.out.println(sort_type);
 		*/
 		String sqlStm;
-		if (geoDistString != null) {
+		if (geoDistString != null && !geoDistString.isEmpty() && !geoDistString.equals("-1")) {
 			sqlStm = "SELECT distinct Shop.lng as  lng, Shop.lat as lat, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
 					" GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date \n" + 
 					" FROM Shop, Product, Record ";
@@ -1149,7 +1149,7 @@ public class DataAccess {
 					"		and Shop_Tag.ShopId = Shop.id\n" + 
 					"		and Tag.name in (:shopTags)))";
 		}
-		if (geoDistString != null) {
+		if (geoDistString != null && !geoDistString.isEmpty() && !geoDistString.equals("-1")) {
 			sqlStm += " having dist < :geoDist ";
 		}
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable

@@ -4,6 +4,7 @@ import gr.ntua.ece.stingy.conf.Configuration;
 import gr.ntua.ece.stingy.data.DataAccess;
 import gr.ntua.ece.stingy.data.model.Message;
 
+import org.restlet.data.Form;
 import org.restlet.data.Header;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ResourceException;
@@ -24,7 +25,14 @@ public class LogoutResource extends ServerResource {
 		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
     	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
     	
-    	
+    	/*
+    	 * Get parameters of the url.
+    	 */
+        Form queryParams = getQuery();
+		String format = queryParams.getFirstValue("format");  
+		if (format == null || format.isEmpty()) {
+			format = "json";
+		}
     	/*
     	 * Check if it is valid and disable it.
     	 */
@@ -32,7 +40,12 @@ public class LogoutResource extends ServerResource {
         /*
         * Return 'OK' message.
         */
-        return new JsonMessageRepresentation(message);
+    	if (format.equals("xml")) {
+			return new XmlMessageRepresentation(message);
+		}
+    	else {
+    		return new JsonMessageRepresentation(message);
+    	}
     }
 }
     

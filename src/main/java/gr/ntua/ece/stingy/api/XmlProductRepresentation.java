@@ -16,6 +16,9 @@ import javax.xml.namespace.QName;
 import org.restlet.data.MediaType;
 import org.restlet.representation.WriterRepresentation;
 
+import com.thoughtworks.xstream.XStream;
+
+import gr.ntua.ece.stingy.data.model.Message;
 import gr.ntua.ece.stingy.data.model.Product;
 
 public class XmlProductRepresentation extends WriterRepresentation {
@@ -29,26 +32,8 @@ public class XmlProductRepresentation extends WriterRepresentation {
 
     @Override
     public void write(Writer writer) throws IOException {
-    	try {
-    		
-    		/*
-    		 * Create JAXB Context
-    		 */
-            JAXBContext jaxbContext = JAXBContext.newInstance(Product.class);
-             
-            /*
-             * Create Marshaller
-             */
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-              
-            /*
-             * Write XML to Writer
-             */
-            jaxbMarshaller.marshal(product, writer);	    	
-		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	XStream xstream = new XStream();
+    	xstream.alias("Product", Product.class);
+    	writer.write(xstream.toXML(product));
     }
 }
