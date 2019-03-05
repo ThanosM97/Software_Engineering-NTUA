@@ -18,13 +18,13 @@ public class Record {
     private final String shopName;
     private final List<String> shopTags;
     private final String shopAddress;
-    private final int shopDist;
+    private final double shopDist;
     private final String date;
     private final Double lng;
     private final Double lat;
     
 	public Record(double price, String productName, String productId, List<String> productTags, String shopId, String shopName,
-			List<String> shopTags, String shopAddress, int shopDist, String date, Double lng, Double lat) {
+			List<String> shopTags, String shopAddress, double shopDist, String date, Double lng, Double lat) {
 		this.price = price;
 		this.productName = productName;
 		this.productId = productId;
@@ -98,7 +98,7 @@ public class Record {
 	/**
 	 * @return the shopDist
 	 */
-	public int getShopDist() {
+	public double getShopDist() {
 		return shopDist;
 	}
 
