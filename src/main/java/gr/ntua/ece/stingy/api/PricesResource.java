@@ -38,6 +38,7 @@ public class PricesResource extends ServerResource {
     	 * Get parameters of the get method.
     	 */
     	Form queryParams = getQuery();
+    	String format = queryParams.getFirstValue("format");
     	String startString = queryParams.getFirstValue("start");
     	String countString = queryParams.getFirstValue("count");
     	String geoDistString = queryParams.getFirstValue("geoDist");
@@ -112,7 +113,9 @@ public class PricesResource extends ServerResource {
         	dateFrom = new SimpleDateFormat("yyyy-MM-dd").format(date);
         	dateTo = new SimpleDateFormat("yyyy-MM-dd").format(date);
         }
-        
+        if (format == null || format.isEmpty()) {
+        	format = "json";
+        }
         
         /*
          * Get prices based on the limits.
@@ -124,7 +127,12 @@ public class PricesResource extends ServerResource {
     	 */
         map.put("total", limits.getTotal());
         map.put("prices", records);
-        return new JsonMapRepresentation(map);
+        if (format.equals("xml")) {
+            return new XmlMapRepresentation(map);
+        }
+        else {
+            return new JsonMapRepresentation(map);
+        }
     }
 
     
@@ -140,6 +148,12 @@ public class PricesResource extends ServerResource {
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can create new records");
     	}
+    	/**
+    	 * Get parameters of the get method.
+    	 */
+    	Form queryParams = getQuery();
+    	String format = queryParams.getFirstValue("format");
+    	
     	/*
          * Create a new restlet form
          */
@@ -217,11 +231,19 @@ public class PricesResource extends ServerResource {
         map.put("total", records.size());
         map.put("count", records.size());
         map.put("prices", records);
+        
+        if (format == null || format.isEmpty()) {
+        	format = "json";
+        }
 		/*
          * Return the json representation of the record.
          */
-        return new JsonMapRepresentation(map);
-       
+        if (format.equals("xml")) {
+            return new XmlMapRepresentation(map);
+        }
+        else {
+            return new JsonMapRepresentation(map);	
+        }       
     
     }
  

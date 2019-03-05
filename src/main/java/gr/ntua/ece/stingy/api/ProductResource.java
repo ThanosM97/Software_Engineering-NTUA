@@ -34,7 +34,7 @@ public class ProductResource extends ServerResource {
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing product id");
         }
-        if (format == null) {
+        if (format == null || format.isEmpty()) {
         	format = "json";
         }
         /*
@@ -72,13 +72,17 @@ public class ProductResource extends ServerResource {
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can delete products");
     	}
-    	
+    	Form queryParams = getQuery();
+ 		String format = queryParams.getFirstValue("format");     
         String idAttr = getAttribute("id");
         /*
          * Check if given id is null.
          */
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing product id");
+        }
+        if (format == null || format.isEmpty()) {
+        	format = "json";
         }
         /*
          * Convert given id to long.
@@ -99,7 +103,12 @@ public class ProductResource extends ServerResource {
 	        /*
 	         * Return message.
 	         */
-	        return new JsonMessageRepresentation(message);
+	        if (format.equals("xml")) {
+		        return new XmlMessageRepresentation(message);
+	        }
+	        else {
+		        return new JsonMessageRepresentation(message);	
+	        }
         }
 	    else {
 	    	/*
@@ -110,8 +119,12 @@ public class ProductResource extends ServerResource {
 	        /*
 	         * Return message.
 	         */
-	        return new JsonMessageRepresentation(message);
-	    }
+	        if (format.equals("xml")) {
+		        return new XmlMessageRepresentation(message);
+	        }
+	        else {
+		        return new JsonMessageRepresentation(message);	
+	        }	    }
     }
     
     @Override
@@ -126,7 +139,9 @@ public class ProductResource extends ServerResource {
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can update products");
     	}
-    	
+    	Form queryParams = getQuery();
+ 		String format = queryParams.getFirstValue("format"); 
+ 		
         /*
          * Get the product id.
          */
@@ -174,14 +189,21 @@ public class ProductResource extends ServerResource {
 		if (tags == null ) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
 		}
-		
+		if (format == null || format.isEmpty()) {
+			format = "json";
+		}
 		
         /*
          * Update the certain product
          */
         Optional<Product> optional = dataAccess.updateProduct(id, name, description, category, withdrawn, Arrays.asList(tags), extraDataString);
         Product product = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
-        return new JsonProductRepresentation(product);
+        if (format.equals("xml")){
+        	return new XmlProductRepresentation(product);
+        }
+        else {
+        	return new JsonProductRepresentation(product);
+        }
     }
     
     @Override
@@ -196,6 +218,8 @@ public class ProductResource extends ServerResource {
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can update products");
     	}
+    	Form queryParams = getQuery();
+ 		String format = queryParams.getFirstValue("format"); 
     	/*
          * Get the product id and check if it is valid 
          */
@@ -254,7 +278,16 @@ public class ProductResource extends ServerResource {
     	else {
     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "None field changed");
     	}
+        
+        if (format == null || format.isEmpty()) {
+			format = "json";
+		}
         Product product = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
-        return new JsonProductRepresentation(product);
+        if (format.equals("xml")){
+        	return new XmlProductRepresentation(product);
+        }
+        else {
+        	return new JsonProductRepresentation(product);
+        }
     }
 }

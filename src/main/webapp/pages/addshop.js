@@ -39,7 +39,7 @@ class content extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>
-                                        <label>Προσδιοριστής καταστήματος:</label>
+                                        <label>Προσδιοριστής καταστήματος(ID):</label>
                                     </td>
                                     <td>
                                         <input type='text' required />
@@ -74,7 +74,7 @@ class content extends React.Component {
                                 </tr>
                             </tbody>
                         </table>
-                        <input type='button' class='button2' value='Submit' />
+                        <input type='button' class='button1' value='Submit' />
                     </form>
                     </div>
                     <div class='footerdiv'>

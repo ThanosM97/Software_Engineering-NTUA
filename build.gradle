@@ -50,6 +50,10 @@ dependencies {
 
     gretty "mysql:mysql-connector-java:5.1.16"                   //make sure it is also available to the grety plugin
 	compile 'com.github.javadev:underscore:1.42'
+	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+	compile group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.2'
+	
+	
 }
 
 

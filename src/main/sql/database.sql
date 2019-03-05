@@ -276,6 +276,14 @@ CREATE TABLE `Record_Validation` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP FUNCTION IF EXISTS GetDistance;
+create function GetDistance(lat1 real, lng1 real, lat2 real, lng2 real) returns real no sql
+return ATAN2(SQRT(POW(COS(RADIANS(lat2)) * SIN(RADIANS(lng1 - lng2)), 2) +
+POW(COS(RADIANS(lat1)) * SIN(RADIANS(lat2)) - SIN(RADIANS(lat1)) *
+COS(RADIANS(lat2)) * COS(RADIANS(lng1 - lng2)), 2)),
+(SIN(RADIANS(lat1)) * SIN(RADIANS(lat2)) + COS(RADIANS(lat1)) *
+COS(RADIANS(lat2)) * COS(RADIANS(lng1 - lng2)))) * 6372.795;
+
 --
 -- Dumping data for table `User`
 --

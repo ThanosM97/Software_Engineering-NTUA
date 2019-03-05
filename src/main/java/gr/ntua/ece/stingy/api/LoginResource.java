@@ -19,6 +19,12 @@ public class LoginResource extends ServerResource {
     @Override
 	protected Representation post(Representation entity) throws ResourceException {
     	/*
+    	 * Get parameters of the url.
+    	 */
+        Form queryParams = getQuery();
+		String format = queryParams.getFirstValue("format");        /*
+
+    	/*
 		 * Create a new restlet form
 		 */	
 		Form form = new Form(entity);
@@ -37,6 +43,9 @@ public class LoginResource extends ServerResource {
 		if (password == null || password.isEmpty()) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Password is required");
 		}
+		if (format == null || format.isEmpty()) {
+			format = "json";
+		}
 		
 		/*
 		 * Add requested product in the database if user exists.
@@ -48,6 +57,11 @@ public class LoginResource extends ServerResource {
 		/*
 		 * Return token in json representation.
 		 */
-		return new JsonMapRepresentation(map);
+		if (format.equals("xml")) {
+			return new XmlMapRepresentation(map);
+		}
+		else {
+			return new JsonMapRepresentation(map);
+		}
     }
 }

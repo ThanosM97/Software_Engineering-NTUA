@@ -35,7 +35,7 @@ public class RecordRowMapper implements RowMapper {
 		String shopId        = rs.getString("shopId");
 		String shopName   = rs.getString("shopName");
 		String shopAddress   = rs.getString("address");
-		int shopDist	= rs.getInt("dist");
+		Double shopDist	= rs.getDouble("dist");
 		Date dateDate 		= rs.getDate("date");
 		String pattern = "yyyy-MM-dd";
 		Double lng = rs.getDouble("lng");

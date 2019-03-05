@@ -1083,7 +1083,7 @@ public class DataAccess {
 		/*
 		 * Initialize named parameters
 		 */
-		
+	
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("geoLng", geoLngString);
 		parameters.addValue("geoLat", geoLatString);
@@ -1109,46 +1109,49 @@ public class DataAccess {
 		System.out.println(sort_type);
 		*/
 		String sqlStm;
-		if (geoDistString != null) {
+		if (geoDistString != null && !geoDistString.isEmpty() && !geoDistString.equals("-1")) {
 			sqlStm = "SELECT distinct Shop.lng as  lng, Shop.lat as lat, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
-					"SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) as dist, Record.date \n" + 
-					"FROM Shop, Product, Record ";
+					" GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date \n" + 
+					" FROM Shop, Product, Record ";
 			if (tags.length!=0) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
 			}
-				sqlStm += "WHERE SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) < :geoDist\n" + 
-					"AND Record.shopId = Shop.id \n" + 
-					"AND Record.productId = Product.id\n" + 
-					"AND Record.date <= :dateTo and Record.date >= :dateFrom\n";
+				sqlStm += "WHERE " + 
+					" Record.shopId = Shop.id \n" + 
+					" AND Record.productId = Product.id\n" + 
+					" AND Record.date <= :dateTo and Record.date >= :dateFrom ";
+					
 		}
 		else {
 			sqlStm = "SELECT distinct Shop.lng as lng, Shop.lat as lat,  price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
 					" Record.date \n" + 
-					"FROM Shop, Product, Record ";
+					" FROM Shop, Product, Record ";
 			if (tags.length!=0) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
 			}
 				sqlStm += "WHERE \n" + 
-					"Record.shopId = Shop.id \n" + 
-					"AND Record.productId = Product.id\n" + 
-					"AND Record.date <= :dateTo and Record.date >= :dateFrom\n";
+					" Record.shopId = Shop.id \n" + 
+					" AND Record.productId = Product.id\n" + 
+					" AND Record.date <= :dateTo and Record.date >= :dateFrom \n";
 		}
 
 		if (products.length!= 0 ) {
-			sqlStm += "AND Record.productId in (:products)\n";
+			sqlStm += " AND Record.productId in (:products)\n";
 		}
 		if (shops.length!=0) {
-			sqlStm += "AND Record.shopId in (:shops)\n";
+			sqlStm += " AND Record.shopId in (:shops)\n";
 		}
 		if (tags.length!=0 ) {
-			sqlStm += "AND ((Tag.name in (:productTags)\n" + 
+			sqlStm += " AND ((Tag.name in (:productTags)\n" + 
 					"		and Tag.id = Product_Tag.TagId\n" + 
 					"		and Product_Tag.ProductId = Product.id)\n" + 
 					"		or (Tag.id = Shop_Tag.TagId\n" + 
 					"		and Shop_Tag.ShopId = Shop.id\n" + 
 					"		and Tag.name in (:shopTags)))";
 		}
-
+		if (geoDistString != null && !geoDistString.isEmpty() && !geoDistString.equals("-1")) {
+			sqlStm += " having dist < :geoDist ";
+		}
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
 		namedJdbcTemplate.query(sqlStm, parameters, countCallback);
 		int rowCount = countCallback.getRowCount();
