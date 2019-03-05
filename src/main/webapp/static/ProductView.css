@@ -22,7 +22,7 @@ h3 {
 }
 
 .specs {
-    width: 30%;
+    width: 27%;
     background-color: #f1f1f1;
     padding: 3%;
     float: left;
@@ -55,6 +55,8 @@ h3 {
 }
 
 .shopbox{
+    overflow: auto;
+    min-width: 500px;
     padding: 20px 50px;
     margin-top: 10px;
     background-color: rgb(167, 180, 180);
