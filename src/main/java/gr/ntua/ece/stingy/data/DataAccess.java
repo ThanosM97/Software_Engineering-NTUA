@@ -235,6 +235,12 @@ public class DataAccess {
 		return jdbcTemplate.queryForList(query, new Object[] { id }, String.class);
 	}
 	
+	public List<Shop> getShopsByProductId(long id){
+		String query = "select Shop.id, Shop.name, Shop.address, Shop.lng, Shop.lat, Shop.id, Shop.withdrawn, Shop.image  from Shop, Product, Record where Record.shopId = Shop.id\n" + 
+				"and Record.productId = Product.id and Product.id = ?";
+		return jdbcTemplate.query(query, new Object[] { id }, new ShopRowMapper());
+	}
+	
 	/*
 	 * Get the shop with the given id.
 	 */

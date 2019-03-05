@@ -29,7 +29,8 @@ public class ProductResource extends ServerResource {
 
         String idAttr = getAttribute("id");
         Form queryParams = getQuery();
-		String format = queryParams.getFirstValue("format");     
+		String format = queryParams.getFirstValue("format");  
+		String shops = queryParams.getFirstValue("shops");
 		if (format == null || format.isEmpty()) {
         	format = "json";
         }
@@ -49,6 +50,10 @@ public class ProductResource extends ServerResource {
         }
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid product id: " + idAttr);
+        }
+        
+        if (shops != null) {
+        	return new JsonShopsRepresentation(dataAccess.getShopsByProductId(id));
         }
         /*
          * Get product based on the given id and return its representations based on the desired format.
