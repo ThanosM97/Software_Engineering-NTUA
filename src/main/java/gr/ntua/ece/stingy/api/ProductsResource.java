@@ -69,6 +69,7 @@ public class ProductsResource extends ServerResource {
 				extra.put("FrontCamera", queryParams.getFirstValue("FrontCamera"));
 				extra.put("SelfieCamera", queryParams.getFirstValue("SelfieCamera"));
 				extra.put("OS", queryParams.getFirstValue("OS"));
+				extra.put("Capacity", queryParams.getFirstValue("Capacity"));
 			}
 			else if (category.equals("tablet")) {
 				extra.put("RAM", queryParams.getFirstValue("RAM"));
@@ -85,6 +86,7 @@ public class ProductsResource extends ServerResource {
 			}
 		}
 		boolean empty  = true;
+		System.out.println(extra);
 		for (String value : extra.values()) {
 			if (value != null && !value.isEmpty()) {
 				empty = false;
