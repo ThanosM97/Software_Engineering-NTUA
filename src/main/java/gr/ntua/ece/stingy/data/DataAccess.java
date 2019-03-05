@@ -22,25 +22,17 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
-import com.google.gson.Gson;
 
 import javax.sql.DataSource;
-import javax.swing.text.DateFormatter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +76,9 @@ public class DataAccess {
 		namedJdbcTemplate = new NamedParameterJdbcTemplate(bds);
 	}
 
-	
+	/*
+	 * Get products based on input parameters.
+	 */
 	public List<Product> getProducts(Limits limits, String status, String sort, List<String> tags, String category) {
 		String sort_type = sort.replaceAll("\\|", " ");   
 		/*
@@ -97,12 +91,11 @@ public class DataAccess {
 		if (status.equals("ACTIVE")){
 			withdrawn = "0";
 		}
-
+		
 		/*
 		 * Get number of all products
 		 */
-		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  /* not reusable */
-		
+		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  /* not reusable */		
 		/*
 		 * Return products based on the limits.
 		 */
@@ -111,12 +104,11 @@ public class DataAccess {
 		parameters.addValue("start", limits.getStart());
 		parameters.addValue("count", limits.getCount());
 		parameters.addValue("withdrawn", withdrawn);
-		parameters.addValue("category", category);
+		parameters.addValue("category", category);	
 		
 		String sqlStm;
-
 		if (tags == null || tags.size()==0 ||  tags.get(0).equals("all")) {
-			sqlStm = "select * from Product where 1=1";
+			sqlStm = "select * from Product where 1=1 ";
 			if (category != null) {
 				sqlStm += " and category = :category ";
 			}
@@ -127,8 +119,6 @@ public class DataAccess {
 			int rowCount = countCallback.getRowCount();
 			limits.setTotal(rowCount);
 			sqlStm += " order by "+ sort_type + " limit :start,:count";
-			System.out.println(sqlStm);
-			System.out.println(sort_type);
 			return namedJdbcTemplate.query(sqlStm, parameters, new ProductRowMapper());
 		}
 		else {
@@ -145,12 +135,13 @@ public class DataAccess {
 			int rowCount = countCallback.getRowCount();
 			limits.setTotal(rowCount);
 			sqlStm += " order by "+ sort_type +" limit :start,:count";
-			System.out.println(sqlStm);
 			return namedJdbcTemplate.query(sqlStm, parameters, new ProductRowMapper());
 		}
 	}
 	
-	
+	/*
+	 * Get products based on extra parameters (extraData).
+	 */
 	public List<Product> getProductsByExtra(Limits limits, String status, String sort, List<String> tags, String category, Map<String, String> extra){
 		String sort_type = sort.replaceAll("\\|", " ");   
 		/*
@@ -163,16 +154,13 @@ public class DataAccess {
 		if (status.equals("ACTIVE")){
 			withdrawn = "0";
 		}
-
 		/*
 		 * Get number of all products
 		 */
-		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  /* not reusable */
-		
+		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  /* not reusable */	
 		/*
 		 * Return products based on the limits.
 		 */
-		System.out.println(extra);
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("sort", sort_type);
 		parameters.addValue("start", limits.getStart());
@@ -180,8 +168,7 @@ public class DataAccess {
 		parameters.addValue("withdrawn", withdrawn);
 		parameters.addValue("category", category);
 	
-		String sqlStm;
-		
+		String sqlStm;	
 		sqlStm = "select * from Product ";
 		if (tags != null && tags.size()!=0 && !tags.get(0).equals("all")) {
 			sqlStm += " , Tag, Product_Tag ";
@@ -210,7 +197,6 @@ public class DataAccess {
 				i += 1;
 			}
 		}
-		
 		int j;
 		if (i > 2) {
 			sqlStm += " where ";
@@ -225,7 +211,7 @@ public class DataAccess {
 			sqlStm = sqlTemp;
 			for (String key : extra.keySet()) {
 				if (extra.get(key) != null && !extra.get(key).isEmpty()) {
-					sqlStm += "( select T1.ProductId from ( select * from extraData where "
+					sqlStm += " ( select T1.ProductId from ( select * from extraData where "
 							+ "extraData.characteristic ='"+key + 
 						"' and extraData.value LIKE '%" + extra.get(key) + "%') as T1) ";
 				}
@@ -234,7 +220,6 @@ public class DataAccess {
 		else {
 			sqlStm += ")";
 		}
-		System.out.println(sqlStm);
 		namedJdbcTemplate.query(sqlStm, parameters, countCallback);
 		int rowCount = countCallback.getRowCount();
 		limits.setTotal(rowCount);
@@ -243,17 +228,25 @@ public class DataAccess {
 		
 	}
 	
-
+	/*
+	 * Get the product with the given id.
+	 */
 	public List<String> getProductTagsById(String id){
 		String query = "select distinct Tag.name from Product_Tag, Tag where productId=? and tagId = Tag.id";
 		return jdbcTemplate.queryForList(query, new Object[] { id }, String.class);
 	}
 	
+	/*
+	 * Get the shop with the given id.
+	 */
 	public List<String> getShopTagsById(String id){
 		String query = "select distinct Tag.name from Shop_Tag, Tag where ShopId=? and TagId = Tag.id";
 		return jdbcTemplate.queryForList(query, new Object[] { id }, String.class);
 	}
-
+	
+	/*
+	 * Get extra data with the given product id.
+	 */
 	public Map<String, String> getExtraDataById(long id){
 		String query = "SELECT extraData.characteristic, extraData.value FROM extraData where productId = ?";
 		return jdbcTemplate.query(query ,new Object[] { id }, new ResultSetExtractor<Map>(){
@@ -268,6 +261,9 @@ public class DataAccess {
 		});
 	}
 
+	/*
+	 * Check if the input token corresponds in an actual user.
+	 */
 	public boolean isUser(String token) {
 		int count = jdbcTemplate.queryForObject("select count(*) from User where "
 				+ "token=?", new Object[] { token }, Integer.class);
@@ -279,6 +275,9 @@ public class DataAccess {
 		}
 	}
 	
+	/*
+	 * Check if the input token corresponds in an actual admin.
+	 */
 	public boolean isAdmin(String token) {
 		int count = jdbcTemplate.queryForObject("select count(*) from Administrator where "
 				+ "token=?", new Object[] { token }, Integer.class);
@@ -290,11 +289,14 @@ public class DataAccess {
 		}
 	}
 	
+	/*
+	 * Add a new product in the database.
+	 */
 	public Product addProduct(String name, String description, String category, boolean withdrawn, List<String> tags, String extraDataString , String image) {
 		/*
 		 * Insert the new product in the Product table
 		 */
-		KeyHolder keyHolder = new GeneratedKeyHolder();	// for keeping the product id
+		KeyHolder keyHolder = new GeneratedKeyHolder();	/* for keeping the product id	*/
 		jdbcTemplate.update(
 				new PreparedStatementCreator() {
 					public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
@@ -369,14 +371,13 @@ public class DataAccess {
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('GraphicsCard', ?, ?)", new Object[] { extraDataList.get(6), productId});			
 
 			}
-			else if (category.equals("TV")) {
+			else if (category.equals("tv")) {
 				if (extraDataList.size() != 3) {
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 3");
 				}
 				/*
 				 * Extra data supported for TVs
 				 */
-
 				if (extraDataList.get(1).equals("Smart") || extraDataList.get(1).equals("SMART")) {
 					extraData.put("Smart", "Yes");
 				}
@@ -390,7 +391,7 @@ public class DataAccess {
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('ScreenSize', ?, ?)", new Object[] { extraDataList.get(2), productId});			
 
 			}
-			else if (category.equals("Smartphone")) {
+			else if (category.equals("smartphone")) {
 				if (extraDataList.size() != 7) {
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 7");
 				}
@@ -416,24 +417,28 @@ public class DataAccess {
 				if (extraDataList.size() != 4) {
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 4");
 				}
+				/*
+				 * Extra data supported for Tablets
+				 */
 				extraData.put("ScreenSize", extraDataList.get(0));
 				extraData.put("RAM", extraDataList.get(1));
 				extraData.put("OS", extraDataList.get(2));
 				extraData.put("HardDrive", extraDataList.get(3));
-
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('ScreenSize', ?, ?)", new Object[] { extraDataList.get(0), productId});			
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('RAM', ?, ?)", new Object[] { extraDataList.get(1), productId});			
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('OS', ?, ?)", new Object[] { extraDataList.get(2), productId});			
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('HardDrive', ?, ?)", new Object[] { extraDataList.get(3), productId});			
 
 			}
-			else if (category.equals("TV")) {
+			else if (category.equals("monitor")) {
 				if (extraDataList.size() != 2) {
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 2");
 				}
+				/*
+				 * Extra data supported for TVs
+				 */
 				extraData.put("ScreenSize", extraDataList.get(0));
-				extraData.put("Resolution", extraDataList.get(1));
-				
+				extraData.put("Resolution", extraDataList.get(1));	
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('ScreenSize', ?, ?)", new Object[] { extraDataList.get(0), productId});			
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('Resolution', ?, ?)", new Object[] { extraDataList.get(1), productId});			
 
@@ -449,7 +454,7 @@ public class DataAccess {
 		 * Create product and return it.
 		 */
 		Product product = new Product(
-				productId, //the newly created project id
+				productId, /*	the newly created project id	*/
 				name,
 				description,
 				category,
@@ -462,6 +467,9 @@ public class DataAccess {
 		return product;
 	}
 
+	/*
+	 * Returns the best price of the given product.
+	 */
 	public Double getBestPrice(long id) {
 		Double bestPrice = jdbcTemplate.queryForObject("select min(price) \n" + 
 				"		from Product, Record\n" + 
@@ -471,6 +479,9 @@ public class DataAccess {
 		return bestPrice;
 	}
 	
+	/*
+	 * Get the product with the given id.
+	 */
 	public Optional<Product> getProduct(long id) {
 		Long[] params = new Long[]{id};
 		List<Product> products = jdbcTemplate.query("select * from Product where id = ?", params, new ProductRowMapper());
@@ -481,7 +492,10 @@ public class DataAccess {
 			return Optional.empty();
 		}
 	}
-
+	
+	/*
+	 * Delete the product with the given id.
+	 */
 	public Optional<Message> deleteProduct(long id) {
 		/*
 		 * Delete product from Product table and return 'OK' message.
@@ -494,7 +508,9 @@ public class DataAccess {
 			return Optional.empty();
 		}
 	}
-	
+	/*
+	 * Set withdrawn the product with the given id.
+	 */
 	public Optional<Message> withdrawnProduct(long id) {
 		/*
 		 * Set withdrawn to True and return 'OK' message.
@@ -507,7 +523,10 @@ public class DataAccess {
 			return Optional.empty();
 		}
 	}
-	
+
+	/*
+	 * Set withdrawn the shop with the given id.
+	 */
 	public Optional<Message> withdrawnShop(long id) {
 		/*
 		 * Set withdrawn to True and return 'OK' message.
@@ -520,7 +539,10 @@ public class DataAccess {
 			return Optional.empty();
 		}
 	}
-
+	
+	/*
+	 * Update the product with the given id.
+	 */
 	public Optional<Product> updateProduct(long id, String name, String description, String category, boolean withdrawn, List<String> tags, String extraDataString ) {
 		/*
 		 * Update the new product record.
@@ -576,7 +598,7 @@ public class DataAccess {
 					 */
 					extraData.put("CPU", extraDataList.get(0));
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPU'", new Object[] { extraDataList.get(0), id});			
-					extraData.put("CPU", extraDataList.get(1));
+					extraData.put("CPUcores", extraDataList.get(1));
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPUcores'", new Object[] { extraDataList.get(1), id});			
 					extraData.put("RAM", extraDataList.get(2));
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='RAM'", new Object[] { extraDataList.get(2), id});			
@@ -630,22 +652,16 @@ public class DataAccess {
 					extraData.put("OS", extraDataList.get(6));
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='OS'", new Object[] { extraDataList.get(6), id});			
 				}
-				else if (category.equals("tv")) {
-					if (extraDataList.size() != 3) {
-						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 3");
+				else if (category.equals("monitor")) {
+					if (extraDataList.size() != 2) {
+						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 2");
 					}
 
-					if (extraDataList.get(1).equals("Smart") || extraDataList.get(1).equals("SMART")) {
-						extraData.put("Smart", "Yes");
-					}
-					else {
-						extraData.put("Smart", "No");
-					}			
+					
 					extraData.put("Resolution", extraDataList.get(0));
-					extraData.put("ScreenSize", extraDataList.get(2));
+					extraData.put("ScreenSize", extraDataList.get(1));
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Resolution'", new Object[] { extraDataList.get(0), id});			
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Smart'", new Object[] { extraDataList.get(1), id});			
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(2), id});			
+					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(1), id});			
 
 				}
 				else if (category.equals("tablet")) {
@@ -741,7 +757,7 @@ public class DataAccess {
 				 */
 				extraData.put("CPU", extraDataList.get(0));
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPU'", new Object[] { extraDataList.get(0), id});			
-				extraData.put("CPU", extraDataList.get(1));
+				extraData.put("CPUcores", extraDataList.get(1));
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPUcores'", new Object[] { extraDataList.get(1), id});			
 				extraData.put("RAM", extraDataList.get(2));
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='RAM'", new Object[] { extraDataList.get(2), id});			
@@ -795,22 +811,15 @@ public class DataAccess {
 				extraData.put("OS", extraDataList.get(6));
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='OS'", new Object[] { extraDataList.get(6), id});			
 			}
-			else if (category.equals("tv")) {
-				if (extraDataList.size() != 3) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 3");
+			else if (category.equals("monitor")) {
+				if (extraDataList.size() != 2) {
+					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 2");
 				}
-
-				if (extraDataList.get(1).equals("Smart") || extraDataList.get(1).equals("SMART")) {
-					extraData.put("Smart", "Yes");
-				}
-				else {
-					extraData.put("Smart", "No");
-				}			
+				
 				extraData.put("Resolution", extraDataList.get(0));
-				extraData.put("ScreenSize", extraDataList.get(2));
+				extraData.put("ScreenSize", extraDataList.get(1));
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Resolution'", new Object[] { extraDataList.get(0), id});			
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Smart'", new Object[] { extraDataList.get(1), id});			
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(2), id});			
+				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(1), id});			
 
 			}
 			else if (category.equals("tablet")) {
@@ -1097,19 +1106,34 @@ public class DataAccess {
 		parameters.addValue("sort", sort_type);
 		parameters.addValue("start", limits.getStart());
 		parameters.addValue("count", limits.getCount());
-		/*
-		System.out.println(geoLngString);
-		System.out.println(geoLatString);
-		System.out.println(geoDistString);
-		System.out.println(dateFrom);
-		System.out.println(dateTo);
-		System.out.println(shops);
-		System.out.println(products);
-		System.out.println(tags);
-		System.out.println(sort_type);
-		*/
 		String sqlStm;
 		if (geoDistString != null && !geoDistString.isEmpty() && !geoDistString.equals("-1")) {
+			if (!geoLngString.isEmpty()) {
+				sqlStm = "SELECT distinct Shop.lng as  lng, Shop.lat as lat, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
+						" GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date \n" + 
+						" FROM Shop, Product, Record ";
+				if (tags.length!=0) {
+					sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
+				}
+					sqlStm += "WHERE " + 
+						" Record.shopId = Shop.id \n" + 
+						" AND Record.productId = Product.id\n" + 
+						" AND Record.date <= :dateTo and Record.date >= :dateFrom ";
+			}
+			else {
+				sqlStm = "SELECT distinct Shop.lng as lng, Shop.lat as lat,  price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
+						" Record.date \n" + 
+						" FROM Shop, Product, Record ";
+				if (tags.length!=0) {
+					sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
+				}
+					sqlStm += "WHERE \n" + 
+						" Record.shopId = Shop.id \n" + 
+						" AND Record.productId = Product.id\n" + 
+						" AND Record.date <= :dateTo and Record.date >= :dateFrom \n";
+			}	
+		}
+		else if (geoLngString!=null && !geoLngString.isEmpty()) {
 			sqlStm = "SELECT distinct Shop.lng as  lng, Shop.lat as lat, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
 					" GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date \n" + 
 					" FROM Shop, Product, Record ";
@@ -1120,7 +1144,7 @@ public class DataAccess {
 					" Record.shopId = Shop.id \n" + 
 					" AND Record.productId = Product.id\n" + 
 					" AND Record.date <= :dateTo and Record.date >= :dateFrom ";
-					
+			
 		}
 		else {
 			sqlStm = "SELECT distinct Shop.lng as lng, Shop.lat as lat,  price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
@@ -1149,7 +1173,8 @@ public class DataAccess {
 					"		and Shop_Tag.ShopId = Shop.id\n" + 
 					"		and Tag.name in (:shopTags)))";
 		}
-		if (geoDistString != null && !geoDistString.isEmpty() && !geoDistString.equals("-1")) {
+		if (geoDistString != null && !geoDistString.isEmpty() && !geoDistString.equals("-1") && 
+				geoLngString!=null && !geoLngString.isEmpty() ) {
 			sqlStm += " having dist < :geoDist ";
 		}
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable

@@ -13,9 +13,6 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.restlet.util.Series;
 
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -85,6 +82,9 @@ public class ProductsResource extends ServerResource {
 				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category " + category + " is not supported in stingy");
 			}
 		}
+		/*
+		 * Check if at least one extra data is given.
+		 */
 		boolean empty  = true;
 		for (String value : extra.values()) {
 			if (value != null && !value.isEmpty()) {
@@ -137,6 +137,9 @@ public class ProductsResource extends ServerResource {
 		if (sort == null) {
 			sort = "id|DESC";
 		}
+		/*
+		 * Set json as the default format for the result.
+		 */
 		if (format == null || format.isEmpty()) {
 			format = "json";
 		}
@@ -185,6 +188,9 @@ public class ProductsResource extends ServerResource {
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can create new products");
     	}
+    	/*
+    	 * Get format from the parameters of the url.
+    	 */
     	Form queryParams = getQuery();
  		String format = queryParams.getFirstValue("format"); 
 		/*
@@ -231,6 +237,9 @@ public class ProductsResource extends ServerResource {
 		else {
 			withdrawn = Boolean.valueOf(withdrawnString);
 		}
+		/*
+		 * Set json as the default format for the result.
+		 */
 		if (format == null || format.isEmpty()) {
 			format = "json";
 		}

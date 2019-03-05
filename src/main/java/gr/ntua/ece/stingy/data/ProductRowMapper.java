@@ -6,15 +6,10 @@ package gr.ntua.ece.stingy.data;
 import gr.ntua.ece.stingy.conf.Configuration;
 import gr.ntua.ece.stingy.data.model.Product;
 
-import org.restlet.data.Status;
-import org.restlet.resource.ResourceException;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +26,7 @@ public class ProductRowMapper implements RowMapper {
 		boolean withdrawn  = rs.getBoolean("withdrawn");
 		String image	   = rs.getString("image");
 		/*
-		 * Convert tags to a list of tags (tags are separated by comma).
+		 * Get tags and extraData of the product.
 		 */
 		List<String> tags = dataAccess.getProductTagsById(String.valueOf(id));
 		Map<String, String> extraData = dataAccess.getExtraDataById(id); 

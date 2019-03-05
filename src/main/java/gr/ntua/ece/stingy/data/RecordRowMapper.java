@@ -44,9 +44,14 @@ public class RecordRowMapper implements RowMapper {
 		DateFormat df1 = new SimpleDateFormat(pattern);
 
 		String date = df1.format(dateDate);
-
-	    DecimalFormat df2 = new DecimalFormat("#.00");
-	    String distFormatted = df2.format(shopDist);
+		String distFormatted;
+		if (shopDist > 0){
+			DecimalFormat df2 = new DecimalFormat("#.00");
+			distFormatted = df2.format(shopDist);
+		}
+		else {
+			distFormatted = "Unknown";
+		}
 		List<String> shopTags = dataAccess.getShopTagsById(shopId);
 		List<String> productTags = dataAccess.getProductTagsById(productId);		
 		return new Record(price, productName, productId, productTags, shopId, shopName, shopTags, shopAddress, distFormatted, shopDist, date, lng, lat);

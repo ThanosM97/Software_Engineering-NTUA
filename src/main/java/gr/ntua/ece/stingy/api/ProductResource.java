@@ -13,11 +13,12 @@ import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.restlet.util.Series;
 
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
+
+/*
+ * A class implementing get, put, patch and delete methods of /products/{id} URI.
+ */
 
 public class ProductResource extends ServerResource {
 
@@ -28,17 +29,19 @@ public class ProductResource extends ServerResource {
 
         String idAttr = getAttribute("id");
         Form queryParams = getQuery();
-		String format = queryParams.getFirstValue("format");        /*
+		String format = queryParams.getFirstValue("format");     
+		if (format == null || format.isEmpty()) {
+        	format = "json";
+        }
+		/*
          * Check if given id is not null.
          */
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing product id");
         }
-        if (format == null || format.isEmpty()) {
-        	format = "json";
-        }
+        
         /*
-         * Convert given id tos long.
+         * Convert given id to long.
          */
         Long id = null;
         try {
@@ -48,7 +51,7 @@ public class ProductResource extends ServerResource {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid product id: " + idAttr);
         }
         /*
-         * Get product based on the given id.
+         * Get product based on the given id and return its representations based on the desired format.
          */
         Optional<Product> optional = dataAccess.getProduct(id);
         Product product = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
@@ -72,18 +75,20 @@ public class ProductResource extends ServerResource {
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can delete products");
     	}
+    	
     	Form queryParams = getQuery();
  		String format = queryParams.getFirstValue("format");     
         String idAttr = getAttribute("id");
+        if (format == null || format.isEmpty()) {
+        	format = "json";
+        }
         /*
          * Check if given id is null.
          */
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing product id");
         }
-        if (format == null || format.isEmpty()) {
-        	format = "json";
-        }
+        
         /*
          * Convert given id to long.
          */
@@ -101,7 +106,7 @@ public class ProductResource extends ServerResource {
 	        Optional<Message> optional = dataAccess.deleteProduct(id);
 	        Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
 	        /*
-	         * Return message.
+	         * Return message in the desired format..
 	         */
 	        if (format.equals("xml")) {
 		        return new XmlMessageRepresentation(message);
@@ -117,7 +122,7 @@ public class ProductResource extends ServerResource {
 	        Optional<Message> optional = dataAccess.withdrawnProduct(id);
 	        Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
 	        /*
-	         * Return message.
+	         * Return message in the desired format.
 	         */
 	        if (format.equals("xml")) {
 		        return new XmlMessageRepresentation(message);
@@ -194,7 +199,7 @@ public class ProductResource extends ServerResource {
 		}
 		
         /*
-         * Update the certain product
+         * Update the certain product and return its representation.
          */
         Optional<Product> optional = dataAccess.updateProduct(id, name, description, category, withdrawn, Arrays.asList(tags), extraDataString);
         Product product = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));

@@ -5,20 +5,12 @@ package gr.ntua.ece.stingy.api;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Map;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
 
 import org.restlet.data.MediaType;
 import org.restlet.representation.WriterRepresentation;
 
 import com.thoughtworks.xstream.XStream;
 
-import gr.ntua.ece.stingy.data.model.Message;
 import gr.ntua.ece.stingy.data.model.Product;
 
 public class XmlProductRepresentation extends WriterRepresentation {
