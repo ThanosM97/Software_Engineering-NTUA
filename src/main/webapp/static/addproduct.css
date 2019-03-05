@@ -1,0 +1,92 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,300,600,400italic);
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.body {
+    position: relative;
+    margin:0;
+    padding:0;
+    height: 100%;
+    min-height:100%;
+ }
+
+ #container {
+    min-height:100%;
+    position: relative;
+ }
+
+ .aheader {
+     margin-top:1%;
+     margin-left: 23%;
+     margin-right:30%;
+     font: 400 25px/30px "Roboto", Helvetica, Arial, sans-serif;
+ }
+
+ .form1 {
+     margin-top:1%;
+     font-family: "Roboto", Helvetica, Arial, sans-serif;
+     background-color: beige;
+     margin-left: 20%;
+     margin-right: 20%;
+     border: ridge;
+     border-width: 4%;
+     border-spacing: 10px;
+     border-radius: 20px;
+     box-shadow: 5px 10px #888888;
+     padding-left: 6%;
+ }
+
+ .button1 {
+    background-color: #008CBA; /* Green */
+    border: none;
+    color: white;
+    padding: 1% 3%;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 70%;
+    margin-bottom: 1%;
+ }
+
+.footerdiv {
+    position: relative;
+    margin-bottom: 0%;
+    margin-top: 12%;
+}
+
+.tablecontent tr {
+    height: 20%;
+    text-align: center;
+}
+
+.tablecontent td {
+    width: 50%;
+    margin-top:10%;
+}
+
+.tablecontent label{
+    font-size: 15px;
+    float: right;
+}
+
+.tablecontent input[type=text] {
+    margin: 0 .10rem;
+    min-width: 125px;
+    border: 1px solid rgb(39, 34, 34);
+    border-left: 3px solid;
+    border-radius: 15px;
+    transition: border-color .5s ease-out;
+    padding: 8px;
+}
+
+.tablecontent input:required {
+    border-color: rgb(43, 36, 56);
+}
+
+.tablecontent input:invalid {
+    border-color: salmon;
+}
