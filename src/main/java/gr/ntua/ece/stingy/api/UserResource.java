@@ -34,12 +34,12 @@ public class UserResource extends ServerResource {
         /*
          * Read the parameters
          */
-        String userToken = form.getFirstValue("userToken");
+        String username = form.getFirstValue("username");
         
-        if (userToken == null || userToken.isEmpty()){
-            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing token");
+        if (username == null || username.isEmpty()){
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing username");
         }
-        if (!dataAccess.isAdmin(auth) && !userToken.equals(auth)) {
+        if (!dataAccess.isAdmin(auth) && !dataAccess.isUser(auth)) {
             throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "You are not authorized for this information");
         }
         Form queryParams = getQuery();
@@ -48,8 +48,8 @@ public class UserResource extends ServerResource {
     		format = "json";
     	}
         
-        Optional<User> optional = dataAccess.getUserByToken(userToken);
-        User user = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "User not found - token: " + userToken));
+        Optional<User> optional = dataAccess.getUserByUsername(username);
+        User user = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "User not found - username: " + username));
         /*
          * Return message.
          */

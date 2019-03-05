@@ -205,7 +205,6 @@ public class ProductsResource extends ServerResource {
 		String category = form.getFirstValue("category");
 		String withdrawnString = form.getFirstValue("withdrawn");
 		String[] tags = form.getValuesArray("tags");
-		String extraDataString = form.getFirstValue("extraData");
 		String image = form.getFirstValue("image");
 
 
@@ -225,8 +224,6 @@ public class ProductsResource extends ServerResource {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
 		}
 		
-		
-
 		/*
 		 * If withdrawn is not set, use default value.
 		 */
@@ -244,10 +241,62 @@ public class ProductsResource extends ServerResource {
 			format = "json";
 		}
 
+		Map<String, String> extraData = new HashMap<>();
+		if (category.equals("laptop")) {
+			/*
+			 * Extra data supported for Laptops
+			 */
+			extraData.put("CPU", form.getFirstValue("CPU"));
+			extraData.put("CPUcores", form.getFirstValue("CPUcores"));
+			extraData.put("RAM", form.getFirstValue("RAM"));
+			extraData.put("HardDrive", form.getFirstValue("HardDrive"));
+			extraData.put("OS",form.getFirstValue("OS"));
+			extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+			extraData.put("GraphicsCard", form.getFirstValue("GraphicsCard"));
+		}
+		else if (category.equals("tv")) {
+			/*
+			 * Extra data supported for TVs
+			 */
+			extraData.put("Smart", form.getFirstValue("Smart"));			
+			extraData.put("Resolution", form.getFirstValue("Resolution"));
+			extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+		}
+		else if (category.equals("smartphone")) {
+			/*
+			 * Extra data supported for Smartphones
+			 */
+			extraData.put("CPUcores", form.getFirstValue("CPUcores"));
+			extraData.put("RAM", form.getFirstValue("RAM"));
+			extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+			extraData.put("Capacity", form.getFirstValue("Capacity"));
+			extraData.put("FrontCamera", form.getFirstValue("FrontCamera"));
+			extraData.put("SelfieCamera", form.getFirstValue("SelfieCamera"));
+			extraData.put("OS", form.getFirstValue("OS"));
+		}
+		else if (category.equals("tablet")) {
+			/*
+			 * Extra data supported for Tablets
+			 */
+			extraData.put("ScreenSize", form.getFirstValue("ScrenSize"));
+			extraData.put("RAM", form.getFirstValue("RAM"));
+			extraData.put("OS", form.getFirstValue("OS"));
+			extraData.put("HardDrive", form.getFirstValue("HardDrive"));
+		}
+		else if (category.equals("monitor")) {
+			/*
+			 * Extra data supported for TVs
+			 */
+			extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+			extraData.put("Resolution", form.getFirstValue("Resolution"));	
+		}
+
+		
+		
 		/*
 		 * Add requested product in the database.
 		 */
-		Product product = dataAccess.addProduct(name, description, category, withdrawn, Arrays.asList(tags), extraDataString, image );
+		Product product = dataAccess.addProduct(name, description, category, withdrawn, Arrays.asList(tags), extraData, image );
 		if (format.equals("xml")) {
 			return new XmlProductRepresentation(product);
 		}

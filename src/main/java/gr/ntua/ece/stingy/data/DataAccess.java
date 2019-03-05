@@ -297,7 +297,7 @@ public class DataAccess {
 	/*
 	 * Add a new product in the database.
 	 */
-	public Product addProduct(String name, String description, String category, boolean withdrawn, List<String> tags, String extraDataString , String image) {
+	public Product addProduct(String name, String description, String category, boolean withdrawn, List<String> tags, Map<String, String> extraData , String image) {
 		/*
 		 * Insert the new product in the Product table
 		 */
@@ -349,107 +349,11 @@ public class DataAccess {
 			}
 			jdbcTemplate.update("INSERT INTO Product_Tag(ProductId, TagId) VALUES(?, ?)", new Object[] { productId, tagId  });			
 		}
-		Map<String, String> extraData;
-		if (extraDataString != null) {
-			List<String> extraDataList = Arrays.asList(extraDataString.split(","));
-			extraData = new HashMap<>();
-			if (category.equals("laptop")) {
-				if (extraDataList.size() != 7) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 7");
-				}
-				/*
-				 * Extra data supported for Laptops
-				 */
-				extraData.put("CPU", extraDataList.get(0));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('CPU', ?, ?)", new Object[] { extraDataList.get(0), productId});			
-				extraData.put("CPUcores", extraDataList.get(1));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('CPUcores', ?, ?)", new Object[] { extraDataList.get(1), productId});			
-				extraData.put("RAM", extraDataList.get(2));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('RAM', ?, ?)", new Object[] { extraDataList.get(2), productId});			
-				extraData.put("HardDrive", extraDataList.get(3));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('HardDrive', ?, ?)", new Object[] { extraDataList.get(3), productId});			
-				extraData.put("OS", extraDataList.get(4));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('OS', ?, ?)", new Object[] { extraDataList.get(4), productId});			
-				extraData.put("ScreenSize", extraDataList.get(5));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('ScreenSize', ?, ?)", new Object[] {  extraDataList.get(5), productId});			
-				extraData.put("GraphicsCard", extraDataList.get(6));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('GraphicsCard', ?, ?)", new Object[] { extraDataList.get(6), productId});			
-
+		
+		for(String key : extraData.keySet()) {
+			if (extraData.get(key)!= null && extraData.get(key).length() != 0) {
+				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(?, ?, ?)", new Object[] { key, extraData.get(key), productId});			
 			}
-			else if (category.equals("tv")) {
-				if (extraDataList.size() != 3) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 3");
-				}
-				/*
-				 * Extra data supported for TVs
-				 */
-
-				extraData.put("Smart", extraDataList.get(1));			
-				extraData.put("Resolution", extraDataList.get(0));
-				extraData.put("ScreenSize", extraDataList.get(2));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('Resolution', ?, ?)", new Object[] { extraDataList.get(0), productId});			
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('Smart', ?, ?)", new Object[] { extraDataList.get(1), productId});			
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('ScreenSize', ?, ?)", new Object[] { extraDataList.get(2), productId});			
-
-			}
-			else if (category.equals("smartphone")) {
-				if (extraDataList.size() != 7) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 7");
-				}
-				/*
-				 * Extra data supported for Smartphones
-				 */
-				extraData.put("CPUcores", extraDataList.get(0));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('CPUcores', ?, ?)", new Object[] { extraDataList.get(0), productId});			
-				extraData.put("RAM", extraDataList.get(1));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('RAM', ?, ?)", new Object[] { extraDataList.get(1), productId});			
-				extraData.put("ScreenSize", extraDataList.get(2));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('ScreenSize', ?, ?)", new Object[] { extraDataList.get(2), productId});			
-				extraData.put("Capacity", extraDataList.get(3));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('Capacity', ?, ?)", new Object[] { extraDataList.get(3), productId});			
-				extraData.put("FrontCamera", extraDataList.get(4));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('FrontCamera', ?, ?)", new Object[] { extraDataList.get(4), productId});			
-				extraData.put("SelfieCamera", extraDataList.get(5));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('SelfieCamera', ?, ?)", new Object[] { extraDataList.get(5), productId});			
-				extraData.put("OS", extraDataList.get(6));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('OS', ?, ?)", new Object[] { extraDataList.get(6), productId});			
-			}
-			else if (category.equals("tablet")) {
-				if (extraDataList.size() != 4) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 4");
-				}
-				/*
-				 * Extra data supported for Tablets
-				 */
-				extraData.put("ScreenSize", extraDataList.get(0));
-				extraData.put("RAM", extraDataList.get(1));
-				extraData.put("OS", extraDataList.get(2));
-				extraData.put("HardDrive", extraDataList.get(3));
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('ScreenSize', ?, ?)", new Object[] { extraDataList.get(0), productId});			
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('RAM', ?, ?)", new Object[] { extraDataList.get(1), productId});			
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('OS', ?, ?)", new Object[] { extraDataList.get(2), productId});			
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('HardDrive', ?, ?)", new Object[] { extraDataList.get(3), productId});			
-
-			}
-			else if (category.equals("monitor")) {
-				if (extraDataList.size() != 2) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 2");
-				}
-				/*
-				 * Extra data supported for TVs
-				 */
-				extraData.put("ScreenSize", extraDataList.get(0));
-				extraData.put("Resolution", extraDataList.get(1));	
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('ScreenSize', ?, ?)", new Object[] { extraDataList.get(0), productId});			
-				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('Resolution', ?, ?)", new Object[] { extraDataList.get(1), productId});			
-
-			}
-			else {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category " + category + " is not supported in stingy");
-			}
-		}
-		else {
-			extraData = null;
 		}
 		/*
 		 * Create product and return it.
@@ -1317,8 +1221,8 @@ public class DataAccess {
 		return new Message("OK");
 	}
 	
-    public Optional<User> getUserByToken(String token){
-    	List<User> users = jdbcTemplate.query("select * from User where token = ?", new Object[] {token}, new UserRowMapper());
+    public Optional<User> getUserByUsername(String username){
+    	List<User> users = jdbcTemplate.query("select * from User where username = ?", new Object[] {username}, new UserRowMapper());
 		if (users.size() == 1)  {
 			return Optional.of(users.get(0));
 		}
