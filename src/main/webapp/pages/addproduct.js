@@ -3,10 +3,12 @@ import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import Head from 'next/head';
 
-var defaultRender =["Λειτουργικό Σύστημα:", "Οθόνη:", "RAM:", "Χωρητικότητα:", "Πίσω κάμερα:", "Μπροστά κάμερα:", "Πυρήνες επεξεργαστή:"]
-var tvRender = ["Ανάλυση Οθόνης:", "Smart TV:", "Μέγεθος Οθόνης"]
-var laptopRender =["Επεξεργαστς","Πυρήνες επεξεργαστή:","RAM:", "Σκληρός Δίσκος:", "Λειτουργικό Σύστημα:", "Μέγεθος Οθόνης:", "Κάρτα γραφικών:" ]
-// TODO: + 2 ΚΑΤΗΓΟΡΙΕΣ ΑΚΟΜΑ
+var defaultRender =[["Λειτουργικό Σύστημα:","OS"], ["Οθόνη:","ScreenSize"], ["RAM:","RAM"], ["Χωρητικότητα:","Capacity"], ["Πίσω κάμερα:","SelfieCamera"], ["Μπροστά κάμερα:","FrontCamera"], ["Πυρήνες επεξεργαστή:","CPUcores"]]
+var tvRender = [["Ανάλυση Οθόνης:","Resolution"], ["Smart TV:","Smart"], ["Μέγεθος Οθόνης","ScreenSize"]]
+var laptopRender =[["Επεξεργαστης:","CPU"],["Πυρήνες επεξεργαστή:","CPUcores"],["RAM:","RAM"], ["Σκληρός Δίσκος:","HardDrive"], ["Λειτουργικό Σύστημα:","OS"], ["Μέγεθος Οθόνης:","ScreenSize"], ["Κάρτα γραφικών:","GraphicsCard"] ]
+var monitorRender = [["Οθόνη:","ScreenSize"], ["Ανάλυση:","Resolution"]]
+var tabletRender = [["Οθόνη:","ScreenSize"], ["RAM:","RAM"], ["Λειτουργικό Σύστημα:","OS"], ["Σκληρός Δίσκος:","HardDrive"]]
+var newRender = [["Όνομα νέας Κατηγορίας:",""]]
 
 class content extends React.Component{
     constructor(props) {
@@ -18,10 +20,10 @@ class content extends React.Component{
             product_render: defaultRender.map((extraData,i)=>(
             <tr>
                 <td>
-                    <label>{extraData}</label>
+                    <label>{extraData[0]}</label>
                 </td>
                 <td>
-                    <input type='text' />
+                    <input type='text' name={extraData[1]} />
                 </td>
             </tr>
           )),
@@ -50,10 +52,10 @@ class content extends React.Component{
                             defaultRender.map((extraData,i)=>(
                             <tr>
                                 <td>
-                                    <label>{extraData}</label>
+                                    <label>{extraData[0]}</label>
                                 </td>
                                 <td>
-                                    <input type='text' />
+                                    <input type='text' name={extraData[1]} />
                                 </td>
                             </tr>
                           ))
@@ -62,190 +64,79 @@ class content extends React.Component{
                 break;
             case 'tv':
                 this.state.product_render = (
-                    <div>
-                        <table class='tablecontent'>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <label>Οθόνη:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Ανάλυση:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>SmartTV:</label>
-                                    </td>
-                                    <td>
-                                        <input type='checkbox' />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                );
+                    tvRender.map((extraData,i)=>(
+                            <tr>
+                                <td>
+                                    <label>{extraData[0]}</label>
+                                </td>
+                                <td>
+                                    <input type='text' name={extraData[1]} />
+                                </td>
+                            </tr>
+                        )
+                    )
+                )
                 break;
             case 'laptop':
-                this.state.product_render = (
-                    <div>
-                        <table class='tablecontent'>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <label>CPU:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Πυρήνες επεξεργαστή:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>RAM:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Σκληρός δίσκος:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Λειτουργικό Σύστημα:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Οθόνη:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Κάρτα γραφικών:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                );
-                break;
+            this.state.product_render = (
+                laptopRender.map((extraData,i)=>(
+                        <tr>
+                            <td>
+                                <label>{extraData[0]}</label>
+                            </td>
+                            <td>
+                                <input type='text' name={extraData[1]} />
+                            </td>
+                        </tr>
+                    )
+                )
+            )
+            break;
             case 'monitor':
-                this.state.product_render = (
-                    <div>
-                        <table class='tablecontent'>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <label>Οθόνη:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Ανάλυση:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                );
-                break;
+            this.state.product_render = (
+                monitorRender.map((extraData,i)=>(
+                        <tr>
+                            <td>
+                                <label>{extraData[0]}</label>
+                            </td>
+                            <td>
+                                <input type='text' name={extraData[1]} />
+                            </td>
+                        </tr>
+                    )
+                )
+            )
+            break;
             case 'tablet':
                 this.state.product_render = (
-                    <div>
-                        <table class='tablecontent'>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <label>Οθόνη:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>RAM:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Λειτουργικό Σύστημα:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Σκληρός δίσκος:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                );
-                break;
+                tabletRender.map((extraData,i)=>(
+                        <tr>
+                            <td>
+                                <label>{extraData[0]}</label>
+                            </td>
+                            <td>
+                                <input type='text' name={extraData[1]} />
+                            </td>
+                        </tr>
+                    )
+                )
+            )
+            break;
             case 'new':
-                this.state.product_render = (
-                    <div>
-                        <table class='tablecontent'>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <label>Όνομα νέας Κατηγορίας:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                );
-                break;
+            this.state.product_render = (
+                newRender.map((extraData,i)=>(
+                        <tr>
+                            <td>
+                                <label>{extraData[0]}</label>
+                            </td>
+                            <td>
+                                <input type='text' name={extraData[1]} />
+                            </td>
+                        </tr>
+                    )
+                )
+            )
+            break;
         }
     }
 
