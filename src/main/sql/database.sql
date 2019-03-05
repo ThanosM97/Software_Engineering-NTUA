@@ -682,37 +682,33 @@ UNLOCK TABLES;
 
 
 
-
-
 /*-------------------------
 -----------VIEWS-----------
 ---------------------------*/
 
 DROP VIEW IF EXISTS `Top_Trends`;
-
 CREATE VIEW `Top_Trends` 
-AS SELECT new.name, new.description, new.image, new.avg
-FROM ( SELECT DISTINCT p.name, p.description, p.image, AVG(ur.Stars) AS avg
-	   FROM Product p, User_Rating ur
-       WHERE p.id=ur.ProductId
+AS SELECT new.name, new.description, new.image, new.average_stars, new.date as date_of_last_record
+FROM ( SELECT DISTINCT p.name, p.description, p.image, AVG(ur.Stars) AS average_stars, r.date
+	   FROM Product p, User_Rating ur, Record r
+       WHERE p.id=ur.ProductId AND p.id =r.productId
        GROUP BY ur.ProductId ) AS new
-ORDER BY new.avg
+WHERE new.date >= '2018-11-15'
+ORDER BY new.average_stars
 DESC LIMIT 5;
 
-
+     
 DROP VIEW IF EXISTS `Hot_Offers`;
 CREATE VIEW `Hot_Offers` 
-AS SELECT new.name, new.description, new.image, new.price
-FROM ( SELECT p.name, p.description, p.image, r.price
-	   FROM Record r,  Product p
-	   WHERE p.id=r.productId
-       GROUP BY r.productId, r.shopId
-       HAVING COUNT(*) >= 2
-       ORDER BY r.price
-       DESC LIMIT 1 ) AS new
-ORDER BY new.price
-DESC LIMIT 5;
-     
+AS SELECT DISTINCT c1.name, c1.description, c1.image, c1.price,  (c1.price - (2*AVG(c1.price) - c1.price))/(2*AVG(c1.price) - c1.price) AS percentage 
+FROM (SELECT DISTINCT p.name, p.description, p.image,r.productId, r.price, r.shopId 
+	  FROM Product p,Record r 
+	  WHERE p.id = r.productId 
+	  ORDER BY r.shopId, r.price) AS c1 
+GROUP BY c1.shopID, c1.productId 
+HAVING COUNT(*)=2 
+ORDER BY percentage;
+ 
 
 
 /*-------------------------
