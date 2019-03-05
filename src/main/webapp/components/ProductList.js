@@ -25,7 +25,7 @@ export class ProductList extends React.Component{
             <div key={i} className='product-entry'>
                 <img src={product.img} className='product-image' />
                 <div className="product-details" >
-                  <a href='productview' className='product-name'>{product.name}</a>
+                  <a href={'productview?id=' + product.id} className='product-name'>{product.name}</a>
                   <p className="product-description">{product.description}</p>
                   <h2 className='product-specs'>{this.getExtraData(product)}</h2>
                   <h2 className='product-price'>Χαμηλότερη καταγεγραμμένη τιμή: {product.bestPrice}&euro;</h2>
@@ -147,7 +147,7 @@ class Sidebar extends React.Component{
                 </div>
                 <div className="filterGroups">
                     <h3>Κατασκευαστής</h3>
-                    <input type='radio' onClick={this.handleFilterChange.bind(this)} name="tags" value=""/> All <br />
+                    <input type='radio' onClick={this.handleFilterChange.bind(this)} name="tags" value="all"/> All <br />
                     <input type='radio' onClick={this.handleFilterChange.bind(this)} name="tags" value="apple"/> Apple <br />
                     <input type='radio' onClick={this.handleFilterChange.bind(this)} name="tags" value="hwawei"/> Huawei <br />
                     <input type='radio' onClick={this.handleFilterChange.bind(this)} name="tags" value="samsung"/> Samsung <br />

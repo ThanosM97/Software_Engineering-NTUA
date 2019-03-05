@@ -12,7 +12,7 @@ class Map extends Component {
   }
 
   renderMap = () => {
-    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyAMZm-VfcJmBlUcfm-OZGltQDgujt8-HEM&callback=initMap")
+    loadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyD7uyIUM_opfDCHzH5hRIECQgqAUcfCnFE&callback=initMap")
     window.initMap = this.initMap
   }
 

@@ -67,6 +67,7 @@ class Productlist extends Component {
   handleFilterChange(newObject,category){
     let myQuery = querystring.stringify(newObject)
     myQuery = "category="+category+"&" + myQuery;
+    console.log(myQuery);
     let data = fetch('https://localhost:8765/observatory/api/products?start=0&count='+this.state.count+"&"+myQuery).then((resp)=>{
       resp.json().then((res)=>{
         this.setState({data:res.products, start:0, activePage:1 , total:res.total, pagesNo:Math.ceil(res.total/this.state.count)});
