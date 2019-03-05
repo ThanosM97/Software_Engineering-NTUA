@@ -3,10 +3,10 @@
   bottom:0;
   right:0;
   left:0;
-
+  color:white;
   width:100%;
-  height:120px;
-  background-color: #e5e5e5;
+  height:150px;
+  background-color: #292c2f;
   text-align: center;
   font-size: 1vw;
   display:block;
@@ -16,18 +16,24 @@
 .categories-box {
   position: relative;
   width:33%;
-  top:25%;
+  top:10%;
   height:50%;
   float:left;
 }
 .categories-box a {
   padding:5px;
+  color:white;
+}
+
+.categories-box a:hover {
+  color:white;
+  color: #910f2d;
 }
 
 .contact-box {
   position:relative;
   width:33%;
-  top:25%;
+  top:20%;
   height:50%;
   margin-left:-2%;
   float:left;
@@ -47,4 +53,30 @@
   text-align: justify;
   font-size: 90%;
   margin-right: 10px;
+  margin-top:1%;
+}
+
+.footer-company-name {
+  color:  #8f9296;
+  font-size: 20px;
+  font-weight: normal;
+  margin: 0;
+  float:left;
+  padding-left:8%;
+  padding-top:2%;
+}
+.logo {
+  color:  #ffffff;
+	font: normal 40px 'Cookie', cursive;
+}
+
+.circle {
+  margin-right:5px;
+}
+.links:visited {
+  color: white;
+}
+
+.links:hover {
+  color: #910f2d;
 }

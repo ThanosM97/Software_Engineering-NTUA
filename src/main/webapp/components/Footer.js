@@ -7,20 +7,25 @@ class Footer extends Component {
       <div>
         <Head>
           <link href="../static/Footer.css" rel="stylesheet" />
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+          <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Cookie"/>
+          <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
         </Head>
         <div className="footer">
           <div className="categories-box">
-            <h3>Κατηγορίες</h3>
-            <a href="#">TV's</a>
-            <a href="#">Monitors</a>
-            <a href="#">Laptops</a>
-            <a href="#">Tablets</a>
-            <a href="#">Smartphones</a>
+            <h3 class="logo" style={{float:"left"}}><img src="../static/logo/logo.png" alt="Stingy" width= "8%" height= "8%" style={{marginBottom:"-5px"}}/>  Stingy </h3>
+            <a href="/"><i className="fa fa-home" /> Home </a>
+            <a href="/productlist?category=tv"><i className="fa fa-television"/> TV's</a>
+            <a href="/productlist?category=smartphone"><i className="fa fa-mobile"/> Smartphones</a>
+            <a href="/productlist?category=laptop"><i className="fa fa-laptop"/> Laptops</a>
+            <a href="/productlist?category=tablet"><i className="fa fa-tablet"/> Tablets</a>
+            <a href="/productlist?category=monitor"><i className="fa fa-television"/> Monitors</a>
+            <p className="footer-company-name">Stingy &copy; 2019</p>
           </div>
           <div className="contact-box">
-              <img src="/static/images/black-envelope.jpg" alt="contact us" width="20px" height="13px" />
-              <h3>Επικοινωνήστε μαζί μας</h3>
-              <p style={{color:"red"}}>(Χρειάζεσαι βοήθεια?)</p>
+              <a className="links" href="/contact-us"><h3> <i className="fa fa-envelope circle " width="20px" height="13px"/>Επικοινωνήστε μαζί μας</h3></a>
+              <p style={{color:"red"}}>(Χρειάζεσαι βοήθεια?)</p><br />
+              <a className="links" href="shops">  <h3><i className="fa fa-building-o"></i> Συνεργαζόμενα Καταστήματα</h3></a>
           </div>
           <div className="volunteering-box">
             <h3 style={{textAlign:"center"}}>Εθελοντική δράση</h3>
