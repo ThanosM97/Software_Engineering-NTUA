@@ -37,7 +37,7 @@ public class RecordRowMapper implements RowMapper {
 		String shopAddress   = rs.getString("address");
 		int shopDist	= rs.getInt("dist");
 		Date dateDate 		= rs.getDate("date");
-		String pattern = "yyyy-dd-MM";
+		String pattern = "yyyy-MM-dd";
 		DateFormat df = new SimpleDateFormat(pattern);
 
 		String date = df.format(dateDate);

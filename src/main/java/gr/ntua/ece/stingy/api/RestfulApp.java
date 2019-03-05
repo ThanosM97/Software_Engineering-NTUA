@@ -69,6 +69,11 @@ public class RestfulApp extends Application {
 		 */
 		router.attach("/user", UserResource.class);
 		
+		/*
+		 * GET, POST methods
+		 */
+		router.attach("/comments", CommentsResource.class);
+		
 		return corsFilter;
 	}
 

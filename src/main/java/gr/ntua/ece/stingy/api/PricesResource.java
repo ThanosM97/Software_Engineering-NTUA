@@ -113,6 +113,7 @@ public class PricesResource extends ServerResource {
         	dateTo = new SimpleDateFormat("yyyy-MM-dd").format(date);
         }
         
+        
         /*
          * Get prices based on the limits.
          */
