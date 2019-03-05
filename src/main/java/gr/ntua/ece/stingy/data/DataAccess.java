@@ -1077,22 +1077,23 @@ public class DataAccess {
 
 
 	public List<Record> getRecords(Limits limits, String geoDistString, String geoLngString, String geoLatString, String dateFrom, String dateTo, 
-			List<String> shops, List<String> products, List<String> tags , String sort) {
+			String[] shops, String[] products, String[] tags , String sort) {
 		String sort_type = sort.replaceAll("\\|", " ");
 
 		/*
 		 * Initialize named parameters
 		 */
+		
 		MapSqlParameterSource parameters = new MapSqlParameterSource();
 		parameters.addValue("geoLng", geoLngString);
 		parameters.addValue("geoLat", geoLatString);
 		parameters.addValue("geoDist", geoDistString);
 		parameters.addValue("dateFrom", dateFrom);
 		parameters.addValue("dateTo", dateTo);
-		parameters.addValue("shops", shops);
-		parameters.addValue("products", products);
-		parameters.addValue("productTags", tags);
-		parameters.addValue("shopTags", tags);
+		parameters.addValue("shops", Arrays.asList(shops));
+		parameters.addValue("products", Arrays.asList(products));
+		parameters.addValue("productTags", Arrays.asList(tags));
+		parameters.addValue("shopTags", Arrays.asList(tags));
 		parameters.addValue("sort", sort_type);
 		parameters.addValue("start", limits.getStart());
 		parameters.addValue("count", limits.getCount());
@@ -1108,12 +1109,11 @@ public class DataAccess {
 		System.out.println(sort_type);
 		*/
 		String sqlStm;
-
 		if (geoDistString != null) {
 			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
 					"SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) as dist, Record.date \n" + 
 					"FROM Shop, Product, Record ";
-			if (tags!= null && !tags.isEmpty()) {
+			if (tags.length!=0) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
 			}
 				sqlStm += "WHERE SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) < :geoDist\n" + 
@@ -1125,7 +1125,7 @@ public class DataAccess {
 			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
 					" Record.date \n" + 
 					"FROM Shop, Product, Record ";
-			if (tags!= null && !tags.isEmpty()) {
+			if (tags.length!=0) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
 			}
 				sqlStm += "WHERE \n" + 
@@ -1134,13 +1134,13 @@ public class DataAccess {
 					"AND Record.date <= :dateTo and Record.date >= :dateFrom\n";
 		}
 
-		if (products != null) {
+		if (products.length!= 0 ) {
 			sqlStm += "AND Record.productId in (:products)\n";
 		}
-		if (shops != null) {
+		if (shops.length!=0) {
 			sqlStm += "AND Record.shopId in (:shops)\n";
 		}
-		if (tags != null && !tags.isEmpty()) {
+		if (tags.length!=0 ) {
 			sqlStm += "AND ((Tag.name in (:productTags)\n" + 
 					"		and Tag.id = Product_Tag.TagId\n" + 
 					"		and Product_Tag.ProductId = Product.id)\n" + 
@@ -1149,14 +1149,11 @@ public class DataAccess {
 					"		and Tag.name in (:shopTags)))";
 		}
 
-		System.out.println(tags);
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
 		namedJdbcTemplate.query(sqlStm, parameters, countCallback);
 		int rowCount = countCallback.getRowCount();
 		limits.setTotal(rowCount);
 		System.out.println(sqlStm);
-		System.out.println(shops);
-		System.out.println(products);
 		sqlStm += "order by " + sort_type + " limit :start, :count";
 		return namedJdbcTemplate.query(sqlStm, parameters, new RecordRowMapper());
 	}

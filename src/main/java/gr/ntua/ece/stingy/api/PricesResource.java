@@ -118,7 +118,7 @@ public class PricesResource extends ServerResource {
          * Get prices based on the limits.
          */
     	List<Record> records = dataAccess.getRecords(limits, geoDistString, geoLngString, geoLatString, dateFrom, dateTo, 
-    			Arrays.asList(shops), Arrays.asList(products), Arrays.asList(tags),sort);
+    			shops, products, tags,sort);
     	/*
     	 * Set current total products.
     	 */
