@@ -25,7 +25,7 @@ class Footer extends Component {
           <div className="contact-box">
               <a className="links" href="/contact-us"><h3> <i className="fa fa-envelope circle " width="20px" height="13px"/>Επικοινωνήστε μαζί μας</h3></a>
               <p style={{color:"red"}}>(Χρειάζεσαι βοήθεια?)</p><br />
-              <a className="links" href="shops">  <h3><i className="fa fa-building-o"></i> Cooperating Shops</h3></a>
+              <a className="links" href="shops">  <h3><i className="fa fa-building-o"></i> Συνεργαζόμενα Καταστήματα</h3></a>
           </div>
           <div className="volunteering-box">
             <h3 style={{textAlign:"center"}}>Εθελοντική δράση</h3>
