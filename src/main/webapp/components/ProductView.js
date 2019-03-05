@@ -73,7 +73,7 @@ class ProductViewShopList extends React.Component{
     componentDidMount(){
       navigator.geolocation.getCurrentPosition(position => {
           this.setState({position:position.coords});
-          let data = fetch('https://localhost:8765/observatory/api/prices?products='+this.props.productId+"&geoLat="+position.coords.latitude+"&geoLng="+position.coords.longitude+"&geoDist=50").then((resp)=>{
+          let data = fetch('https://localhost:8765/observatory/api/prices?products='+this.props.productId+"&geoLat="+position.coords.latitude+"&geoLng="+position.coords.longitude+"&geoDist=-1").then((resp)=>{
             resp.json().then((res)=>{
               this.setState({records:res.prices, total:res.total});
             })
@@ -96,14 +96,17 @@ class ProductViewShopList extends React.Component{
       if (this.state.position){
         finalFilters.geoLat = this.state.position.latitude
         finalFilters.geoLng = this.state.position.longitude
+      }else {
+        finalFilters.geoLat = ""
+        finalFilters.geoLng = ""
       }
       var arr = [2,5,10,-1];
       let dist = this.state.filters.geoDist == -1 ? -1 : arr[this.state.filters.geoDist]
       finalFilters.geoDist = dist;
       let myQuery = querystring.stringify(finalFilters);
-      let data = fetch('https://localhost:8765/observatory/api/prices?'+ myQuery).then((resp)=>{
+      let data = fetch('https://localhost:8765/observatory/api/prices?products='+this.props.productId+"&"+ myQuery).then((resp)=>{
         resp.json().then((res)=>{
-          this.setState({records:res.prices, total:res.total}); console.log(res.prices)
+          this.setState({records:res.prices, total:res.total}); 
         })
       }).catch(error => console.error('Error:', error));
     }
