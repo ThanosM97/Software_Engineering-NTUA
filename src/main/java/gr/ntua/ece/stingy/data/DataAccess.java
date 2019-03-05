@@ -1111,15 +1111,16 @@ public class DataAccess {
 		String sqlStm;
 		if (geoDistString != null) {
 			sqlStm = "SELECT distinct Shop.lng as  lng, Shop.lat as lat, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
-					"SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) as dist, Record.date \n" + 
+					"GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date \n" + 
 					"FROM Shop, Product, Record ";
 			if (tags.length!=0) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
 			}
-				sqlStm += "WHERE SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) < :geoDist\n" + 
-					"AND Record.shopId = Shop.id \n" + 
+				sqlStm += "WHERE " + 
+					"Record.shopId = Shop.id \n" + 
 					"AND Record.productId = Product.id\n" + 
-					"AND Record.date <= :dateTo and Record.date >= :dateFrom\n";
+					"AND Record.date <= :dateTo and Record.date >= :dateFrom"
+					+ " having dist < :geoDist \n";
 		}
 		else {
 			sqlStm = "SELECT distinct Shop.lng as lng, Shop.lat as lat,  price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
