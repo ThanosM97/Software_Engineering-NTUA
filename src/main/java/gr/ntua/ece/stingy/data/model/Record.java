@@ -20,9 +20,11 @@ public class Record {
     private final String shopAddress;
     private final int shopDist;
     private final String date;
+    private final Double lng;
+    private final Double lat;
     
 	public Record(double price, String productName, String productId, List<String> productTags, String shopId, String shopName,
-			List<String> shopTags, String shopAddress, int shopDist, String date) {
+			List<String> shopTags, String shopAddress, int shopDist, String date, Double lng, Double lat) {
 		this.price = price;
 		this.productName = productName;
 		this.productId = productId;
@@ -33,6 +35,8 @@ public class Record {
 		this.shopAddress = shopAddress;
 		this.shopDist = shopDist;
 		this.date = date;
+		this.lng = lng;
+		this.lat = lat;
 	}
 
 	/**

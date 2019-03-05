@@ -38,13 +38,15 @@ public class RecordRowMapper implements RowMapper {
 		int shopDist	= rs.getInt("dist");
 		Date dateDate 		= rs.getDate("date");
 		String pattern = "yyyy-MM-dd";
+		Double lng = rs.getDouble("lng");
+		Double lat = rs.getDouble("lat");
 		DateFormat df = new SimpleDateFormat(pattern);
 
 		String date = df.format(dateDate);
 
 		List<String> shopTags = dataAccess.getShopTagsById(shopId);
 		List<String> productTags = dataAccess.getProductTagsById(productId);		
-		return new Record(price, productName, productId, productTags, shopId, shopName, shopTags, shopAddress, shopDist, date);
+		return new Record(price, productName, productId, productTags, shopId, shopName, shopTags, shopAddress, shopDist, date, lng, lat);
 	}
 
 }

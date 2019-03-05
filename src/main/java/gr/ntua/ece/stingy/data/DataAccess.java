@@ -1110,7 +1110,7 @@ public class DataAccess {
 		*/
 		String sqlStm;
 		if (geoDistString != null) {
-			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
+			sqlStm = "SELECT distinct Shop.lng as  lng, Shop.lat as lat, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
 					"SQRT(POW(Shop.lng - :geoLng, 2) + POW(Shop.lat - :geoLat, 2)) as dist, Record.date \n" + 
 					"FROM Shop, Product, Record ";
 			if (tags.length!=0) {
@@ -1122,7 +1122,7 @@ public class DataAccess {
 					"AND Record.date <= :dateTo and Record.date >= :dateFrom\n";
 		}
 		else {
-			sqlStm = "SELECT distinct price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
+			sqlStm = "SELECT distinct Shop.lng as lng, Shop.lat as lat,  price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
 					" Record.date \n" + 
 					"FROM Shop, Product, Record ";
 			if (tags.length!=0) {
@@ -1194,7 +1194,9 @@ public class DataAccess {
 						shop.getTags(),
 						shop.getAddress(),
 						-1,
-						text
+						text,
+						shop.getLng(),
+						shop.getLat()
 						));
         }
 
