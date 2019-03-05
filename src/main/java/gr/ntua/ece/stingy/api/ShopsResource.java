@@ -36,7 +36,7 @@ public class ShopsResource extends ServerResource {
 	    String countString = queryParams.getFirstValue("count");
 	    String status = queryParams.getFirstValue("status");
 	    String sort = queryParams.getFirstValue("sort");
-	
+	    String format = queryParams.getFirstValue("format");
 	    Map<String, Object> map = new HashMap<>();
 	    Limits limits = new Limits();
 	    /**
@@ -89,6 +89,9 @@ public class ShopsResource extends ServerResource {
 	    if (!sort.equals("id|ASC") && !sort.equals("id|DESC") && !sort.equals("name|ASC") && !sort.equals("name|DESC")) {
 	    	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid sort: " + sort);
 	    }
+	    if (format == null || format.isEmpty()) {
+	    	format = "json";
+	    }
 	    /*
 	     * Get shops based on the limits.
 	     */
@@ -98,7 +101,12 @@ public class ShopsResource extends ServerResource {
 	     */
 	    map.put("total", limits.getTotal());
 	    map.put("shops", shops);
-	    return new JsonMapRepresentation(map);
+	    if (format.equals("xml")) {
+	    	return new XmlMapRepresentation(map);
+	    }
+	    else {
+	    	return new JsonMapRepresentation(map);
+	    }
 	}
 
     @Override
@@ -127,7 +135,8 @@ public class ShopsResource extends ServerResource {
 		String[] tags = form.getValuesArray("tags");
         String withdrawnString = form.getFirstValue("withdrawn");
         String image = form.getFirstValue("image");
-
+	    Form queryParams = getQuery();
+	    String format = queryParams.getFirstValue("format");
         /*
 		 *  Validate the values (in the general case)
 		 */
@@ -144,6 +153,10 @@ public class ShopsResource extends ServerResource {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
 		}
 		
+		if (format == null || format.isEmpty()) {
+			format = "json";
+		}
+		
 		/*
 		 * If withdrawn is not set, use default value.
 		 */
@@ -155,12 +168,16 @@ public class ShopsResource extends ServerResource {
 			withdrawn = Boolean.valueOf(withdrawnString);
 		}
 
-		
         Shop shop = dataAccess.addShop(name, address, lng, lat, Arrays.asList(tags), withdrawn, image);
         /*
          * Return the json representation of the shop.
          */
-        return new JsonShopRepresentation(shop);
+		if (format.equals("xml")) {
+			return new XmlShopRepresentation(shop);
+		}
+		else {
+			return new JsonShopRepresentation(shop);
+		}
     }
 }
 

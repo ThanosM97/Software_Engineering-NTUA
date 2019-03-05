@@ -30,6 +30,7 @@ public class UserResource extends ServerResource {
          * Create a new restlet form
          */
         Form form = new Form(entity);
+
         /*
          * Read the parameters
          */
@@ -41,13 +42,23 @@ public class UserResource extends ServerResource {
         if (!dataAccess.isAdmin(auth) && !userToken.equals(auth)) {
             throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "You are not authorized for this information");
         }
+        Form queryParams = getQuery();
+    	String format = queryParams.getFirstValue("format");
+    	if (format == null || format.isEmpty()) {
+    		format = "json";
+    	}
         
         Optional<User> optional = dataAccess.getUserByToken(userToken);
         User user = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "User not found - token: " + userToken));
         /*
          * Return message.
          */
-        return new JsonUserRepresentation(user);
+        if (format.equals("xml")) {
+        	return new XmlUserRepresentation(user);
+        }
+        else {
+        	return new JsonUserRepresentation(user);
+        }
     }
     
 }

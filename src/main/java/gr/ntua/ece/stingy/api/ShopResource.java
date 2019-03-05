@@ -77,6 +77,8 @@ public class ShopResource extends ServerResource {
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can delete shops");
     	}
+    	Form queryParams = getQuery();
+    	String format = queryParams.getFirstValue("format");
     	/*
     	 * Get given id and check its validity.
     	 */
@@ -84,6 +86,9 @@ public class ShopResource extends ServerResource {
 
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing shop id");
+        }
+        if (format == null || format.isEmpty()) {
+        	format = "json";
         }
         /*
          * Convert it to long.
@@ -101,7 +106,12 @@ public class ShopResource extends ServerResource {
              */
             Optional<Message> optional = dataAccess.deleteShop(id);
             Message message = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
-            return new JsonMessageRepresentation(message);
+            if (format.equals("xml")) {
+            	return new XmlMessageRepresentation(message);
+            }
+            else {
+            	return new JsonMessageRepresentation(message);
+            }
         }
 	    else {
 	    	/*
@@ -112,8 +122,12 @@ public class ShopResource extends ServerResource {
 	        /*
 	         * Return message.
 	         */
-	        return new JsonMessageRepresentation(message);
-	    }
+	        if (format.equals("xml")) {
+            	return new XmlMessageRepresentation(message);
+            }
+            else {
+            	return new JsonMessageRepresentation(message);
+            }	    }
     }
     
     @Override
@@ -128,6 +142,8 @@ public class ShopResource extends ServerResource {
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can update shops");
     	}
+    	Form queryParams = getQuery();
+    	String format = queryParams.getFirstValue("format");
         /*
          * Get the shop id and check if it is valid 
          */
@@ -145,6 +161,9 @@ public class ShopResource extends ServerResource {
         }
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
+        }
+        if (format == null || format.isEmpty()) {
+        	format = "json";
         }
         /*
          * Create a new restlet form
@@ -181,7 +200,12 @@ public class ShopResource extends ServerResource {
          */
         Optional<Shop> optional = dataAccess.updateShop(id, name, address, lng, lat, Arrays.asList(tags), withdrawn, image);
         Shop shop = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
-        return new JsonShopRepresentation(shop);
+        if (format.equals("xml")) {
+        	return new XmlShopRepresentation(shop);
+        }
+        else {
+        	return new JsonShopRepresentation(shop);
+        }
     }
     
     @Override
@@ -192,7 +216,11 @@ public class ShopResource extends ServerResource {
     	@SuppressWarnings("unchecked")
 		Series<Header> headers = (Series<Header>) getRequestAttributes().get("org.restlet.http.headers");
     	String auth = headers.getFirstValue("X-OBSERVATORY-AUTH");
-    	
+    	Form queryParams = getQuery();
+    	String format = queryParams.getFirstValue("format");
+    	if (format == null || format.isEmpty()) {
+    		format = "xml";
+    	}
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can update shops");
     	}
@@ -260,7 +288,12 @@ public class ShopResource extends ServerResource {
     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "None field changed");
     	}
         Shop shop = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + idAttr));
-        return new JsonShopRepresentation(shop);
+        if (format.equals("xml")) {
+        	return new XmlShopRepresentation(shop);
+        }
+        else {
+         return new JsonShopRepresentation(shop);
+        }
     }
 }
 
