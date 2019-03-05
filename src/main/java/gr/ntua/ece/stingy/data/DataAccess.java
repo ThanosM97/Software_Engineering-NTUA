@@ -177,7 +177,6 @@ public class DataAccess {
 		if (!status.equals("ALL")) {
 			sqlStm += " and withdrawn=:withdrawn ";
 		}
-		System.out.println(tags);
 		if (tags != null && tags.size()!=0 && !tags.get(0).equals("all")) {
 			sqlStm += " and Product_Tag.Tagid = Tag.id and Product.id = Product_Tag.ProductId and Tag.name = '"+tags.get(0)+"'";
 		}
@@ -378,12 +377,8 @@ public class DataAccess {
 				/*
 				 * Extra data supported for TVs
 				 */
-				if (extraDataList.get(1).equals("Smart") || extraDataList.get(1).equals("SMART")) {
-					extraData.put("Smart", "Yes");
-				}
-				else {
-					extraData.put("Smart", "No");
-				}			
+
+				extraData.put("Smart", extraDataList.get(1));			
 				extraData.put("Resolution", extraDataList.get(0));
 				extraData.put("ScreenSize", extraDataList.get(2));
 				jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES('Resolution', ?, ?)", new Object[] { extraDataList.get(0), productId});			
@@ -617,12 +612,7 @@ public class DataAccess {
 						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 3");
 					}
 
-					if (extraDataList.get(1).equals("Smart") || extraDataList.get(1).equals("SMART")) {
-						extraData.put("Smart", "Yes");
-					}
-					else {
-						extraData.put("Smart", "No");
-					}			
+					extraData.put("Smart", extraDataList.get(1));			
 					extraData.put("Resolution", extraDataList.get(0));
 					extraData.put("ScreenSize", extraDataList.get(2));
 					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Resolution'", new Object[] { extraDataList.get(0), id});			
@@ -776,12 +766,7 @@ public class DataAccess {
 					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 3");
 				}
 
-				if (extraDataList.get(1).equals("Smart") || extraDataList.get(1).equals("SMART")) {
-					extraData.put("Smart", "Yes");
-				}
-				else {
-					extraData.put("Smart", "No");
-				}			
+				extraData.put("Smart", extraDataList.get(1));
 				extraData.put("Resolution", extraDataList.get(0));
 				extraData.put("ScreenSize", extraDataList.get(2));
 				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Resolution'", new Object[] { extraDataList.get(0), id});			
@@ -1181,7 +1166,6 @@ public class DataAccess {
 		namedJdbcTemplate.query(sqlStm, parameters, countCallback);
 		int rowCount = countCallback.getRowCount();
 		limits.setTotal(rowCount);
-		System.out.println(sqlStm);
 		sqlStm += "order by " + sort_type + " limit :start, :count";
 		return namedJdbcTemplate.query(sqlStm, parameters, new RecordRowMapper());
 	}
@@ -1198,7 +1182,6 @@ public class DataAccess {
         String currentDate;
         LocalDate afterEnd = endDate.plusDays(1);
 		for (LocalDate date = startDate; date.isBefore(afterEnd); date = date.plusDays(1)) {
-			System.out.println("as");
 			jdbcTemplate.update("insert into Record(price, date, productId, shopId, userId) "
 					+ "values(?, ?, ?, ?, ?)", new Object[] {price, java.sql.Date.valueOf(date), productId, shopId, userId});
 		}
@@ -1208,7 +1191,6 @@ public class DataAccess {
         Product product = productOpt.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + productId));
         Shop shop = shopOpt.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Shop not found - id: " + shopId));
         List<Record> records = new ArrayList<Record>();
-        System.out.println(productId);
         for (LocalDate date = startDate; date.isBefore(afterEnd); date = date.plusDays(1)) {
             String text = date.toString();
 

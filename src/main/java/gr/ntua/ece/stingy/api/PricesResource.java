@@ -101,7 +101,6 @@ public class PricesResource extends ServerResource {
         		&& !sort.equals("geo.dist|ASC") && !sort.equals("geo.dist|DESC")) {
         	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid sort: " + sort);
         }
-        
         if (!(geoDistString == null && geoLngString == null && geoLatString == null) && !(geoDistString != null && geoLngString != null && geoLatString != null)){
         	throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Something is missing in geographical data ");
         }

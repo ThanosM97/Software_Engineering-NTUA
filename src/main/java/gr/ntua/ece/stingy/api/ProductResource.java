@@ -265,7 +265,6 @@ public class ProductResource extends ServerResource {
             optional = dataAccess.patchProduct(id, name, "name", null);
     	}
     	else if (description != null) {
-    		System.out.println("asa");
             optional = dataAccess.patchProduct(id, description, "description", null);
     	}
     	else if (category != null) {
