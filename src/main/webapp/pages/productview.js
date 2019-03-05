@@ -10,16 +10,6 @@ const cookies = new Cookies();
 const querystring = require('querystring');
 const fetch = require("node-fetch");
 
-const myExampleProduct = {
-    device: 'smartphone', name: 'Testphone 5inch 4GB RAM Black', size: '6"', ram: '4GB', capacity: '32GB', backCamera: '20Mp',
-    frontCamera: '4Mp', cpuCores: '4', cpuFrequency: '1.8 GHz', OS: 'Android'
-};
-
-const myExampleShops = [
-    {name: 'Λαική αγορά Αιγαλέου', price: '5$', otherData: ''},
-    {name: 'Public Συντάγματος', price: '1000$', otherData: ''},
-    {name: 'Πλαίσιο Πειραιά', price: '1000$', otherData: ''}
-];
 
 class Productview extends Component {
   constructor(){
@@ -57,8 +47,8 @@ class Productview extends Component {
             <link href='../static/ProductView.css' type='text/css' rel='stylesheet' />
           </Head>
             <div>
-                <NavBar />
-                <ProductView product={this.state.data} shops={myExampleShops} />
+                <NavBar loggedIn={this.state.loggedIn}/>
+                <ProductView product={this.state.data}  />
                 <Footer />
             </div>
         </div>
