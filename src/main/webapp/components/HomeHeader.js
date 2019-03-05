@@ -60,7 +60,12 @@ class HomeHeader extends Component {
             <h1>Item</h1>
           </div>
           <div className="items-container">
-            <h1><a href="#">See more...</a></h1>
+            <img src={square} />
+            <h1>Item</h1>
+          </div>
+          <div className="items-container">
+            <img src={square} />
+            <h1>Item</h1>
           </div>
           <button className="header-buttons" onClick={this.toggleTrends.bind(this)}>Top trends</button>
         </div>
@@ -86,7 +91,12 @@ class HomeHeader extends Component {
             <h1>Item</h1>
           </div>
           <div className="items-container">
-            <h1><a href="#">See more...</a></h1>
+            <img src={square} />
+            <h1>Item</h1>
+          </div>
+          <div className="items-container">
+            <img src={square} />
+            <h1>Item</h1>
           </div>
           <button className="header-buttons" onClick={this.toggleOffers.bind(this)}>Hot offers</button>
         </div>
