@@ -137,7 +137,7 @@ public class ProductsResource extends ServerResource {
 		if (sort == null) {
 			sort = "id|DESC";
 		}
-		if (format == null) {
+		if (format == null || format.isEmpty()) {
 			format = "json";
 		}
 		/*
@@ -164,7 +164,7 @@ public class ProductsResource extends ServerResource {
 		 */
 		map.put("total", limits.getTotal());
 		map.put("products", products);
-		if (format == "json") {
+		if (format.equals("json")) {
 			return new JsonMapRepresentation(map);
 		}
 
@@ -185,6 +185,8 @@ public class ProductsResource extends ServerResource {
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can create new products");
     	}
+    	Form queryParams = getQuery();
+ 		String format = queryParams.getFirstValue("format"); 
 		/*
 		 * Create a new restlet form
 		 */	
@@ -216,6 +218,8 @@ public class ProductsResource extends ServerResource {
 		if (tags == null) {
 			throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Tags are required");
 		}
+		
+		
 
 		/*
 		 * If withdrawn is not set, use default value.
@@ -227,11 +231,19 @@ public class ProductsResource extends ServerResource {
 		else {
 			withdrawn = Boolean.valueOf(withdrawnString);
 		}
+		if (format == null || format.isEmpty()) {
+			format = "json";
+		}
 
 		/*
 		 * Add requested product in the database.
 		 */
 		Product product = dataAccess.addProduct(name, description, category, withdrawn, Arrays.asList(tags), extraDataString, image );
-		return new JsonProductRepresentation(product);
+		if (format.equals("xml")) {
+			return new XmlProductRepresentation(product);
+		}
+		else {
+			return new JsonProductRepresentation(product);
+		}
 	}
 }

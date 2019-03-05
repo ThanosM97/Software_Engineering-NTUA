@@ -30,7 +30,8 @@ public class ShopResource extends ServerResource {
     	 * Get given id and check its validity.
     	 */
         String idAttr = getAttribute("id");
-
+        Form queryParams = getQuery();
+    	String format = queryParams.getFirstValue("format");
         if (idAttr == null) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing shop id");
         }
@@ -44,6 +45,10 @@ public class ShopResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shop id: " + idAttr);
         }
+        if (format == null || format.isEmpty()) {
+        	format = "json";
+        }
+        
         /*
          * Get shop based on the given id.
          */
@@ -52,7 +57,12 @@ public class ShopResource extends ServerResource {
         /*
          * Return the json representation of the shop.
          */
-        return new JsonShopRepresentation(shop);
+        if (format.equals("xml")) {
+        	return new XmlShopRepresentation(shop);
+        }
+        else {
+        	return new JsonShopRepresentation(shop);
+        }
     }
     
     @Override

@@ -223,8 +223,7 @@ public class PricesResource extends ServerResource {
         catch(Exception e) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid shopId: " + shopIdString);
         }
-		System.out.println(productIdString);
-		System.out.println(productId);
+
 		List<Record> records = dataAccess.addRecord(price, dateFrom, dateTo, productId, shopId, userId, validity);
         Map<String, Object> map = new HashMap<>();
         map.put("start", 0);

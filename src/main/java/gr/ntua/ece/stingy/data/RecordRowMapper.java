@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -40,13 +41,15 @@ public class RecordRowMapper implements RowMapper {
 		String pattern = "yyyy-MM-dd";
 		Double lng = rs.getDouble("lng");
 		Double lat = rs.getDouble("lat");
-		DateFormat df = new SimpleDateFormat(pattern);
+		DateFormat df1 = new SimpleDateFormat(pattern);
 
-		String date = df.format(dateDate);
+		String date = df1.format(dateDate);
 
+	    DecimalFormat df2 = new DecimalFormat("#.00");
+	    String distFormatted = df2.format(shopDist);
 		List<String> shopTags = dataAccess.getShopTagsById(shopId);
 		List<String> productTags = dataAccess.getProductTagsById(productId);		
-		return new Record(price, productName, productId, productTags, shopId, shopName, shopTags, shopAddress, shopDist, date, lng, lat);
+		return new Record(price, productName, productId, productTags, shopId, shopName, shopTags, shopAddress, distFormatted, shopDist, date, lng, lat);
 	}
 
 }

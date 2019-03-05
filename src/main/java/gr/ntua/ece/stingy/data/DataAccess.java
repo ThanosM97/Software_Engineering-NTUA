@@ -1196,6 +1196,7 @@ public class DataAccess {
 						shop.getName(),
 						shop.getTags(),
 						shop.getAddress(),
+						"-1",
 						-1,
 						text,
 						shop.getLng(),
