@@ -3,82 +3,33 @@ import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 import Head from 'next/head';
 
+var defaultRender =["Λειτουργικό Σύστημα:", "Οθόνη:", "RAM:", "Χωρητικότητα:", "Πίσω κάμερα:", "Μπροστά κάμερα:", "Πυρήνες επεξεργαστή:"]
+var tvRender = ["Ανάλυση Οθόνης:", "Smart TV:", "Μέγεθος Οθόνης"]
+var laptopRender =["Επεξεργαστς","Πυρήνες επεξεργαστή:","RAM:", "Σκληρός Δίσκος:", "Λειτουργικό Σύστημα:", "Μέγεθος Οθόνης:", "Κάρτα γραφικών:" ]
+// TODO: + 2 ΚΑΤΗΓΟΡΙΕΣ ΑΚΟΜΑ
+
 class content extends React.Component{
     constructor(props) {
-        super(props);       
+        super(props);
 
         this.state = {
             value1: 'smartphone',
             filevalue: '',
-            product_render: (
-                <div>
-                    <table class='tablecontent'>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <label>Λειτουργικό Σύστημα:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Οθόνη:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>RAM:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Χωρητικότητα:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Πίσω κάμερα:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Μπροστά κάμερα:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Πυρήνες επεξεργαστή:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                </div>
-            )
+            product_render: defaultRender.map((extraData,i)=>(
+            <tr>
+                <td>
+                    <label>{extraData}</label>
+                </td>
+                <td>
+                    <input type='text' />
+                </td>
+            </tr>
+          )),
         };
-        
+
         this.handleChange = this.handleChange.bind(this);
         this.handleFileSelect = this.handleFileSelect.bind(this);
-        this.handleClick = this.handleClick.bind(this); 
+        this.handleClick = this.handleClick.bind(this);
     }
 
     handleClick(e) {
@@ -93,69 +44,20 @@ class content extends React.Component{
         this.setState({value1: event.target.value});
         switch (event.target.value){
             case 'smartphone':
+
                 this.state.product_render = (
-                    <div>
-                        <table class='tablecontent'>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <label>Οθόνη:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>RAM:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Χωρητικότητα:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Πίσω κάμερα:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Μπροστά κάμερα:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Λειτουργικό Σύστημα:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <label>Πυρήνες επεξεργαστή:</label>
-                                    </td>
-                                    <td>
-                                        <input type='text' />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
+                            defaultRender.map((extraData,i)=>(
+                            <tr>
+                                <td>
+                                    <label>{extraData}</label>
+                                </td>
+                                <td>
+                                    <input type='text' />
+                                </td>
+                            </tr>
+                          ))
+
                 );
                 break;
             case 'tv':
@@ -349,14 +251,14 @@ class content extends React.Component{
 
     render() {
         return (
-            <div id="container">               
+            <div id="container">
                 <Head>
                     <title> Προσθέστε προϊόν | Stingy </title>
-                    <link rel="shortcut icon" href="../static/logo/logo.png"/>    
+                    <link rel="shortcut icon" href="../static/logo/logo.png"/>
                     <link href='../static/addproduct.css' type='text/css' rel='stylesheet' />
                 </Head>
                 <div id='body'>
-                    <NavBar />
+                    <NavBar loggedIn={this.loggedIn}/>
                     <div>
                     <h2 class='aheader'>Προσθήκη Προϊόντος:</h2>
                     <div>
@@ -366,7 +268,7 @@ class content extends React.Component{
                                 <tr>
                                     <td>
                                         <label>Κατηγορία:</label>
-                                    </td>   
+                                    </td>
                                     <td class='category'>
                                         <select value={this.state.value1} onChange={this.handleChange}>
                                             <option value="smartphone">Smartphone</option>
@@ -380,7 +282,11 @@ class content extends React.Component{
                                 </tr>
                             </tbody>
                         </table>
-                        <div class='optionalcontent'>{this.state.product_render}</div>
+                        <div class='optionalcontent'>
+                            <table class='tablecontent'>
+                                <tbody>{this.state.product_render}</tbody>
+                            </table>
+                        </div>
                         <input type='button' class='button1' value='Submit' />
                     </form>
                     </div>
