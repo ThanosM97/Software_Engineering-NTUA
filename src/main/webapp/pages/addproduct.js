@@ -353,7 +353,7 @@ class content extends React.Component{
                 <Head>
                     <title> Προσθέστε προϊόν | Stingy </title>
                     <link rel="shortcut icon" href="../static/logo/logo.png"/>    
-                    <link href='../static/addrecord.css' type='text/css' rel='stylesheet' />
+                    <link href='../static/addproduct.css' type='text/css' rel='stylesheet' />
                 </Head>
                 <div id='body'>
                     <NavBar />
@@ -367,8 +367,7 @@ class content extends React.Component{
                                     <td>
                                         <label>Κατηγορία:</label>
                                     </td>   
-                               
-                                    <td>
+                                    <td class='category'>
                                         <select value={this.state.value1} onChange={this.handleChange}>
                                             <option value="smartphone">Smartphone</option>
                                             <option value="laptop">Laptop</option>
@@ -382,7 +381,7 @@ class content extends React.Component{
                             </tbody>
                         </table>
                         <div class='optionalcontent'>{this.state.product_render}</div>
-                        <input type='button' class='button2' value='Submit' />
+                        <input type='button' class='button1' value='Submit' />
                     </form>
                     </div>
                     <div class='footerdiv'>

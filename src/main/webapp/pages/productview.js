@@ -51,9 +51,11 @@ class Productview extends Component {
     if (product){
       return(
         <div>
-            <head>
-                <link href='../static/ProductView.css' type='text/css' rel='stylesheet' />
-            </head>
+          <Head>
+            <title> Stingy | {product.name}</title>
+            <link rel="shortcut icon" href="../static/logo/logo.png"/>
+            <link href='../static/ProductView.css' type='text/css' rel='stylesheet' />
+          </Head>
             <div>
                 <NavBar />
                 <ProductView product={this.state.data} shops={myExampleShops} />

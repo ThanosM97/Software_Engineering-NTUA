@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import Map from './Map';
 
 const fetch = require("node-fetch");
+const querystring = require('querystring');
 
 const smartphone = "../static/images/smartphone250x250.png";
 const like = "../static/images/like.png";
@@ -53,7 +54,7 @@ class ProductViewShopList extends React.Component{
             count:6,
             start:0,
             filters:{
-              geoDist:null,
+              geoDist:-1,
               geoLng:null,
               geoLat:null,
               dateFrom:null,
@@ -65,7 +66,8 @@ class ProductViewShopList extends React.Component{
         };
         this.handleClick = this.handleClick.bind(this);
         this.showFilters = this.showFilters.bind(this);
-        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount(){
@@ -77,7 +79,10 @@ class ProductViewShopList extends React.Component{
             })
           })
       });
-
+      let curDate = new Date();
+      curDate.hours = curDate.hours + 2;
+      curDate = curDate.toISOString().split('T')[0]
+      this.setState({filters:{dateFrom:curDate, dateTo:curDate, geoDist:-1}})
     }
 
     handleClick(e) {
@@ -85,9 +90,29 @@ class ProductViewShopList extends React.Component{
         this.setState({display: newDisplay});
     }
 
-    handleChange(e) {
-      console.log(e.target.value)
-      this.setState({sliderValue:e.target.value})
+    handleSubmit(e) {
+      e.preventDefault();
+      let finalFilters = this.state.filters;
+      if (this.state.position){
+        finalFilters.geoLat = this.state.position.latitude
+        finalFilters.geoLng = this.state.position.longitude
+      }
+      var arr = [2,5,10,-1];
+      let dist = this.state.filters.geoDist == -1 ? -1 : arr[this.state.filters.geoDist]
+      finalFilters.geoDist = dist;
+      let myQuery = querystring.stringify(finalFilters);
+      let data = fetch('https://localhost:8765/observatory/api/prices?'+ myQuery).then((resp)=>{
+        resp.json().then((res)=>{
+          this.setState({records:res.prices, total:res.total}); console.log(res.prices)
+        })
+      }).catch(error => console.error('Error:', error));
+    }
+
+    handleChange(e){
+      var filterName = event.target.parentElement.id;
+      var newObject = this.state.filters;
+      newObject[filterName] = event.target.value;
+      this.setState({filters:newObject})
     }
 
     showFilters(){
@@ -96,10 +121,10 @@ class ProductViewShopList extends React.Component{
       curDate = curDate.toISOString().split('T')[0]
       let filters = (
         <div className="filtersDiv">
-          <form id="filters">
-            <div className="DistanceFilter" style={{marginLeft:"10px"}}>
+          <form id="filters" onSubmit={this.handleSubmit}>
+            <div id="geoDist" className="DistanceFilter" style={{marginLeft:"10px"}}>
               <label>Απόσταση από το κατάστημα:</label><br /><br />
-              <input id="slider" type="range" min="0" max="3" defaultValue="3" onChange={this.handleChange}  step="1"/>
+              <input id="slider" type="range" min="0" max="3" defaultValue="3" onChange={this.handleChange} step="1"/>
               <div id="sliderTags" >
                 <h4> 2χλμ </h4>
                 <h4> 5χλμ </h4>
@@ -107,14 +132,15 @@ class ProductViewShopList extends React.Component{
                 <h4> Όλα </h4>
               </div>
             </div>
-            <div className= "DistanceFilter" align="center" style={{marginLeft:"4%"}}>
+            <div id="dateFrom" className= "DistanceFilter" align="center" style={{marginLeft:"4%"}}>
               <label> Από ημερομηνία: </label> <br /><br />
-              <input type="date" defaultValue={curDate} />
+              <input type="date" defaultValue={curDate}  onChange={this.handleChange} />
             </div>
-            <div className= "DistanceFilter" align="center">
+            <div id="dateTo" className= "DistanceFilter" align="center">
               <label> Έως ημερομηνία: </label> <br /><br />
-              <input type="date" defaultValue={curDate}/>
+              <input type="date" defaultValue={curDate} onChange={this.handleChange}/>
             </div>
+            <input type="submit" />
           </form>
         </div>
       )
@@ -124,13 +150,12 @@ class ProductViewShopList extends React.Component{
 
     render(){
       if (this.state.records){
-      console.log(this.state.records["0"], this.state.total)
       let records = this.state.records;
         const shoplist = records.map((record, i) =>
             <div className='shopbox' key={i}>
                 <as className='shopname'>{record.shopName} </as>
                 <as className='price'>{record.price} &euro;</as><br/><br/>
-                <as style={{float:"left"}}>Απόσταση καταστήματος: {record.shopDist / 1000}χλμ. </as><br/>
+                <as style={{float:"left"}}>Απόσταση καταστήματος: {record.distFormatted}χλμ. </as><br/>
                 <as style={{float:"left"}}>Αξιοπιστία καταχώρησης: <img src={like} className='like-img'/> <img src={unlike} className='like-img'/><img src={questionmark} className='questionmark-img'/></as><br/><br/>
                 <div>
                     <button href='#' className='address' name={'button_' + i} onClick={this.handleClick}>{record.shopAddress}</button><br></br>
@@ -141,7 +166,7 @@ class ProductViewShopList extends React.Component{
         return(
             <div>
                 <div className="avail">
-                  <h3>Διαθέσιμο στα εξής αταστήματα:</h3>
+                  <h3>Διαθέσιμο στα εξής καταστήματα:</h3>
                   <button className="filtersButton" onClick={this.showFilters} style={{width:"10%"}}> Show Filters </button>
                 </div>
                                   {this.state.filtersDiv}
@@ -151,7 +176,11 @@ class ProductViewShopList extends React.Component{
             </div>
         );
       } else {
-        return( <div> Waiting for data... </div>)
+        return( <div>
+                  <button className="filtersButton" onClick={this.showFilters} style={{width:"10%"}}> Show Filters </button>
+                  {this.state.filtersDiv}
+                  <h3>There are no records for these filters.</h3>
+                </div>)
       }
     }
 }
