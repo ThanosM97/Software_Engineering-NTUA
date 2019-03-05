@@ -91,7 +91,7 @@ public class ProductsResource extends ServerResource {
 				break;
 			}
 		}
-		
+
 		Map<String, Object> map = new HashMap<>();
 		Limits limits = new Limits();
 
@@ -202,7 +202,6 @@ public class ProductsResource extends ServerResource {
 		String extraDataString = form.getFirstValue("extraData");
 		String image = form.getFirstValue("image");
 
-		
 
 		/*
 		 *  Validate the values (in the general case)

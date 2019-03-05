@@ -114,8 +114,8 @@ public class DataAccess {
 		parameters.addValue("category", category);
 		
 		String sqlStm;
-		
-		if (tags == null || tags.isEmpty()) {
+
+		if (tags == null || tags.size()==0 ||  tags.get(0).equals("all")) {
 			sqlStm = "select * from Product where 1=1";
 			if (category != null) {
 				sqlStm += " and category = :category ";
@@ -183,15 +183,16 @@ public class DataAccess {
 		String sqlStm;
 		
 		sqlStm = "select * from Product ";
-		if (tags!=null && !tags.isEmpty() ) {
+		if (tags != null && tags.size()!=0 && !tags.get(0).equals("all")) {
 			sqlStm += " , Tag, Product_Tag ";
 		}	
 		sqlStm += " where category = '" + category + "'";
 		if (!status.equals("ALL")) {
 			sqlStm += " and withdrawn=:withdrawn ";
 		}
-		if (tags!=null && !tags.isEmpty() ) {
-			sqlStm += " and Product_Tag.id = Product.id and Tag.id = Product_Tag.TagId and Tag.name = '"+tags.get(0)+"'";
+		System.out.println(tags);
+		if (tags != null && tags.size()!=0 && !tags.get(0).equals("all")) {
+			sqlStm += " and Product_Tag.Tagid = Tag.id and Product.id = Product_Tag.ProductId and Tag.name = '"+tags.get(0)+"'";
 		}
 		sqlStm += " and Product.id IN ";
 		int i=1;
@@ -205,7 +206,7 @@ public class DataAccess {
 					sqlStm += " (select T1.ProductId from ";
 				}
 				sqlStm += "( select * from extraData where extraData.characteristic ='"+key+"' and\n" + 
-						"extraData.value ='"+extra.get(key)+"') as T"+i;
+						"extraData.value LIKE '%"+extra.get(key)+"%') as T"+i;
 				i += 1;
 			}
 		}
@@ -226,7 +227,7 @@ public class DataAccess {
 				if (extra.get(key) != null && !extra.get(key).isEmpty()) {
 					sqlStm += "( select T1.ProductId from ( select * from extraData where "
 							+ "extraData.characteristic ='"+key + 
-						"' and extraData.value ='" + extra.get(key) + "') as T1) ";
+						"' and extraData.value LIKE '%" + extra.get(key) + "%') as T1) ";
 				}
 			}
 		}
