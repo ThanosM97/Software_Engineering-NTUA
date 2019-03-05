@@ -4,11 +4,11 @@ import Footer from '../components/Footer';
 import Head from 'next/head';
 
 var defaultRender =[["Λειτουργικό Σύστημα:","OS"], ["Οθόνη:","ScreenSize"], ["RAM:","RAM"], ["Χωρητικότητα:","Capacity"], ["Πίσω κάμερα:","SelfieCamera"], ["Μπροστά κάμερα:","FrontCamera"], ["Πυρήνες επεξεργαστή:","CPUcores"]]
-var tvRender = ["Ανάλυση Οθόνης:", "Smart TV:", "Μέγεθος Οθόνης"]
-var laptopRender =["Επεξεργαστς","Πυρήνες επεξεργαστή:","RAM:", "Σκληρός Δίσκος:", "Λειτουργικό Σύστημα:", "Μέγεθος Οθόνης:", "Κάρτα γραφικών:" ]
-var monitorRender = ["Οθόνη", "Ανάλυση"]
-var tabletRender = ["Οθόνη", "RAM", "Λειτουργικό Σύστημα", "Σκληρός Δίσκος"]
-var newRender = ["Όνομα νέας Κατηγορίας"]
+var tvRender = [["Ανάλυση Οθόνης:","Resolution"], ["Smart TV:","Smart"], ["Μέγεθος Οθόνης","ScreenSize"]]
+var laptopRender =[["Επεξεργαστης:","CPU"],["Πυρήνες επεξεργαστή:","CPUcores"],["RAM:","RAM"], ["Σκληρός Δίσκος:","HardDrive"], ["Λειτουργικό Σύστημα:","OS"], ["Μέγεθος Οθόνης:","ScreenSize"], ["Κάρτα γραφικών:","GraphicsCard"] ]
+var monitorRender = [["Οθόνη:","ScreenSize"], ["Ανάλυση:","Resolution"]]
+var tabletRender = [["Οθόνη:","ScreenSize"], ["RAM:","RAM"], ["Λειτουργικό Σύστημα:","OS"], ["Σκληρός Δίσκος:","HardDrive"]]
+var newRender = [["Όνομα νέας Κατηγορίας:",""]]
 
 class content extends React.Component{
     constructor(props) {
@@ -52,10 +52,10 @@ class content extends React.Component{
                             defaultRender.map((extraData,i)=>(
                             <tr>
                                 <td>
-                                    <label>{extraData}</label>
+                                    <label>{extraData[0]}</label>
                                 </td>
                                 <td>
-                                    <input type='text' />
+                                    <input type='text' name={extraData[1]} />
                                 </td>
                             </tr>
                           ))
@@ -67,10 +67,10 @@ class content extends React.Component{
                     tvRender.map((extraData,i)=>(
                             <tr>
                                 <td>
-                                    <label>{extraData}</label>
+                                    <label>{extraData[0]}</label>
                                 </td>
                                 <td>
-                                    <input type='text' />
+                                    <input type='text' name={extraData[1]} />
                                 </td>
                             </tr>
                         )
@@ -82,10 +82,10 @@ class content extends React.Component{
                 laptopRender.map((extraData,i)=>(
                         <tr>
                             <td>
-                                <label>{extraData}</label>
+                                <label>{extraData[0]}</label>
                             </td>
                             <td>
-                                <input type='text' />
+                                <input type='text' name={extraData[1]} />
                             </td>
                         </tr>
                     )
@@ -97,10 +97,10 @@ class content extends React.Component{
                 monitorRender.map((extraData,i)=>(
                         <tr>
                             <td>
-                                <label>{extraData}</label>
+                                <label>{extraData[0]}</label>
                             </td>
                             <td>
-                                <input type='text' />
+                                <input type='text' name={extraData[1]} />
                             </td>
                         </tr>
                     )
@@ -109,13 +109,13 @@ class content extends React.Component{
             break;
             case 'tablet':
                 this.state.product_render = (
-                laptopRender.map((extraData,i)=>(
+                tabletRender.map((extraData,i)=>(
                         <tr>
                             <td>
-                                <label>{extraData}</label>
+                                <label>{extraData[0]}</label>
                             </td>
                             <td>
-                                <input type='text' />
+                                <input type='text' name={extraData[1]} />
                             </td>
                         </tr>
                     )
@@ -127,10 +127,10 @@ class content extends React.Component{
                 newRender.map((extraData,i)=>(
                         <tr>
                             <td>
-                                <label>{extraData}</label>
+                                <label>{extraData[0]}</label>
                             </td>
                             <td>
-                                <input type='text' />
+                                <input type='text' name={extraData[1]} />
                             </td>
                         </tr>
                     )
