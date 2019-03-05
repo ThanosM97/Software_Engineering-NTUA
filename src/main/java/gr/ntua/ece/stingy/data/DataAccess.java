@@ -1111,45 +1111,47 @@ public class DataAccess {
 		String sqlStm;
 		if (geoDistString != null) {
 			sqlStm = "SELECT distinct Shop.lng as  lng, Shop.lat as lat, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
-					"GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date \n" + 
-					"FROM Shop, Product, Record ";
+					" GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date \n" + 
+					" FROM Shop, Product, Record ";
 			if (tags.length!=0) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
 			}
 				sqlStm += "WHERE " + 
-					"Record.shopId = Shop.id \n" + 
-					"AND Record.productId = Product.id\n" + 
-					"AND Record.date <= :dateTo and Record.date >= :dateFrom"
-					+ " having dist < :geoDist \n";
+					" Record.shopId = Shop.id \n" + 
+					" AND Record.productId = Product.id\n" + 
+					" AND Record.date <= :dateTo and Record.date >= :dateFrom ";
+					
 		}
 		else {
 			sqlStm = "SELECT distinct Shop.lng as lng, Shop.lat as lat,  price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
 					" Record.date \n" + 
-					"FROM Shop, Product, Record ";
+					" FROM Shop, Product, Record ";
 			if (tags.length!=0) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
 			}
 				sqlStm += "WHERE \n" + 
-					"Record.shopId = Shop.id \n" + 
-					"AND Record.productId = Product.id\n" + 
-					"AND Record.date <= :dateTo and Record.date >= :dateFrom\n";
+					" Record.shopId = Shop.id \n" + 
+					" AND Record.productId = Product.id\n" + 
+					" AND Record.date <= :dateTo and Record.date >= :dateFrom \n";
 		}
 
 		if (products.length!= 0 ) {
-			sqlStm += "AND Record.productId in (:products)\n";
+			sqlStm += " AND Record.productId in (:products)\n";
 		}
 		if (shops.length!=0) {
-			sqlStm += "AND Record.shopId in (:shops)\n";
+			sqlStm += " AND Record.shopId in (:shops)\n";
 		}
 		if (tags.length!=0 ) {
-			sqlStm += "AND ((Tag.name in (:productTags)\n" + 
+			sqlStm += " AND ((Tag.name in (:productTags)\n" + 
 					"		and Tag.id = Product_Tag.TagId\n" + 
 					"		and Product_Tag.ProductId = Product.id)\n" + 
 					"		or (Tag.id = Shop_Tag.TagId\n" + 
 					"		and Shop_Tag.ShopId = Shop.id\n" + 
 					"		and Tag.name in (:shopTags)))";
 		}
-
+		if (geoDistString != null) {
+			sqlStm += " having dist < :geoDist ";
+		}
 		RowCountCallbackHandler countCallback = new RowCountCallbackHandler();  // not reusable
 		namedJdbcTemplate.query(sqlStm, parameters, countCallback);
 		int rowCount = countCallback.getRowCount();
