@@ -172,3 +172,50 @@ h3 {
   width:25%;
   text-align: center;
 }
+.submitFilters {
+  padding:10px 20px;
+  margin-top:2.5%;
+  background-color: #808080;
+  color:white;
+}
+.submitFilters:hover {
+  cursor:pointer;
+  background-color: #808060;
+}
+.deleteButton {
+  color:white;
+  background-color:red;
+  outline-color: red;
+  font-size:1.5vw;
+}
+.deleteButton:hover {
+  cursor:pointer;
+}
+
+.createButton {
+  color:white;
+  background-color:blue;
+  outline-color: blue;
+  font-size:1.5vw;
+}
+.createButton:hover {
+  cursor:pointer;
+}
+
+.buttonConf {
+  padding:10px 40px;
+  margin:10px 5px;
+}
+.buttonConf:hover {
+  cursor:pointer;
+}
+
+.red {
+  background-color: red;
+  color:white;
+}
+
+.blue {
+  background-color:blue;
+  color: white;
+}

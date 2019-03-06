@@ -70,3 +70,21 @@ label {
   cursor:pointer;
   background-color: Dodgerblue;
 }
+
+.buttonConf {
+  padding:10px 40px;
+  margin:10px 5px;
+}
+.buttonConf:hover {
+  cursor:pointer;
+}
+
+.red {
+  background-color: red;
+  color:white;
+}
+
+.blue {
+  background-color:blue;
+  color: white;
+}
