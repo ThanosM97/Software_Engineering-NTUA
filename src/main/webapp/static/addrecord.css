@@ -51,6 +51,13 @@
     margin-left: 70%;
     margin-bottom: 1%;
  }
+ .button1:hover {
+   cursor:pointer;
+ }
+ .tags {
+   background-color:red;
+   color:white;
+ }
 
 .footerdiv {
     position: relative;

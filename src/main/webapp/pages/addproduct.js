@@ -52,8 +52,8 @@ class content extends React.Component{
 
     componentWillMount() {
       if (cookies.get('auth'))  this.setState({loggedIn:true})
-
     }
+
     componentDidMount() {
       if (!cookies.get('auth')) Router.back()
       let query = Router.query
@@ -69,7 +69,7 @@ class content extends React.Component{
           body: query
         }).then(response => {
             if (!response.ok) { alert("Something wente wrong! Please try again."); throw response }
-            alert("Your product has been added to our database. Thank your for your help!")
+            alert("Your product has been added to our database. Thank you for your help!")
             Router.push('/addproduct');
           })
       }
