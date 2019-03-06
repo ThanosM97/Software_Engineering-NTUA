@@ -66,6 +66,18 @@ import spock.lang.Stepwise
         returned.withdrawn == sent.withdrawn
     }
     
+    def "User gets above product" () {
+    	when:
+    	 Product returned = api.getProduct("1", RestCallFormat.JSON)
+    	 
+    	then:
+    	returned.name == "Product" &&
+    	returned.description == "NewDescription" &&
+    	returned.category == "Category" &&
+    	returned.tags == [ "x", "y", "w" ] &&
+    	returned.withdrawn == true
+    }
+    
     def "User patches a product (name)" () {
     	when:
     	 String field = "name"
@@ -128,6 +140,18 @@ import spock.lang.Stepwise
         returned.lat == sent.lat &&
         returned.lng == sent.lng &&
         returned.tags == sent.tags
+    }
+    
+    def "User gets above shop" () {
+    	when:
+    	 Shop returned = api.getShop("1", RestCallFormat.JSON)
+    	 
+    	then:
+    	returned.name == "NewShop" &&
+    	returned.address == "Athens" &&
+    	returned.lat == 31 &&
+    	returned.lng == 34 &&
+    	returned.tags == [ "four", "five" ]
     }
     
     def "User patches a shop" () {
