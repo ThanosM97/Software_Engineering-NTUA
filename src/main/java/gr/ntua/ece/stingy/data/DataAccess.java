@@ -448,7 +448,7 @@ public class DataAccess {
 	/*
 	 * Update the product with the given id.
 	 */
-	public Optional<Product> updateProduct(long id, String name, String description, String category, boolean withdrawn, List<String> tags, String extraDataString ) {
+	public Optional<Product> updateProduct(long id, String name, String description, String category, boolean withdrawn, List<String> tags, Map<String, String> extraData ) {
 		/*
 		 * Update the new product record.
 		 */
@@ -490,104 +490,17 @@ public class DataAccess {
 				}
 				jdbcTemplate.update("INSERT INTO Product_Tag(ProductId, TagId) VALUES(?, ?)", new Object[] { id, tagId  });			
 			}
-			Map<String, String> extraData;
-			if (extraDataString != null) {
-				List<String> extraDataList = Arrays.asList(extraDataString.split(","));
-				extraData = new HashMap<>();
-				if (category.equals("laptop")) {
-					if (extraDataList.size() != 7) {
-						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 7");
+			
+			for( String key : extraData.keySet()) {
+				if (extraData.get(key)!= null && extraData.get(key).length() != 0) {
+					if (isExtraData(id, key)) {
+						jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic=?", new Object[] { extraData.get(key), id, key});			
 					}
-					/*
-					 * Extra data supported for Laptops
-					 */
-					extraData.put("CPU", extraDataList.get(0));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPU'", new Object[] { extraDataList.get(0), id});			
-					extraData.put("CPUcores", extraDataList.get(1));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPUcores'", new Object[] { extraDataList.get(1), id});			
-					extraData.put("RAM", extraDataList.get(2));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='RAM'", new Object[] { extraDataList.get(2), id});			
-					extraData.put("HardDrive", extraDataList.get(3));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='HardDrive'", new Object[] { extraDataList.get(3), id});			
-					extraData.put("OS", extraDataList.get(4));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='OS'", new Object[] { extraDataList.get(4), id});			
-					extraData.put("ScreenSize", extraDataList.get(5));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] {  extraDataList.get(5), id});			
-					extraData.put("GraphicsCard", extraDataList.get(6));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='GraphicsCard'", new Object[] { extraDataList.get(6), id});			
-
-				}
-				else if (category.equals("tv")) {
-					if (extraDataList.size() != 3) {
-						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 3");
+					else {
+						jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(?, ?, ?)", new Object[] { key, extraData.get(key), id});			
 					}
-
-					extraData.put("Smart", extraDataList.get(1));			
-					extraData.put("Resolution", extraDataList.get(0));
-					extraData.put("ScreenSize", extraDataList.get(2));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Resolution'", new Object[] { extraDataList.get(0), id});			
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Smart'", new Object[] { extraDataList.get(1), id});			
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(2), id});			
-
-				}
-				else if (category.equals("smartphone")) {
-					if (extraDataList.size() != 7) {
-						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 7");
-					}
-					/*
-					 * Extra data supported for Smartphones
-					 */
-					extraData.put("CPUcores", extraDataList.get(0));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPUcores'", new Object[] { extraDataList.get(0), id});			
-					extraData.put("RAM", extraDataList.get(1));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='RAM'", new Object[] { extraDataList.get(1), id});			
-					extraData.put("ScreenSize", extraDataList.get(2));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(2), id});			
-					extraData.put("Capacity", extraDataList.get(3));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Capacity'", new Object[] { extraDataList.get(3), id});			
-					extraData.put("FrontCamera", extraDataList.get(4));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='FrontCamera'", new Object[] { extraDataList.get(4), id});			
-					extraData.put("SelfieCamera", extraDataList.get(5));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='SelfieCamera'", new Object[] { extraDataList.get(5), id});			
-					extraData.put("OS", extraDataList.get(6));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='OS'", new Object[] { extraDataList.get(6), id});			
-				}
-				else if (category.equals("monitor")) {
-					if (extraDataList.size() != 2) {
-						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 2");
-					}
-
-					
-					extraData.put("Resolution", extraDataList.get(0));
-					extraData.put("ScreenSize", extraDataList.get(1));
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Resolution'", new Object[] { extraDataList.get(0), id});			
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(1), id});			
-
-				}
-				else if (category.equals("tablet")) {
-					if (extraDataList.size() != 4) {
-						throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 4");
-					}
-		
-					extraData.put("ScreenSize", extraDataList.get(0));
-					extraData.put("RAM", extraDataList.get(1));
-					extraData.put("OS", extraDataList.get(2));
-					extraData.put("HardDrive", extraDataList.get(3));
-
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(0), id});			
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='RAM'", new Object[] { extraDataList.get(1), id});			
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='OS'", new Object[] { extraDataList.get(2), id});			
-					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='HardDrive'", new Object[] { extraDataList.get(3), id});			
-
-				}
-				else {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category " + category + " is not supported in stingy");
 				}
 			}
-			else {
-				extraData = null;
-			}
-
 			/*
 			 *  return the product that was updated.
 			 */
@@ -595,6 +508,17 @@ public class DataAccess {
 		}
 		else {
 			return Optional.empty();
+		}
+	}
+	
+	public boolean isExtraData(long id, String key) {
+		int count = jdbcTemplate.queryForObject("select count(*) from extraData where "
+				+ "ProductId=? and characteristic=?", new Object[] { id, key }, Integer.class);
+		if (count > 0) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 
@@ -643,100 +567,6 @@ public class DataAccess {
 				rows = jdbcTemplate.update("INSERT INTO Product_Tag(ProductId, TagId) VALUES(?, ?)", new Object[] { id, tagId  });			
 			}
 		}
-		else if (field.equals("extraData")){
-			Map<String, String> extraData;
-			List<String> extraDataList = Arrays.asList(value.split(","));
-			extraData = new HashMap<>();
-			String category = jdbcTemplate.queryForObject("select category from Product where id = ?", new Object[] { id }, String.class);
-			if (category.equals("laptop")) {
-				if (extraDataList.size() != 7) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 7");
-				}
-				/*
-				 * Extra data supported for Laptops
-				 */
-				extraData.put("CPU", extraDataList.get(0));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPU'", new Object[] { extraDataList.get(0), id});			
-				extraData.put("CPUcores", extraDataList.get(1));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPUcores'", new Object[] { extraDataList.get(1), id});			
-				extraData.put("RAM", extraDataList.get(2));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='RAM'", new Object[] { extraDataList.get(2), id});			
-				extraData.put("HardDrive", extraDataList.get(3));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='HardDrive'", new Object[] { extraDataList.get(3), id});			
-				extraData.put("OS", extraDataList.get(4));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='OS'", new Object[] { extraDataList.get(4), id});			
-				extraData.put("ScreenSize", extraDataList.get(5));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] {  extraDataList.get(5), id});			
-				extraData.put("GraphicsCard", extraDataList.get(6));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='GraphicsCard'", new Object[] { extraDataList.get(6), id});			
-
-			}
-			else if (category.equals("tv")) {
-				if (extraDataList.size() != 3) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 3");
-				}
-
-				extraData.put("Smart", extraDataList.get(1));
-				extraData.put("Resolution", extraDataList.get(0));
-				extraData.put("ScreenSize", extraDataList.get(2));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Resolution'", new Object[] { extraDataList.get(0), id});			
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Smart'", new Object[] { extraDataList.get(1), id});			
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(2), id});			
-
-			}
-			else if (category.equals("smartphone")) {
-				if (extraDataList.size() != 7) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 7");
-				}
-				/*
-				 * Extra data supported for Smartphones
-				 */
-				extraData.put("CPUcores", extraDataList.get(0));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='CPUcores'", new Object[] { extraDataList.get(0), id});			
-				extraData.put("RAM", extraDataList.get(1));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='RAM'", new Object[] { extraDataList.get(1), id});			
-				extraData.put("ScreenSize", extraDataList.get(2));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(2), id});			
-				extraData.put("Capacity", extraDataList.get(3));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Capacity'", new Object[] { extraDataList.get(3), id});			
-				extraData.put("FrontCamera", extraDataList.get(4));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='FrontCamera'", new Object[] { extraDataList.get(4), id});			
-				extraData.put("SelfieCamera", extraDataList.get(5));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='SelfieCamera'", new Object[] { extraDataList.get(5), id});			
-				extraData.put("OS", extraDataList.get(6));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='OS'", new Object[] { extraDataList.get(6), id});			
-			}
-			else if (category.equals("monitor")) {
-				if (extraDataList.size() != 2) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 2");
-				}
-				
-				extraData.put("Resolution", extraDataList.get(0));
-				extraData.put("ScreenSize", extraDataList.get(1));
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='Resolution'", new Object[] { extraDataList.get(0), id});			
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(1), id});			
-
-			}
-			else if (category.equals("tablet")) {
-				if (extraDataList.size() != 4) {
-					throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Invalid extra data size: " + extraDataList.size() + " instead of 4");
-				}
-	
-				extraData.put("ScreenSize", extraDataList.get(0));
-				extraData.put("RAM", extraDataList.get(1));
-				extraData.put("OS", extraDataList.get(2));
-				extraData.put("HardDrive", extraDataList.get(3));
-
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='ScreenSize'", new Object[] { extraDataList.get(0), id});			
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='RAM'", new Object[] { extraDataList.get(1), id});			
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='OS'", new Object[] { extraDataList.get(2), id});			
-				jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic='HardDrive'", new Object[] { extraDataList.get(3), id});			
-
-			}
-			else {
-				throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Category " + category + " is not supported in stingy");
-			}
-		}
 		else {
 			rows = jdbcTemplate.update("update Product set " + field + "=? where id =?", new Object[] {value, id});
 		}
@@ -744,6 +574,20 @@ public class DataAccess {
 		/*
 		 * Return the product that was updated.
 		 */
+		return getProduct(id);
+	}
+	
+	public Optional<Product> updateExtraData(long id, Map<String, String> extraData){
+		for( String key : extraData.keySet()) {
+			if (extraData.get(key)!= null && extraData.get(key).length() != 0) {
+				if (isExtraData(id, key)) {
+					jdbcTemplate.update("update extraData set value=? where ProductId = ? and characteristic=?", new Object[] { extraData.get(key), id, key});			
+				}
+				else {
+					jdbcTemplate.update("INSERT INTO extraData(characteristic, value, ProductId ) VALUES(?, ?, ?)", new Object[] { key, extraData.get(key), id});			
+				}
+			}
+		}
 		return getProduct(id);
 	}
 

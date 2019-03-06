@@ -14,6 +14,8 @@ import org.restlet.resource.ServerResource;
 import org.restlet.util.Series;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 /*
@@ -182,8 +184,8 @@ public class ProductResource extends ServerResource {
         String category = form.getFirstValue("category");
         boolean withdrawn = Boolean.valueOf(form.getFirstValue("withdrawn"));
 		String[] tags = form.getValuesArray("tags");
-        String extraDataString = form.getFirstValue("extraData");
-        
+
+		
         /*
 		 *  Validate the values (in the general case)
 		 */
@@ -202,11 +204,61 @@ public class ProductResource extends ServerResource {
 		if (format == null || format.isEmpty()) {
 			format = "json";
 		}
-		
+
+		Map<String, String> extraData = new HashMap<>();
+		if (category.equals("laptop")) {
+			/*
+			 * Extra data supported for Laptops
+			 */
+			extraData.put("CPU", form.getFirstValue("CPU"));
+			extraData.put("CPUcores", form.getFirstValue("CPUcores"));
+			extraData.put("RAM", form.getFirstValue("RAM"));
+			extraData.put("HardDrive", form.getFirstValue("HardDrive"));
+			extraData.put("OS",form.getFirstValue("OS"));
+			extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+			extraData.put("GraphicsCard", form.getFirstValue("GraphicsCard"));
+		}
+		else if (category.equals("tv")) {
+			/*
+			 * Extra data supported for TVs
+			 */
+			extraData.put("Smart", form.getFirstValue("Smart"));			
+			extraData.put("Resolution", form.getFirstValue("Resolution"));
+			extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+		}
+		else if (category.equals("smartphone")) {
+			/*
+			 * Extra data supported for Smartphones
+			 */
+			extraData.put("CPUcores", form.getFirstValue("CPUcores"));
+			extraData.put("RAM", form.getFirstValue("RAM"));
+			extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+			extraData.put("Capacity", form.getFirstValue("Capacity"));
+			extraData.put("FrontCamera", form.getFirstValue("FrontCamera"));
+			extraData.put("SelfieCamera", form.getFirstValue("SelfieCamera"));
+			extraData.put("OS", form.getFirstValue("OS"));
+		}
+		else if (category.equals("tablet")) {
+			/*
+			 * Extra data supported for Tablets
+			 */
+			extraData.put("ScreenSize", form.getFirstValue("ScrenSize"));
+			extraData.put("RAM", form.getFirstValue("RAM"));
+			extraData.put("OS", form.getFirstValue("OS"));
+			extraData.put("HardDrive", form.getFirstValue("HardDrive"));
+		}
+		else if (category.equals("monitor")) {
+			/*
+			 * Extra data supported for TVs
+			 */
+			extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+			extraData.put("Resolution", form.getFirstValue("Resolution"));	
+		}
+
         /*
          * Update the certain product and return its representation.
          */
-        Optional<Product> optional = dataAccess.updateProduct(id, name, description, category, withdrawn, Arrays.asList(tags), extraDataString);
+        Optional<Product> optional = dataAccess.updateProduct(id, name, description, category, withdrawn, Arrays.asList(tags), extraData);
         Product product = optional.orElseThrow(() -> new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "Product not found - id: " + idAttr));
         if (format.equals("xml")){
         	return new XmlProductRepresentation(product);
@@ -258,13 +310,70 @@ public class ProductResource extends ServerResource {
         String category = form.getFirstValue("category");
         String withdrawn = form.getFirstValue("withdrawn");
 		String[] tags = form.getValuesArray("tags");
-        String extraDataString = form.getFirstValue("extraData");
-        /*
+		Map<String, String> extraData = new HashMap<>();
+		if (category!=null) {
+			if (category.equals("laptop")) {
+				/*
+				 * Extra data supported for Laptops
+				 */
+				extraData.put("CPU", form.getFirstValue("CPU"));
+				extraData.put("CPUcores", form.getFirstValue("CPUcores"));
+				extraData.put("RAM", form.getFirstValue("RAM"));
+				extraData.put("HardDrive", form.getFirstValue("HardDrive"));
+				extraData.put("OS",form.getFirstValue("OS"));
+				extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+				extraData.put("GraphicsCard", form.getFirstValue("GraphicsCard"));
+			}
+			else if (category.equals("tv")) {
+				/*
+				 * Extra data supported for TVs
+				 */
+				extraData.put("Smart", form.getFirstValue("Smart"));			
+				extraData.put("Resolution", form.getFirstValue("Resolution"));
+				extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+			}
+			else if (category.equals("smartphone")) {
+				/*
+				 * Extra data supported for Smartphones
+				 */
+				extraData.put("CPUcores", form.getFirstValue("CPUcores"));
+				extraData.put("RAM", form.getFirstValue("RAM"));
+				extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+				extraData.put("Capacity", form.getFirstValue("Capacity"));
+				extraData.put("FrontCamera", form.getFirstValue("FrontCamera"));
+				extraData.put("SelfieCamera", form.getFirstValue("SelfieCamera"));
+				extraData.put("OS", form.getFirstValue("OS"));
+			}
+			else if (category.equals("tablet")) {
+				/*
+				 * Extra data supported for Tablets
+				 */
+				extraData.put("ScreenSize", form.getFirstValue("ScrenSize"));
+				extraData.put("RAM", form.getFirstValue("RAM"));
+				extraData.put("OS", form.getFirstValue("OS"));
+				extraData.put("HardDrive", form.getFirstValue("HardDrive"));
+			}
+			else if (category.equals("monitor")) {
+				/*
+				 * Extra data supported for TVs
+				 */
+				extraData.put("ScreenSize", form.getFirstValue("ScreenSize"));
+				extraData.put("Resolution", form.getFirstValue("Resolution"));	
+			}
+		}
+		/*
          * patch the certain product based on the non null value.
          * If more than two values are given only the first is updated.
          * That is because patch request should update only one value.
          * If more changes are required use put instead.
          */
+		boolean empty = true;
+		for(String key : extraData.keySet()) {
+			if (extraData.get(key)!= null || extraData.get(key).length()!=0) {
+				empty = false;
+			}
+		}
+		
         Optional<Product> optional = null;
         if (name != null) {
             optional = dataAccess.patchProduct(id, name, "name", null);
@@ -281,8 +390,8 @@ public class ProductResource extends ServerResource {
     	else if (tags != null) {
             optional = dataAccess.patchProduct(id, null, "tags", Arrays.asList(tags));
     	}
-    	else if (extraDataString != null) {
-            optional = dataAccess.patchProduct(id, extraDataString, "extraData", null);
+    	else if (!empty) {
+            optional = dataAccess.updateExtraData(id, extraData);
     	}
     	else {
     		throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "None field changed");
