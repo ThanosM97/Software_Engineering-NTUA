@@ -46,15 +46,56 @@ import spock.lang.Stepwise
         returned.tags == sent.tags &&
         returned.withdrawn == sent.withdrawn
     }
+    
+     def "User updates a product" () {
+     	when:
+     	 Product sent = new Product(
+            name       : "Product",
+            description: "NewDescription",
+            category   : "Category",
+            tags       : ["x", "y", "w"],
+            withdrawn  : true
+        )
+        Product returned = api.putProduct("1", sent, RestCallFormat.JSON)
+        
+        then:
+        returned.name == sent.name &&
+        returned.description == sent.description &&
+        returned.category == sent.category &&
+        returned.tags == sent.tags &&
+        returned.withdrawn == sent.withdrawn
+    }
+    
+    def "User patches a product (name)" () {
+    	when:
+    	 String field = "name"
+    	 def value    = "AnotherProduct"
+    	 Product returned = api.patchProduct("1", field, value, RestCallFormat.JSON)
+    	 
+    	 then:
+    	 returned.name == value
+    	}
+    	
+    def "User patches a product (tags)" () {
+    	when:
+    	 String field = "tags"
+    	 def value    = ["q", "t"]
+    	 Product returned = api.patchProduct("1", field, value, RestCallFormat.JSON)
+    	 
+    	 then:
+    	 returned.tags == value
+    	}
+    	
+
 
     def "User adds shop"() {
         when:
         Shop sent = new Shop(
-            name: "Shop",
+            name   : "Shop",
             address: "Somewhere",
-            lat: 38.01324,
-            lng: 23.77223,
-            tags: ["one", "two", "three"]
+            lat    : 38.01324,
+            lng    : 23.77223,
+            tags   : ["one", "two", "three"]
         )
 
         Shop returned = api.postShop(sent, RestCallFormat.JSON)
@@ -67,6 +108,37 @@ import spock.lang.Stepwise
         returned.tags == sent.tags &&
         !returned.withdrawn
     }
+    
+    
+    def "User updates a shop" () {
+     	when:
+     	 Shop sent = new Shop(
+            name       : "NewShop",
+            address    : "Athens",
+            lat        : 31,
+            lng        : 34,
+            tags       : ["four", "five"]
+        )
+        
+        Shop returned = api.putShop("1", sent, RestCallFormat.JSON)
+        
+        then:
+        returned.name == sent.name &&
+        returned.address == sent.address &&
+        returned.lat == sent.lat &&
+        returned.lng == sent.lng &&
+        returned.tags == sent.tags
+    }
+    
+    def "User patches a shop" () {
+    	when:
+    	 String field = "address"
+    	 def value = "Volos"
+    	 Shop returned = api.patchShop("1", field, value, RestCallFormat.JSON)
+    	 
+    	 then:
+    	 returned.address == value
+    	}
 
     def "User adds price"() {
         when:
@@ -87,5 +159,7 @@ import spock.lang.Stepwise
         list.prices[0].date == dateFrom &&
         list.prices[1].date == dateTo
     }
+    
+    
 }
 
