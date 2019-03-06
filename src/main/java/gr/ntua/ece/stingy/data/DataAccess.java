@@ -850,7 +850,7 @@ public class DataAccess {
 		if (geoDistString != null && !geoDistString.isEmpty() && !geoDistString.equals("-1")) {
 			if (!geoLngString.isEmpty()) {
 				sqlStm = "SELECT distinct Shop.lng as  lng, Shop.lat as lat, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
-						" GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date \n" + 
+						" GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date as date \n" + 
 						" FROM Shop, Product, Record ";
 				if (tags.length!=0) {
 					sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
@@ -862,7 +862,7 @@ public class DataAccess {
 			}
 			else {
 				sqlStm = "SELECT distinct Shop.lng as lng, Shop.lat as lat,  price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
-						" Record.date \n" + 
+						" Record.date as date \n" + 
 						" FROM Shop, Product, Record ";
 				if (tags.length!=0) {
 					sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
@@ -875,7 +875,7 @@ public class DataAccess {
 		}
 		else if (geoLngString!=null && !geoLngString.isEmpty()) {
 			sqlStm = "SELECT distinct Shop.lng as  lng, Shop.lat as lat, price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, \n" + 
-					" GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date \n" + 
+					" GetDistance(Shop.lat, Shop.lng, :geoLat, :geoLng) as dist, Record.date as date \n" + 
 					" FROM Shop, Product, Record ";
 			if (tags.length!=0) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
@@ -888,7 +888,7 @@ public class DataAccess {
 		}
 		else {
 			sqlStm = "SELECT distinct Shop.lng as lng, Shop.lat as lat,  price, Product.id as productId, Product.name as productName, Shop.id as shopId, Shop.name as shopName, Shop.address, -1 as dist, \n" + 
-					" Record.date \n" + 
+					" Record.date as date \n" + 
 					" FROM Shop, Product, Record ";
 			if (tags.length!=0) {
 				sqlStm += ", Tag, Shop_Tag, Product_Tag\n";
@@ -921,6 +921,13 @@ public class DataAccess {
 		namedJdbcTemplate.query(sqlStm, parameters, countCallback);
 		int rowCount = countCallback.getRowCount();
 		limits.setTotal(rowCount);
+		if (sort_type.equals("geo.dist ASC")) {
+			sort_type = "dist ASC";
+		}
+		if (sort_type.equals("geo.dist DESC")) {
+			sort_type = "dist DESC";
+		}
+		System.out.println(sort_type);
 		sqlStm += "order by " + sort_type + " limit :start, :count";
 		return namedJdbcTemplate.query(sqlStm, parameters, new RecordRowMapper());
 	}
