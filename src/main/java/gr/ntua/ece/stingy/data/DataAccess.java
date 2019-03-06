@@ -236,7 +236,7 @@ public class DataAccess {
 	}
 	
 	public List<Shop> getShopsByProductId(long id){
-		String query = "select Shop.id, Shop.name, Shop.address, Shop.lng, Shop.lat, Shop.id, Shop.withdrawn, Shop.image  from Shop, Product, Record where Record.shopId = Shop.id\n" + 
+		String query = "select distinct Shop.id, Shop.name, Shop.address, Shop.lng, Shop.lat, Shop.id, Shop.withdrawn, Shop.image  from Shop, Product, Record where Record.shopId = Shop.id\n" + 
 				"and Record.productId = Product.id and Product.id = ?";
 		return jdbcTemplate.query(query, new Object[] { id }, new ShopRowMapper());
 	}
