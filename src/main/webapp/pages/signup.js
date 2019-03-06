@@ -6,18 +6,58 @@ import Router from 'next/router'
 import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
+const querystring = require('querystring');
 
 class SignUp extends Component {
   constructor(){
     super()
     this.state={
       passVisibility: 'password',
-      buttonText: 'Show'
+      buttonText: 'Show',
+      username: null,
+      firstName:null,
+      lastName:null,
+      email:null,
+      password:null,
+      phoneNumber:null,
     }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount(){
     if (cookies.get('auth')) Router.push("/")
+  }
+
+  handleSubmit(event){
+    event.preventDefault();
+    let query={
+      username:this.state.username,
+      firstName: this.state.firstName,
+      lastName:this.state.lastName,
+      email:this.state.email,
+      passowrd:this.state.password,
+      phoneNumber:this.state.phoneNumber
+    }
+    query = querystring.stringify(query);
+    fetch("https://localhost:8765/observatory/api/register",{
+      method: "post",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: query
+    }).then(response => {
+        if (!response.ok) { alert("Something went wrong!"); throw response }
+        return response.json()
+      })
+    .then(data => {cookies.set('auth', data.token, {path: '/'}); Router.back()});
+    event.preventDefault();
+  }
+
+  handleChange(event) {
+   this.setState({
+     [event.target.name]: event.target.value
+   });
   }
 
   showPassword(){
@@ -37,24 +77,24 @@ class SignUp extends Component {
         <div className="modal">
           <h1>Εγγραφή νέου χρήστη</h1>
           <div  id="horizontalLine"></div>
-          <form action="#">
+          <form onSubmit={this.handleSubmit}>
           <div>
               <div className="col1">
                 <label>*Ψευδώνυμο λογαριασμού:</label>
-                <input className="inputField req" type="text" placeholder="Type your username..." name="username"  required/>
+                <input name="username"  onChange={this.handleChange} className="inputField req" type="text" placeholder="Type your username..." name="username"  required/>
                 <label>*Ηλεκτρονικό ταχυδρομείο:</label>
-                <input className="inputField req" type="email" placeholder="Type your email..." name="email" required/>
+                <input name="email" onChange={this.handleChange}  className="inputField req" type="email" placeholder="Type your email..." name="email" required/>
                 <label>*Κωδικός πρόσβασης:</label>
-                <input className="inputField req" type={ this.state.passVisibility } placeholder="Type your password..." name="password1"  required />
+                <input name="password"  onChange={this.handleChange} className="inputField req" type={ this.state.passVisibility } placeholder="Type your password..." name="password1"  required />
                 <button className="showPass" type="button"onClick={this.showPassword.bind(this)}> {this.state.buttonText} </button>
               </div>
               <div className="col2">
                 <label>Όνομα:</label>
-                <input className="inputField" type="text" placeholder="Type your first name..." name="firstName" />
+                <input name="firstName"  onChange={this.handleChange} className="inputField" type="text" placeholder="Type your first name..." name="firstName" />
                 <label>Επώνυμο:</label>
-                <input className="inputField" type="text" placeholder="Type your last name..." name="lastName" />
+                <input name="lastName"  onChange={this.handleChange} className="inputField" type="text" placeholder="Type your last name..." name="lastName" />
                 <label>Αριθμός τηλεφώνου:</label>
-                <input className="inputField" type="tel" placeholder="Type your phone number..." name="tel" />
+                <input name="phoneNumber"  onChange={this.handleChange} className="inputField" type="text" placeholder="Type your phone number..." name="tel" />
               </div>
 
               <div className="submitCol" align="center">
