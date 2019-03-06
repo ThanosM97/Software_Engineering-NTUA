@@ -712,6 +712,7 @@ public class DataAccess {
 		/*
 		 *  Updates the new shop record
 		 */
+
 		int rows = jdbcTemplate.update("update Shop set name=?, address=?, lng=?, lat=?,  withdrawn=?, image=? where id =?", new Object[] {name, address, lng, lat, withdrawn, image, id});
 		/*
 		 *  Check if the product exists
@@ -1074,6 +1075,20 @@ public class DataAccess {
 			return Optional.empty();
 		}
     }
+    
+    
+    public String addUser(String username, String firstName, String lastName, String email, String password, String phoneNumber) {
+		/*
+		 * Insert the new user in the User table.
+		 */
+
+    	String token = getRandomString();
+		jdbcTemplate.update("insert into User(username, password, firstName , lastName, email, phoneNumber, "
+				+ "points, token) "
+					+ "values(?, ?, ?, ?, ?,?, ?, ?)", new Object[] {username, password, firstName, lastName, email, phoneNumber, 0, token});
+		return token;
+		
+	}
 
 	
 }

@@ -219,7 +219,7 @@ public class ShopResource extends ServerResource {
     	Form queryParams = getQuery();
     	String format = queryParams.getFirstValue("format");
     	if (format == null || format.isEmpty()) {
-    		format = "xml";
+    		format = "json";
     	}
     	if (!dataAccess.isUser(auth) && !dataAccess.isAdmin(auth)) {
 			throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN, "Only users and administrators can update shops");

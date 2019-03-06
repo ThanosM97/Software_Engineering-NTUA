@@ -77,12 +77,18 @@ public class RestfulApp extends Application {
 		/*
 		 * GET method
 		 */
-	//	router.attach("/offers", OffersResource.class);
+	
+		//router.attach("/offers", OffersResource.class);
 		
 		/*
 		 * GET method
 		 */
-		router.attach("trends", TrendsResource.class);
+		router.attach("/trends", TrendsResource.class);
+		
+		/*
+		 * POST method
+		 */
+		router.attach("/register", RegisterResource.class);
 		
 		return corsFilter;
 	}
