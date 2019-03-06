@@ -18,7 +18,14 @@ class Productview extends Component {
       loggedIn:false,
       query:"",
       data:null,
+      button:null,
+      button2:null,
+      id:null,
+      visibility:"hidden",
+      toDelete:null,
     }
+    this.handleDelete = this.handleDelete.bind(this);
+    this.deleteProduct = this.deleteProduct.bind(this);
   }
 
   componentWillMount(){
@@ -26,6 +33,12 @@ class Productview extends Component {
   }
 
   componentDidMount(){
+    let profId = Router.query.id;
+    this.setState({id:profId});
+    if (this.state.loggedIn){this.setState({
+      button:(<div id={profId} style={{width:"100%", backgroundColor:"#f1f1f1"}}><button className="deleteButton" id={profId} onClick={this.handleDelete} style={{width:"26%", padding:"10px 0"}}>Delete product</button></div>),
+      button2:(<div id={profId} style={{width:"100%", backgroundColor:"#f1f1f1"}}><a href={"/addrecord?id="+profId}><button className="createButton" id={profId} onClick={this.handleCreate} style={{width:"26%", padding:"10px 0"}}>Create record</button></a></div>)
+    })}
     this.setState({query:Router.query});
     let myQuery = querystring.stringify(Router.query);
     myQuery = myQuery.replace("id=","")
@@ -36,8 +49,38 @@ class Productview extends Component {
     })
   }
 
+  handleDelete(event){
+    this.setState({visibility:"visible", toDelete:event.target.id});
+  }
+
+  deleteProduct(e){
+    if (e.target.value=="yes"){
+      let cookie = cookies.get('auth');
+      fetch("https://localhost:8765/observatory/api/products/"+this.state.toDelete,{
+        method: "delete",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-OBSERVATORY-AUTH": cookie
+        },
+      }).then(response => {
+          if (!response.ok) { alert("Something went wrong!"); throw response }
+          else {alert("Product has been deleted"); Router.back()}
+
+        })
+      } else { Router.back()}
+    }
+
+
+
   render(){
     let product = this.state.data;
+    const confirm = (
+      <div align="center" style={{visibility:this.state.visibility, position:"fixed", top:"50%", left:"35%",zIndex:10,backgroundColor:"#f2f2f2", border:"2px solid red",padding:"2%"}}>
+        <h2> Are you sure that you want to delete this product? </h2>
+        <button  className="buttonConf red" onClick={this.deleteProduct} value="yes"> Yes</button>
+        <button className="buttonConf blue"  onClick={this.deleteProduct} value="no"> No</button>
+      </div>
+    )
     if (product){
       return(
         <div>
@@ -48,7 +91,10 @@ class Productview extends Component {
           </Head>
             <div>
                 <NavBar loggedIn={this.state.loggedIn}/>
-                <ProductView product={this.state.data}  />
+                {this.state.button}
+                {this.state.button2}
+                {confirm}
+                <ProductView product={this.state.data} loggedIn={this.state.loggedIn} />
                 <Footer />
             </div>
         </div>
