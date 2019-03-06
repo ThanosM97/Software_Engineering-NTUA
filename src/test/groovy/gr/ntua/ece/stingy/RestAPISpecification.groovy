@@ -47,6 +47,25 @@ import spock.lang.Stepwise
         returned.withdrawn == sent.withdrawn
     }
     
+    def "User adds product 2" () {
+        when:
+        Product sent = new Product(
+            name       : "Product2",
+            description: "Description2",
+            category   : "Category2",
+            tags       : ["x"],
+            withdrawn  : false
+        )
+        Product returned = api.postProduct(sent, RestCallFormat.JSON)
+        
+        then:
+        returned.name == sent.name &&
+        returned.description == sent.description &&
+        returned.category == sent.category &&
+        returned.tags == sent.tags &&
+        returned.withdrawn == sent.withdrawn
+    }
+    
      def "User updates a product" () {
      	when:
      	 Product sent = new Product(
