@@ -1,4 +1,4 @@
-# SoftEng-JavaMagkes
+# SoftEng-Stingy
 Implementation of a price comparison engine for the software engineering course of NTUA ECE.
 
 ## Team Members:
