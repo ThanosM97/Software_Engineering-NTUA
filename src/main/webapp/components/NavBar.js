@@ -14,7 +14,7 @@ class NavBar extends Component {
 
     bar = this.props.loggedIn ? (<div className="nav-right">
       <p><a href="" onClick={this.handleLogOut} className="right"> Αποσύνδεση </a>
-        <a href="/my_profile" className="right"> Το προφίλ μου </a>
+        <a href="/myprofile" className="right"> Το προφίλ μου </a>
         <a href="/addproduct" className="right"> Προσθήκη προιόντος </a>
         <a href="/addshop" className="right"> Προσθήκη καταστήματος </a></p>
     </div>) : (<div className="nav-right">
