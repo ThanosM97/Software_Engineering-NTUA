@@ -5,7 +5,7 @@ import Footer from '../components/Footer.js';
 
 
 const ExampleUser = {
-    username: 'ompampisosougias', password: 'onikosopetaloudas', email: 'xaralamboslove@gmail.com', firstname: 'Χαράλαμπος', lastname:  'Σουγιάς', phone_number: '6942852132'         
+    username: 'Template', password: '', email: 'user1@gmail.com', firstname: 'User1', lastname:  'template', phone_number: '6942852132'         
 };
 
 class MyProfile extends React.Component {
