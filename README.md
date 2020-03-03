@@ -85,7 +85,7 @@ Furthermore, the original idea was to create an automated process that would per
    - `products/`: Data we crawled from four of Greece's top techology products retailers
    - `scripts/`: Scripts for the crawling
 - `docs/`: Project documentation (SRS, diagrams, etc)
-- `gradle/`:
+- `gradle/`: Contains the JAR file and configuration of the Gradle Wrapper
 - `src/main/`: source code
    - `src/main/webapp/`: files about the react web app
       - `src/main/webapp/components`: react components used on multiple pages
@@ -94,7 +94,11 @@ Furthermore, the original idea was to create an automated process that would per
    - `src/main/sql/`: MySQL ddl files to populate the database
       - `src/main/sql/database.sql`: DDL file with toy products and stores
       - `src/main/sql/testDatabase.sql`: DDL file without toy products and stores
-   - `src/main/java/gr/ntua/ece/stingy`: source code about the rest api and the database handling
+   - `src/main/java/gr/ntua/ece/stingy`: 
+      - `src/main/java/gr/ntua/ece/stingy/api`: code for all API endpoints
+      - `src/main/java/gr/ntua/ece/stingy/conf`: code for app configurations
+      - `src/main/java/gr/ntua/ece/stingy/data`: code for database handling
+      - `src/main/java/gr/ntua/ece/stingy/data/model`: code for data representation
    - `src/main/resources/gr/ntua/ece/stingy`: database credentials
 - `gradlew` and `gradlew.bat`: configuration files for Linux OS and Windows OS respectively
 - `project.pdf`: project description (written in greek)
