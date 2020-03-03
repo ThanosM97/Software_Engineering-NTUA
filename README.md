@@ -86,8 +86,8 @@ Furthermore, the original idea was to create an automated process that would per
    - `src/main/sql/`: MySQL ddl files to populate the database
       - `src/main/sql/database.sql`: DDL file with toy products and stores
       - `src/main/sql/testDatabase.sql`: DDL file without toy products and stores
-   - Template
-   - Template  
+   - `src/main/java/gr/ntua/ece/stingy`: source code about the rest api and the database handling
+   - `src/main/resources/gr/ntua/ece/stingy`: database credentials
 - `gradlew` and `gradlew.bat`: configuration files for Linux OS and Windows OS respectively
 - `project.pdf`: project description (written in greek)
 - `rest-api-specs.v2.pdf`: RESTful API specifications (written in greek)
