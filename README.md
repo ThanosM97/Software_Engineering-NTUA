@@ -51,6 +51,14 @@ Furthermore, the original idea was to create an automated process that would per
 3.  You can visit our website using the following address:
     `localhost:3000`
     
+### RESTful API
+
+1. **Starting the server**
+
+   Run `./gradle apprun`
+
+2. The API is available in the following address:
+   `localhost:8765/observatory/api/`
     
 ## Technologies Used
 
